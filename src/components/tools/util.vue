@@ -5,6 +5,7 @@ function myFileReader(file, callback) {
   let reader = new FileReader()
   reader.readAsDataURL(file)
   reader.onload = function(e) {
+    console.log(file)
     callback(e.target.result)
   }
 }
@@ -47,8 +48,11 @@ let toast = {
 }
 
 let req = {
-  queryErr(obj) {
+  queryError(obj) {
     toast.fade(obj, '获取信息失败，请稍后再试')
+  },
+  changeError(obj) {
+    toast.fade(obj, '出错了，请稍后再试!', 'sad')
   }
 }
 

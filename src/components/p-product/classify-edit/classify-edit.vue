@@ -216,11 +216,12 @@ export default {
         if (data.code === '200') {
           _this.showSuccess()
         } else {
-          _this.showErr()
+          util.req.changeError(_this.toast)
         }
       }).catch((err) => {
-        console.log(err)
-        _this.showErr()
+        if (err) {
+          util.req.changeError(_this.toast)
+        }
       })
     },
     verify() {
@@ -233,9 +234,6 @@ export default {
         return false
       }
       return true
-    },
-    showError() {
-      util.toast.fade(this.toast, '出错了，请稍后再试!', 'sad')
     },
     showSuccess() {
       util.toast.show(this.toast, '提交成功！', 'appreciate')
@@ -250,7 +248,7 @@ export default {
     uploadFile(file, callback) {
       let _this = this
       util.uploadFile(this, file, callback, () => {
-        _this.showError()
+        util.req.changeError(_this.toast)
       })
     },
     sendPic(file, key, callback) {

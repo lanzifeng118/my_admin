@@ -17,54 +17,64 @@
         <tr>
           <td class="vertical-top">预览图<span class="separate"></span></td>
           <td>
-            <div class="edit-img f-clearfix">
-              <div class="edit-img-box pic">
-                <img class="" :src="item.logo" alt="">
-              </div>
-              <p class="edit-img-note">（240px × 180px）</p>
-            </div>
-            <div class="edit-upload">
-              <label for="inputLogo" class="button button-second">选择图片</label>
-              <input type="file" id="inputLogo" accept="image/png, image/jpeg, image/gif, image/jpg"
-              @change="chooseLogo">
-              <button type="button" class="button button-second edit-delete" @click="deleteLogo">删除图片</button>
-            </div>
+            <edit-pic
+              logo="true"
+              boxWidth="240"
+              boxHeight="200"
+              :img="item.img"
+              id="inputImg"
+              note="（宽度240px，高度180px）"
+              @choosePic="chooseImg"
+              @deletePic="deleteImg"
+            >
+            </edit-pic>
           </td>
         </tr>
         <!-- 显示 -->
         <tr>
           <td width="90" class="vertical-middle">显示</td>
           <td class="show">
-            <span :class="[item.show ? 'icon-square_check_fill' : 'icon-square']"></span>
+            <span :class="[item.display ? 'icon-square_check_fill' : 'icon-square']"></span>
           </td>
         </tr>
+        <!-- 顺序 -->
         <tr>
           <td>顺序</td>
-          <td><input type="text" v-model="item.order"></td>
+          <td><input type="text" v-model="item.sort"></td>
         </tr>
+        <!-- 分类 -->
         <tr>
           <td>分类</td>
           <td>
             <select v-model="item.classify">
               <option disabled value="">选择分类</option>
-              <option>Phoenix</option>
+              <option v-for="classifyItem in classify">{{classifyItem.name}}</option>
             </select>
           </td>
         </tr>
+        <!-- PDF -->
         <tr>
-          <td >PDF</td>
+          <td>资源</td>
           <td class="pdf">
-            <button type="button" class="button button-second"><span class=" icon icon-round_add"></span>添加PDF</button>
-            <p class="pdf-box" v-for="pdf in item.pdf">
-              {{pdf.name}}
-              <span class="icon-round_close_fill"></span>
-            </p>
-        </td>
+            <label for="inputResources" class="button button-second">
+              <span class=" icon icon-round_add"></span>添加文件
+            </label>
+            <input type="file" id="inputResources" accept="application/pdf" @change="chooseResources">
+            <ul>
+              <li class="pdf-box" v-for="(pdf, indexPdf) in item.pdf">
+                <span class="icon icon-pdf"></span>
+                {{pdf.name}}
+                <span class="icon-round_close_fill" @click="deleteResources(indexPdf)"></span>
+              </li>
+            </ul>
+          </td>
         </tr>
+        <!-- 简要描述 -->
         <tr>
           <td class="vertical-top">简要描述</td>
           <td><textarea rows="3" type="text" v-model="item.brief"></textarea></td>
         </tr>
+        <!-- 详细介绍 -->
         <tr>
           <td class="vertical-top">详细介绍</td>
           <td>
@@ -83,17 +93,10 @@
     </table>
   </div>
   <toast
-    v-show="toastA.show"
-    :text="toastA.text"
-    :icon="toastA.icon"
+    v-show="toast.show"
+    :text="toast.text"
+    :icon="toast.icon"
   >
-  </toast>
-  <toast
-    v-show="toase.submitShow"
-    text="正在提交..."
-    icon="upload"
-  >
-  </toast>
   </toast>
 </div>
 </template>
@@ -101,16 +104,19 @@
 <script>
 import { quillEditor } from 'vue-quill-editor'
 import toast from 'components/toast/toast'
+import editPic from 'components/c-edit-pic/edit-pic'
+import util from 'components/tools/util'
+import api from 'components/tools/api'
+
 export default {
   data() {
     return {
       typeAdd: true,
       item: {
-        id: '',
         name: '',
-        show: true,
-        pic: '',
-        order: '',
+        display: true,
+        img: '',
+        sort: '',
         pdf: [],
         brief: '',
         classify: '', // 读取接口
@@ -118,6 +124,8 @@ export default {
         createdTime: '',
         modifyTime: ''
       },
+      // classify
+      classify: [],
       // editor
       editorOption: { // 编辑器的配置
         placeholder: '输入内容...',
@@ -127,20 +135,17 @@ export default {
       },
       // file
       file: null,
-      // toastA
-      toastA: {
+      // toast
+      toast: {
         show: false,
         text: '',
         icon: ''
-      },
-      // submit
-      toase: {
-        submitShow: false
       }
     }
   },
   created() {
     this.getItem()
+    this.getClassiy()
   },
   methods: {
     getItem() {
@@ -148,71 +153,70 @@ export default {
         return
       }
       this.typeAdd = false
-      this.item = {id: '1', name: 'Phoenix', pic: '/static/images/prodct-phoenix-01.jpg', order: '1', classify: 'Phoenix', brief: 'Vantage solutions unify Phoenix Controls suite of scalable products for airflow control and system integration, monitoring, and management. The products range from precision valve controllers to network integration hardware and front-end displays of actionable data. Applications are standalone or implemented at the room, floor.', detail: '<p>Many times during an HVAC project implementation, the building management system (BMS) vendor suggests providing their generic controller for controlling third party devices such as air flow control valves. While this may reduce the upfront third party integration</p>', pdf: [{name: 'components.pdf'}, {name: 'toast.pdf'}], show: true}
     },
-    chooseLogo(e) {
+    getClassiy() {
       let _this = this
-      _this.file = e.target.files[0]
-      let reader = new FileReader()
-      reader.readAsDataURL(_this.file)
-      reader.onload = function(e) {
-        _this.item.logo = e.target.result
-      }
+      this.axios(api.productClassify.query()).then((res) => {
+        let data = res.data
+        if (data.code === '200') {
+          _this.classify = data.data.list
+        } else {
+          _this.queryErrorGoBack()
+        }
+      }).catch((err) => {
+        if (err) {
+          _this.queryErrorGoBack()
+        }
+      })
     },
-    deleteLogo() {
-      if (this.item.logo !== '') {
-        this.item.logo = ''
-      }
+    chooseImg(e) {
+      let _this = this
+      this.file = e.target.files[0]
+      util.myFileReader(this.file, (result) => {
+        _this.item.img = result
+      })
+    },
+    deleteImg() {
+      this.item.img = ''
+      this.file = null
+    },
+    chooseResources(e) {
+      let file = e.target.files[0]
+      let nameArr = file.name.split('.')
+      let _this = this
+      util.uploadFile(this, file, (url) => {
+        _this.item.pdf.push({
+          name: nameArr[0],
+          type: nameArr[1],
+          size: file.size,
+          url: url
+        })
+        console.log(_this.item.pdf)
+      }, () => {
+        util.req.changeError(_this.toast)
+      })
+    },
+    deleteResources(index) {
+      this.item.pdf.splice(index, 1)
     },
     submit() {
-      let _this = this
-      // 如果上传了图片
       if (!this.verify()) {
         return
       }
-      _this.toase.submitShow = true
-      if (_this.file) {
-        let formData = new FormData()
-        formData.append('upload', this.file)
-        _this.axios({
-          method: 'post',
-          url: '/api/admin/upload',
-          headers: {'content-type': 'multipart/form-data'},
-          data: formData
-        }).then((response) => {
-          let data = response.data
-          if (data.code === '200') {
-            _this.item.logo = data.url
-            _this.sendData()
-          } else {
-            _this.showError()
-          }
-        }).catch(() => {
-          _this.showError()
-        })
-      } else {
-        _this.sendData()
-      }
+      util.toast.show(this.toast, '正在提交', 'upload')
+      this.sendImg()
     },
-    verify() {
-      if (!this.item.name) {
-        this.showToast('分类名称不能为空')
-        return false
-      }
-      if (this.item.order && !/^\d+$/.test(this.item.order)) {
-        this.showToast('顺序必须为数字')
-        return false
-      }
-      return true
+    sendImg() {
+      let _this = this
+      this.sendPic(this.file, 'img', () => {
+        _this.sendData()
+      })
     },
     sendData() {
       let _this = this
       let obj = null
       if (this.typeAdd) {
-        obj = {
-          method: 'post',
-          url: '/api/admin/basicinfo'
-        }
+        obj = {}
       } else {
         obj = {
           method: 'post',
@@ -224,44 +228,69 @@ export default {
           }
         }
       }
-      _this.axios(obj).then((response) => {
-        let data = response.data
-        if (data.code === '200') {
-          _this.showSuccess()
-        } else {
-          _this.showError()
-        }
-      }).catch(() => {
+      console.log(obj)
+      console.log(this.item)
+      // _this.axios(obj).then((response) => {
+      //   let data = response.data
+      //   if (data.code === '200') {
+      //     _this.showSuccess()
+      //   } else {
+      //     _this.showError()
+      //   }
+      // }).catch(() => {
+      //   _this.showError()
+      // })
+    },
+    verify() {
+      if (!this.item.name) {
+        util.toast.fade(this.toast, '产品名称不能为空')
+        return false
+      }
+      if (this.item.sort && !/^\d+$/.test(this.item.sort)) {
+        util.toast.fade(this.toast, '顺序必须为数字')
+        return false
+      }
+      return true
+    },
+    showError() {
+      util.toast.fade(this.toast, '出错了，请稍后再试!', 'sad')
+    },
+    showSuccess() {
+      util.toast.show(this.toast, '提交成功！', 'appreciate')
+      this.goBack()
+    },
+    goBack() {
+      let _this = this
+      setTimeout(() => {
+        _this.$router.push('/admin/product/list')
+      }, 700)
+    },
+    uploadFile(file, callback) {
+      let _this = this
+      util.uploadFile(this, file, callback, () => {
         _this.showError()
       })
     },
-    showError() {
-      this.toase.submitShow = false
-      this.showToast('出错了，请稍后再试！', 'sad')
-    },
-    showSuccess() {
-      this.toase.submitShow = false
-      this.showToast('提交成功！', 'appreciate', 600, () => {
-        this.$router.push('/admin/product/list')
-      })
-    },
-    showToast(text, icon, time, callback) {
+    sendPic(file, key, callback) {
       let _this = this
-      time = time || 600
-      _this.toastA.show = true
-      _this.toastA.text = text || ''
-      _this.toastA.icon = icon || 'warn'
-      setTimeout(() => {
-        _this.toastA.show = false
-        if (typeof (callback) === 'function') {
+      if (file) {
+        this.uploadFile(file, (url) => {
+          _this.item[key] = url
           callback()
-        }
-      }, time)
+        })
+      } else {
+        callback()
+      }
+    },
+    queryErrorGoBack() {
+      util.req.queryError(this.toast)
+      this.goBack()
     }
   },
   components: {
     quillEditor,
-    toast
+    toast,
+    editPic
   }
 }
 </script>

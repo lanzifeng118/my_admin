@@ -130,7 +130,7 @@ export default {
       if (data.code === '200') {
         _this.basicInfo = data.data
       } else {
-        util.req.queryErr(this.toast)
+        util.req.queryError(this.toast)
       }
     })
   },
@@ -196,7 +196,7 @@ export default {
       })
     },
     showError() {
-      util.toast.fade(this.toast, '出错了！', 'sad')
+      util.req.changeError(this.toast)
     },
     showSuccess() {
       let _this = this

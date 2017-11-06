@@ -22,8 +22,8 @@
               :img="item.img"
               id="inputLogo"
               note="（宽度1226px，高度130px）"
-              @choosePic="chooseLogo"
-              @deletePic="deleteLogo"
+              @choosePic="chooseImg"
+              @deletePic="deleteImg"
             >
             </edit-pic>
           </td>
@@ -79,25 +79,25 @@ export default {
         if (data.code === '200') {
           _this.item = data.data
         } else {
-          util.req.queryErr(this.toast)
+          util.req.queryError(this.toast)
           _this.goback()
         }
       }).catch((err) => {
         if (err) {
           console.log(err)
-          util.req.queryErr(this.toast)
+          util.req.queryError(this.toast)
           _this.goback()
         }
       })
     },
-    chooseLogo(e) {
+    chooseImg(e) {
       let _this = this
       this.file = e.target.files[0]
       util.myFileReader(this.file, (result) => {
         _this.item.img = result
       })
     },
-    deleteLogo() {
+    deleteImg() {
       this.item.img = ''
       this.file = null
     },

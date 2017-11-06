@@ -90,19 +90,16 @@ export default {
       if (data.code === '200') {
         _this.basicInfo = data.data
       } else {
-        _this.showErr()
+        util.req.queryError(this.toast)
       }
     }).catch((error) => {
       if (error) {
         console.log(error)
-        _this.showErr()
+        util.req.queryError(this.toast)
       }
     })
   },
   methods: {
-    showErr() {
-      util.req.queryErr(this.toast)
-    }
   },
   components: {
     toast

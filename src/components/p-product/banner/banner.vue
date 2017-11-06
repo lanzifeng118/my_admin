@@ -59,12 +59,12 @@
           if (data.code === '200') {
             _this.item = data.data
           } else {
-            util.req.queryErr(this.toast)
+            util.req.queryError(this.toast)
           }
         }).catch((err) => {
           if (err) {
             console.log(err)
-            util.req.queryErr(this.toast)
+            util.req.queryError(this.toast)
           }
         })
       }

@@ -132,7 +132,7 @@
             })
             console.log(this.items)
           } else {
-            util.req.queryErr(this.toast)
+            util.req.queryError(this.toast)
           }
         })
       },
