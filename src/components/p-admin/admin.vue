@@ -90,7 +90,7 @@ export default {
 .content-left {
   position: fixed;
   top: 65px;
-  z-index: 999;
+  z-index: 1;
   width: 150px;
   border-radius: 3px;
   overflow: hidden;

@@ -1,46 +1,40 @@
 <template>
-  <div class="ad-video-cancle" v-show="show">
-    <div class="ad-video-progress">
-      <span :style="'width:'+percent+'%'"></span>
+  <div class="percent-cancle" v-show="show === 'true'">
+    <div class="percent-progress">
+      <span :style="'width:'+ progress +'%'"></span>
     </div>
-    <div class="ad-video-cancle-btn" @click="submitCancle">
+    <div class="percent-cancle-btn" @click="cancle">
       <span class="icon-close"></span>
     </div>
   </div>
 </template>
 
 <script>
-  import toast from 'components/toast/toast'
-  import api from 'components/tools/api'
-  import util from 'components/tools/util'
-
   export default {
-    props: ['show', 'percent'],
-    data() {
-
-    },
+    props: ['show', 'progress'],
     created() {
     },
     methods: {
-
+      cancle() {
+        this.$emit('cancle')
+      }
     },
     components: {
-      toast
     }
   }
 </script>
 
 <style>
-.ad-video-cancle {
+.percent-cancle {
   position: fixed;
-  z-index: 9999;
+  z-index: 9;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0,0,0,0.5);
 }
-.ad-video-cancle button {
+.percent-cancle button {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -49,7 +43,7 @@
   margin-top: 50px;
   background-color: #e29800;
 }
-.ad-video-cancle-btn {
+.percent-cancle-btn {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -62,11 +56,12 @@
   background-color: #e29800;
   color: #fff;
   font-size: 20px;
+  cursor: pointer;
 }
-.ad-video-cancle-btn span {
+.percent-cancle-btn span {
   line-height: 40px;
 }
-.ad-video-progress {
+.percent-progress {
   position: absolute;
   width: 350px;
   height: 20px;
@@ -78,8 +73,9 @@
   margin-top: 5px;
   background: #4f4f4f;
 }
-.ad-video-progress span {
+.percent-progress span {
   display: block;
+  width: 0;
   height: 20px;
   background: #07efd9;
   transition: all 0.2s;

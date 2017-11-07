@@ -101,7 +101,12 @@
     :icon="toast.icon"
   >
   </toast>
-  <!-- <percent show="true"></percent> -->
+  <percent
+    :show="percent.show"
+    :progress="percent.progress"
+    @cancle="cancleResources"
+  >
+  </percent>
 </div>
 </template>
 
@@ -145,6 +150,11 @@ export default {
         show: false,
         text: '',
         icon: ''
+      },
+      // percent
+      percent: {
+        show: 'false',
+        progress: 0
       }
     }
   },
@@ -177,7 +187,6 @@ export default {
           _this.queryErrorGoBack()
         }
       })
-      console.log(api.productList.queryById(id))
     },
     getClassiy() {
       let _this = this
@@ -207,29 +216,19 @@ export default {
     },
     chooseResources(e) {
       let file = e.target.files[0]
-      // let lastIndexOf = file.name.lastIndexOf('.')
-      // let _this = this
-      let percent = 0
-      util.uploadBigFile(file, percent)
-      // util.uploadFile(this, file, (url) => {
-      //   let size = file.size / 1024
-      //   if (size < 1024) {
-      //     size = Math.ceil(size) + 'Kb'
-      //   } else {
-      //     size = Math.ceil((size / 102.4)) / 10 + 'Mb'
-      //   }
-      //   _this.item.resources.push({
-      //     name: file.name.slice(0, lastIndexOf),
-      //     type: file.name.slice(lastIndexOf + 1),
-      //     size: size,
-      //     url: url
-      //   })
-      // }, () => {
-      //   util.req.changeError(_this.toast)
-      // })
+      let _this = this
+      this.xhr = util.uploadBigFile(file, this.percent, (obj) => {
+        _this.item.resources.push(obj)
+      }, () => {
+        util.req.changeError(this.toast)
+      })
     },
     deleteResources(index) {
       this.item.resources.splice(index, 1)
+    },
+    cancleResources() {
+      this.xhr.abort()
+      this.percent.show = 'false'
     },
     submit() {
       if (!this.verify()) {

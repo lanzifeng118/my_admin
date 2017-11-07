@@ -27,17 +27,16 @@ function uploadFile(_this, file, success, error) {
     })
 }
 
-function uploadBigFile(file, percent) {
-  // this.toase.submitCancleShow = true
-  // _this.toase.submitShow = true
+function uploadBigFile(file, percent, success, error) {
+  percent.show = 'true'
   let formData = new FormData()
   formData.append('upload', file)
   // xhr
   let xhr = new XMLHttpRequest()
+
   // 上传中
   xhr.upload.addEventListener('progress', function(e) {
-    percent = Math.floor(e.loaded / e.total * 100)
-    console.log(percent)
+    percent.progress = Math.floor(e.loaded / e.total * 100)
   }, false)
   // 文件上传成功或是失败
   xhr.onreadystatechange = function() {
@@ -45,11 +44,24 @@ function uploadBigFile(file, percent) {
       if (xhr.status === 200) {
         let data = JSON.parse(xhr.responseText)
         if (data.code === '200') {
-          // 发add请求
-          console.log(data.url)
-          // _this.sendInfo(data.url)
+          let lastIndexOf = file.name.lastIndexOf('.')
+          // size
+          let size = file.size / 1024
+          if (size < 1024) {
+            size = Math.ceil(size) + 'Kb'
+          } else {
+            size = Math.ceil((size / 102.4)) / 10 + 'Mb'
+          }
+          let obj = {
+            name: file.name.slice(0, lastIndexOf),
+            type: file.name.slice(lastIndexOf + 1),
+            size: size,
+            url: data.url
+          }
+          success(obj)
+          percent.show = 'false'
         } else {
-          // _this.showFailure()
+          error()
         }
       }
     }
@@ -57,6 +69,7 @@ function uploadBigFile(file, percent) {
   // 开始上传
   xhr.open('POST', '/api/admin/upload', true)
   xhr.send(formData)
+  return xhr
 }
 
 function isNum(str) {

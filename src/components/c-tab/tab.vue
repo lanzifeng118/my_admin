@@ -19,7 +19,7 @@
   .tab {
     position: fixed;
     top: 50px;
-    z-index: 99;
+    z-index: 1;
     width: 1236px;
     padding: 15px 0;
     background-color: #f0f6f6;
