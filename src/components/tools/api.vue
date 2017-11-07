@@ -1,7 +1,8 @@
 <script>
-let lang = 'cn'
+const LANG = 'cn'
 // basicInfo
 let basicInfoUrl = '/api/admin/basicinfo'
+let productListUrl = '/api/admin/product/list'
 let productClassifyUrl = '/api/admin/product/classify'
 let productBannerUrl = '/api/admin/product/banner'
 
@@ -12,7 +13,7 @@ let queryFun = (url) => {
     data: {
       method: 'query',
       data: {
-        lang: lang
+        lang: LANG
       }
     }
   }
@@ -38,6 +39,24 @@ let api = {
         data: {
           method: 'update',
           data: data
+        }
+      }
+    }
+  },
+  // product
+  productList: {
+    query() {
+      return queryFun(productListUrl)
+    },
+    queryById(id) {
+      return {
+        method: 'post',
+        url: productListUrl,
+        data: {
+          method: 'queryById',
+          data: {
+            id: id
+          }
         }
       }
     }
@@ -72,7 +91,7 @@ let api = {
       }
     },
     insert(data) {
-      data.lang = lang
+      data.lang = LANG
       return {
         method: 'post',
         url: productClassifyUrl,

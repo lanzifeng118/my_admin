@@ -46,6 +46,15 @@ html, body {
   display: inline-block;
   margin-right: 5px;
 }
+.icon-pdf {
+  color: #c00;
+}
+.icon-word {
+  color: #5b83cc;
+}
+.icon-excel {
+  color: #6db665;
+}
 .icon-nessisary {
   color: #c00;
 }

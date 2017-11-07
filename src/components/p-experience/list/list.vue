@@ -74,11 +74,11 @@
       </table>
     </div>
     <pop
-      text="确定要删除所选项目？"
       type="warning"
-      v-show="popDeleteAll.show"
-      @confirm="confirmDeleteAll"
-      @close="closeDeleteAll"
+      :text="pop.text"
+      v-show="pop.show"
+      @confirm="confirmPop"
+      @close="closePop"
     >
     </pop>
     <toast
@@ -93,6 +93,8 @@
 <script>
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
+  import util from 'components/tools/util'
+  import api from 'components/tools/api'
 
   export default {
     data() {
@@ -109,9 +111,10 @@
           text: '',
           icon: ''
         },
-        popDeleteAll: {
-          show: false,
-          items: []
+        // pop
+        pop: {
+          text: '',
+          show: false
         }
       }
     },
@@ -119,6 +122,21 @@
       this.getItems()
     },
     methods: {
+      getItems(keyword) {
+        let _this = this
+        this.axios(api.productList.query()).then((res) => {
+          let data = res.data
+          console.log(data)
+          if (data.code === '200') {
+            data.data.list.forEach((v) => {
+              v.select = false
+              _this.items.push(v)
+            })
+          } else {
+            util.req.queryError(this.toast)
+          }
+        })
+      },
       searchSubmit() {
         this.getItems(this.searchText)
       },
@@ -169,39 +187,6 @@
           this.showToast('请输入数字', 'close')
           this.$set(this.orderValue, index, this.items[index].order)
         }
-      },
-      getItems(keyword) {
-        let _this = this
-        this.axios({
-          method: 'post',
-          url: '/api/admin/experienceList',
-          data: {
-            method: 'get',
-            language: 'cn',
-            keyword: keyword || ''
-          }
-        }).then((res) => {
-          let data = res.data
-          if (data.code === '200') {
-            let list = data.data.list
-            if (list.length > 0) {
-              list.forEach((v, i) => {
-                v.select = false
-              })
-              _this.items = list
-              _this.items.forEach((v, i) => {
-                _this.orderValue.push(v.order)
-              })
-              console.log(_this.order)
-            }
-          } else {
-            console.log('系统繁忙')
-          }
-        }).catch(error => {
-          if (error) {
-            _this.$router.push('/error')
-          }
-        })
       },
       showToast(text, icon, time) {
         let _this = this

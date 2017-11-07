@@ -27,6 +27,42 @@ function uploadFile(_this, file, success, error) {
     })
 }
 
+function uploadBigFile(file, percent) {
+  // this.toase.submitCancleShow = true
+  // _this.toase.submitShow = true
+  let formData = new FormData()
+  formData.append('upload', file)
+  // xhr
+  let xhr = new XMLHttpRequest()
+  // 上传中
+  xhr.upload.addEventListener('progress', function(e) {
+    percent = Math.floor(e.loaded / e.total * 100)
+    console.log(percent)
+  }, false)
+  // 文件上传成功或是失败
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        let data = JSON.parse(xhr.responseText)
+        if (data.code === '200') {
+          // 发add请求
+          console.log(data.url)
+          // _this.sendInfo(data.url)
+        } else {
+          // _this.showFailure()
+        }
+      }
+    }
+  }
+  // 开始上传
+  xhr.open('POST', '/api/admin/upload', true)
+  xhr.send(formData)
+}
+
+function isNum(str) {
+  return /^\d+$/.test(str)
+}
+
 let toast = {
   show(obj, text, icon) {
     if (!icon) {
@@ -57,8 +93,10 @@ let req = {
 }
 
 export default {
+  isNum,
   myFileReader,
   uploadFile,
+  uploadBigFile,
   toast,
   req
 }

@@ -28,12 +28,12 @@
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="120">排序</th>
+            <th width="60">排序</th>
             <th>名称</th>
-            <th width="180">图片</th>
+            <th width="220">图片</th>
             <th width="110">显示</th>
             <th width="190">分类</th>
-            <th width="135">创建时间</th>
+            <th width="135">修改时间</th>
             <th width="140">操作</th>
           </tr>
         </thead>
@@ -48,40 +48,42 @@
             </td>
             <!-- order -->
             <td class="order">
-              <input type="text" v-model.lazy="orderValue[index]" @change="changeOrder(index)">
+              {{item.sort}}
             </td>
             <!-- name -->
-            <td>{{item.title}}</td>
+            <td>{{item.name}}</td>
             <!-- picture -->
-            <td class="picture"><img :src="item.picture" alt=""></td>
+            <td class="picture product-list-img"><img :src="item.img" alt=""></td>
             <!-- show -->
             <td
               class="pointer"
-              :class="[item.display ? 'show' : 'not-show']"
+              :class="[item.display === 'Y' ? 'show' : 'not-show']"
               @click="toggleShow(index)"
             >
               <span class="icon-check"></span>
             </td>
             <!-- classify -->
             <td class="classify">
-              <p v-for="itemC in item.classify">
-                <span>{{itemC}}</span>
+              <p>
+                <span>{{item.classify}}</span>
               </p>
             </td>
-            <td>{{item.createTime}}</td>
+            <td>{{item.modifytime}}</td>
             <td class="link">
-              <router-link :to="'/admin/product/edit/' + item.id">编辑</router-link><span class="icon-cutting_line"></span><a href="javascipt: void(0)">删除</a>
+              <router-link :to="'/admin/product/edit/' + item.id">编辑</router-link>
+              <span class="icon-cutting_line"></span>
+              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
     <pop
-      text="确定要删除所选项目？"
       type="warning"
-      v-show="popDeleteAll.show"
-      @confirm="confirmDeleteAll"
-      @close="closeDeleteAll"
+      :text="pop.text"
+      v-show="pop.show"
+      @confirm="confirmPop"
+      @close="closePop"
     >
     </pop>
     <toast
@@ -96,14 +98,17 @@
 <script>
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
+  import util from 'components/tools/util'
+  import api from 'components/tools/api'
 
   export default {
     data() {
       return {
         // items
         items: [],
+        deleteIds: [],
+
         searchText: '',
-        thSelect: false,
         // order
         orderValue: [],
         // toast
@@ -112,16 +117,33 @@
           text: '',
           icon: ''
         },
-        popDeleteAll: {
-          show: false,
-          items: []
-        }
+        // pop
+        pop: {
+          text: '',
+          show: false
+        },
+        thSelect: false
       }
     },
     created() {
       this.getItems()
     },
     methods: {
+      getItems(keyword) {
+        let _this = this
+        this.axios(api.productList.query()).then((res) => {
+          let data = res.data
+          console.log(data)
+          if (data.code === '200') {
+            data.data.list.forEach((v) => {
+              v.select = false
+              _this.items.push(v)
+            })
+          } else {
+            util.req.queryError(this.toast)
+          }
+        })
+      },
       searchSubmit() {
         this.getItems(this.searchText)
       },
@@ -131,93 +153,63 @@
           value.select = this.thSelect
         })
       },
+      closePop() {
+        this.pop.show = false
+      },
       toggleSelect(index) {
-        this.items[index].select = !this.items[index].select
+        let item = this.items[index]
+        item.select = !item.select
       },
       toggleShow(index) {
+        let item = this.items[index]
+        if (item.display === 'Y') {
+          item.display = 'N'
+        } else {
+          item.display = 'Y'
+        }
         // ajax
-        this.items[index].display = !this.items[index].display
+      },
+      deleteItem(index) {
+        let arr = []
+        let item = this.items[index]
+        arr.push(item.id)
+        this.deleteIds = arr
+        this.pop.text = '确定删除[' + item.name +']'
+        this.pop.show = true
       },
       deleteAll() {
-        let _this = this
-        _this.popDeleteAll.items = []
-        // 检查是否选中选项
-        _this.items.forEach((value, index) => {
-          if (value.select === true) {
-            _this.popDeleteAll.items.push(index)
+        let arr = []
+        this.items.forEach((v) => {
+          if (v.select) {
+            arr.push(v.id)
           }
         })
-        if (_this.popDeleteAll.items.length <=0) {
-          this.showToast('请选择需要删除的项目', 'warn')
+        if (arr.length <= 0) {
+          util.toast.fade(this.toast, '请选择需要删除的项目')
           return
         }
-        this.popDeleteAll.show = true
+        this.deleteIds = arr
+        this.pop.text = '确定删除所选项目'
+        this.pop.show = true
       },
-      confirmDeleteAll() {
-        // ajax
-        this.popDeleteAll.show = false
-        this.showToast('删除成功', 'check')
-      },
-      closeDeleteAll() {
-        this.popDeleteAll.show = false
-      },
-      // 顺序
-      changeOrder(index) {
-        let value = this.orderValue[index]
-        if (this.isNum(value)) {
-          if (value !== this.items[index].order) {
-            // ajax
-          }
-        } else {
-          this.showToast('请输入数字', 'close')
-          this.$set(this.orderValue, index, this.items[index].order)
-        }
-      },
-      getItems(keyword) {
-        let _this = this
-        this.axios({
-          method: 'post',
-          url: '/api/admin/productList',
-          data: {
-            method: 'get',
-            language: 'cn',
-            keyword: keyword || ''
-          }
-        }).then((res) => {
-          let data = res.data
-          if (data.code === '200') {
-            let list = data.data.list
-            if (list.length > 0) {
-              list.forEach((v, i) => {
-                v.select = false
-              })
-              _this.items = list
-              _this.items.forEach((v, i) => {
-                _this.orderValue.push(v.order)
-              })
-              console.log(_this.order)
-            }
-          } else {
-            console.log('系统繁忙')
-          }
-        }).catch(error => {
-          if (error) {
-            // _this.$router.push('/error')
-          }
-        })
-      },
-      showToast(text, icon, time) {
-        let _this = this
-        time = time || 650
-        _this.toast.show = true
-        _this.toast.text = text
-        _this.toast.icon = icon
-        setTimeout(() => {
-          _this.toast.show = false
-        }, time)
-      },
-      isNum(obj) {
-        return /^\d+$/.test(obj)
+      confirmPop() {
+        // let _this = this
+        // let deleteIds = this.deleteIds
+        this.pop.show = false
+        // this.axios(api.productClassify.delete(deleteIds)).then((res) => {
+        //   let data = res.data
+        //   if (data.code === '200') {
+        //     deleteIds.forEach((id) => {
+        //       for (let i = 0; i <= _this.items.length - 1; i++) {
+        //         if (_this.items[i].id === id) {
+        //           _this.items.splice(i, 1)
+        //           break
+        //         }
+        //       }
+        //     })
+        //     util.toast.fade(this.toast, '删除成功', 'check')
+        //   }
+        // })
       }
     },
     components: {
@@ -228,5 +220,8 @@
 </script>
 
 <style>
-
+.product-list-img img{
+  max-width: 200px;
+  max-height: 150px;
+}
 </style>

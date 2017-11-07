@@ -215,6 +215,8 @@ export default {
         let data = res.data
         if (data.code === '200') {
           _this.showSuccess()
+        } else if (data.code === '400') {
+          util.toast.fade(this.toast, '分类名称已存在', 'close')
         } else {
           util.req.changeError(_this.toast)
         }

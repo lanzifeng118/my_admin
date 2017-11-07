@@ -59,12 +59,15 @@
             <label for="inputResources" class="button button-second">
               <span class=" icon icon-round_add"></span>添加文件
             </label>
-            <input type="file" id="inputResources" accept="application/pdf" @change="chooseResources">
+            <input type="file" id="inputResources" accept="application/pdf, application/msword, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="chooseResources">
             <ul>
-              <li class="pdf-box" v-for="(pdf, indexPdf) in item.pdf">
-                <span class="icon icon-pdf"></span>
-                {{pdf.name}}
-                <span class="icon-round_close_fill" @click="deleteResources(indexPdf)"></span>
+              <li class="pdf-box" v-for="(resource, resourceIndex) in item.resources" :title="resource.name">
+                <span v-if="resource.type === 'pdf'" class="icon icon-pdf"></span>
+                <span v-if="resource.type === 'doc'" class="icon icon-word"></span>
+                <span v-if="resource.type === 'xlsx' || resource.type === 'xls'" class="icon icon-excel"></span>
+                {{resource.name}}
+                <span class="icon-round_close_fill" @click="deleteResources(resourceIndex)"></span>
+                <span>{{resource.size}}</span>
               </li>
             </ul>
           </td>
@@ -98,12 +101,14 @@
     :icon="toast.icon"
   >
   </toast>
+  <!-- <percent show="true"></percent> -->
 </div>
 </template>
 
 <script>
 import { quillEditor } from 'vue-quill-editor'
 import toast from 'components/toast/toast'
+import percent from 'components/c-percent/percent'
 import editPic from 'components/c-edit-pic/edit-pic'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
@@ -117,7 +122,7 @@ export default {
         display: true,
         img: '',
         sort: '',
-        pdf: [],
+        resources: [],
         brief: '',
         classify: '', // 读取接口
         detail: '',
@@ -153,6 +158,26 @@ export default {
         return
       }
       this.typeAdd = false
+      let _this = this
+      let id = this.$route.params.id
+      console.log(id)
+      this.axios(api.productList.queryById(id)).then((res) => {
+        let data = res.data
+        if (data.code === '200') {
+          if (data.data) {
+            _this.item = data.data
+          } else {
+            util.toast.show(_this.toast, '此产品不存在', 'close')
+            this.goBack()
+          }
+        }
+        console.log(data)
+      }).catch((err) => {
+        if (err) {
+          _this.queryErrorGoBack()
+        }
+      })
+      console.log(api.productList.queryById(id))
     },
     getClassiy() {
       let _this = this
@@ -182,22 +207,29 @@ export default {
     },
     chooseResources(e) {
       let file = e.target.files[0]
-      let nameArr = file.name.split('.')
-      let _this = this
-      util.uploadFile(this, file, (url) => {
-        _this.item.pdf.push({
-          name: nameArr[0],
-          type: nameArr[1],
-          size: file.size,
-          url: url
-        })
-        console.log(_this.item.pdf)
-      }, () => {
-        util.req.changeError(_this.toast)
-      })
+      // let lastIndexOf = file.name.lastIndexOf('.')
+      // let _this = this
+      let percent = 0
+      util.uploadBigFile(file, percent)
+      // util.uploadFile(this, file, (url) => {
+      //   let size = file.size / 1024
+      //   if (size < 1024) {
+      //     size = Math.ceil(size) + 'Kb'
+      //   } else {
+      //     size = Math.ceil((size / 102.4)) / 10 + 'Mb'
+      //   }
+      //   _this.item.resources.push({
+      //     name: file.name.slice(0, lastIndexOf),
+      //     type: file.name.slice(lastIndexOf + 1),
+      //     size: size,
+      //     url: url
+      //   })
+      // }, () => {
+      //   util.req.changeError(_this.toast)
+      // })
     },
     deleteResources(index) {
-      this.item.pdf.splice(index, 1)
+      this.item.resources.splice(index, 1)
     },
     submit() {
       if (!this.verify()) {
@@ -213,20 +245,12 @@ export default {
       })
     },
     sendData() {
-      let _this = this
+      // let _this = this
       let obj = null
       if (this.typeAdd) {
         obj = {}
       } else {
-        obj = {
-          method: 'post',
-          url: '/api/admin/basicinfo',
-          data: {
-            method: 'modify',
-            language: 'cn',
-            data: _this.item
-          }
-        }
+        obj = {}
       }
       console.log(obj)
       console.log(this.item)
@@ -246,7 +270,7 @@ export default {
         util.toast.fade(this.toast, '产品名称不能为空')
         return false
       }
-      if (this.item.sort && !/^\d+$/.test(this.item.sort)) {
+      if (this.item.sort && !util.isNum(this.item.sort)) {
         util.toast.fade(this.toast, '顺序必须为数字')
         return false
       }
@@ -290,7 +314,8 @@ export default {
   components: {
     quillEditor,
     toast,
-    editPic
+    editPic,
+    percent
   }
 }
 </script>
