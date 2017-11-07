@@ -6,6 +6,13 @@
         <input class="search-input" v-model="searchText" placeholder="输入查找内容">
         <span class="search-icon icon-search" @click="searchSubmit"></span>
       </div>
+      <!-- 分类 -->
+      <select v-model="classifySelect" @change="changeSelect">
+        <option disabled value="">选择分类</option>
+        <option>所有分类</option>
+        <option v-for="classifyItem in classify">{{classifyItem.name}}</option>
+      </select>
+      <!-- 删除 -->
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span>一键删除
       </button>
@@ -64,9 +71,7 @@
             </td>
             <!-- classify -->
             <td class="classify">
-              <p>
-                <span>{{item.classify}}</span>
-              </p>
+              <p><span>{{item.classify}}</span></p>
             </td>
             <td>{{item.modifytime}}</td>
             <td class="link">
@@ -106,8 +111,11 @@
       return {
         // items
         items: [],
-        deleteIds: [],
+        // classify
+        classifySelect: '',
+        classify: [],
 
+        deleteIds: [],
         searchText: '',
         // order
         orderValue: [],
@@ -127,10 +135,12 @@
     },
     created() {
       this.getItems()
+      this.getClassiy()
     },
     methods: {
       getItems(keyword) {
         let _this = this
+        this.items = []
         this.axios(api.productList.query()).then((res) => {
           let data = res.data
           console.log(data)
@@ -144,17 +154,36 @@
           }
         })
       },
+      getClassiy() {
+        let _this = this
+        this.axios(api.productClassify.query()).then((res) => {
+          let data = res.data
+          if (data.code === '200') {
+            _this.classify = data.data.list
+          } else {
+            _this.queryErrorGoBack()
+          }
+        }).catch((err) => {
+          if (err) {
+            _this.queryErrorGoBack()
+          }
+        })
+      },
       searchSubmit() {
         this.getItems(this.searchText)
+      },
+      changeSelect() {
+        if (this.classifySelect === '所有分类') {
+          this.getItems()
+          return
+        }
+        // ajax
       },
       toggleSelectAll() {
         this.thSelect = !this.thSelect
         this.items.forEach((value, index) => {
           value.select = this.thSelect
         })
-      },
-      closePop() {
-        this.pop.show = false
       },
       toggleSelect(index) {
         let item = this.items[index]
@@ -191,6 +220,9 @@
         this.deleteIds = arr
         this.pop.text = '确定删除所选项目'
         this.pop.show = true
+      },
+      closePop() {
+        this.pop.show = false
       },
       confirmPop() {
         // let _this = this

@@ -1,9 +1,9 @@
 <template>
-  <div class="percent-cancle" v-show="show === 'true'">
+  <div class="percent" v-show="show === 'true'">
     <div class="percent-progress">
       <span :style="'width:'+ progress +'%'"></span>
     </div>
-    <div class="percent-cancle-btn" @click="cancle">
+    <div class="percent-btn" @click="cancle">
       <span class="icon-close"></span>
     </div>
   </div>
@@ -25,7 +25,7 @@
 </script>
 
 <style>
-.percent-cancle {
+.percent {
   position: fixed;
   z-index: 9;
   top: 0;
@@ -34,7 +34,7 @@
   height: 100%;
   background-color: rgba(0,0,0,0.5);
 }
-.percent-cancle button {
+.percent button {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -43,7 +43,7 @@
   margin-top: 50px;
   background-color: #e29800;
 }
-.percent-cancle-btn {
+.percent-btn {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -58,7 +58,7 @@
   font-size: 20px;
   cursor: pointer;
 }
-.percent-cancle-btn span {
+.percent-btn span {
   line-height: 40px;
 }
 .percent-progress {
@@ -78,6 +78,5 @@
   width: 0;
   height: 20px;
   background: #07efd9;
-  transition: all 0.2s;
 }
 </style>

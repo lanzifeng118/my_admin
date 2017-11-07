@@ -29,6 +29,7 @@ function uploadFile(_this, file, success, error) {
 
 function uploadBigFile(file, percent, success, error) {
   percent.show = 'true'
+  percent.progress = 0
   let formData = new FormData()
   formData.append('upload', file)
   // xhr

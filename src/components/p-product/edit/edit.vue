@@ -67,7 +67,6 @@
                 <span v-if="resource.type === 'xlsx' || resource.type === 'xls'" class="icon icon-excel"></span>
                 {{resource.name}}
                 <span class="icon-round_close_fill" @click="deleteResources(resourceIndex)"></span>
-                <span>{{resource.size}}</span>
               </li>
             </ul>
           </td>
@@ -170,9 +169,9 @@ export default {
       this.typeAdd = false
       let _this = this
       let id = this.$route.params.id
-      console.log(id)
       this.axios(api.productList.queryById(id)).then((res) => {
         let data = res.data
+        console.log(data)
         if (data.code === '200') {
           if (data.data) {
             _this.item = data.data
@@ -181,9 +180,9 @@ export default {
             this.goBack()
           }
         }
-        console.log(data)
       }).catch((err) => {
         if (err) {
+          console.log(err)
           _this.queryErrorGoBack()
         }
       })

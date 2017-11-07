@@ -15,6 +15,7 @@ import ProductEdit from 'components/p-product/edit/edit'
 import ProductClassify from 'components/p-product/classify/classify'
 import ProductClassifyEdit from 'components/p-product/classify-edit/classify-edit'
 import ProductVideo from 'components/p-product/video/video'
+import ProductVideoEdit from 'components/p-product/video-edit/video-edit'
 import ProductBanner from 'components/p-product/banner/banner'
 import ProductBannerEdit from 'components/p-product/banner-edit/banner-edit'
 // experience
@@ -125,6 +126,14 @@ export default new Router({
             {path: 'banner', component: ProductBanner},
             {path: 'banneredit', component: ProductBannerEdit},
             {path: 'video', component: ProductVideo},
+            {
+              path: 'videoedit',
+              component: ProductVideoEdit,
+              children: [
+                {path: ':id'}
+              ]
+            },
+            {path: 'videoadd', component: ProductVideoEdit},
             {path: 'video/en', component: ProductVideo}
           ]
         },

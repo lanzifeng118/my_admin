@@ -75,7 +75,7 @@ input, textarea {
   line-height: 28px;
   padding: 0 10px;
 }
-input:focus, textarea:focus, input:hover, textarea:hover {
+input:focus, textarea:focus, input:hover, textarea:hover, select:focus, select:hover{
   border-color: #d5d5d5;
 }
 input::-webkit-outer-spin-button,
@@ -110,12 +110,12 @@ textarea {
   max-width: 100%;
 }
 select {
-  width: 200px;
+  width: 180px;
   display: inline-block;
   padding: 0 20px 0 5px;
   line-height: 28px;
   border-radius: 2px;
-  border: 1px solid #ddd;
+  border: 1px solid #eaeaea;
   background: none;
   outline: none;
   appearance: none;
@@ -127,7 +127,7 @@ select {
   text-align: center;
   background-color: #363f46;
   border: 1px solid #363f46;
-  line-height: 30px;
+  line-height: 28px;
   min-width: 100px;
   padding: 0 10px;
   font-size: 14px;
@@ -396,7 +396,7 @@ table {
   color: #e29800;
 }
 /*search*/
-.search input {
+.search-input {
   width: 180px;
   padding-right: 30px;
 }
@@ -405,7 +405,7 @@ table {
   display: inline-block;
   color: #ccc;
   width: 30px;
-  line-height: 30px;
+  line-height: 29px;
   margin-left: -30px;
 }
 .search-icon:hover {
