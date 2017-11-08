@@ -46,7 +46,12 @@
             <label for="inputVideo" class="button button-second">
               <span class=" icon icon-round_add"></span>选择视频
             </label>
-            <input type="file" id="inputVideo" accept="video/mp4" @change="chooseVideo">
+            <input type="file" id="inputVideo" accept="video/mp4, application/pdf" @change="chooseVideo">
+            <div class="pdf-box" v-if="video" :title="video.name">
+              <span class="icon icon-video">
+              {{video.name}}</span>
+              <span class="icon-round_close_fill" @click="deleteVideo"></span>
+            </div>
           </td>
         </tr>
         <tr>
@@ -62,11 +67,18 @@
     :icon="toast.icon"
   >
   </toast>
+  <percent
+    :show="percent.show"
+    :progress="percent.progress"
+    @cancle="cancleVideo"
+  >
+  </percent>
 </div>
 </template>
 
 <script>
 import toast from 'components/toast/toast'
+import percent from 'components/c-percent/percent'
 import editPic from 'components/c-edit-pic/edit-pic'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
@@ -76,13 +88,12 @@ export default {
     return {
       typeAdd: true,
       item: {
-        logo: '',
         name: '',
-        sort: '',
+        classify: '',
         img: '',
-        banner_img: '',
-        banner_ling: ''
+        video: ''
       },
+      video: null,
       // classify
       classify: [],
       // file
@@ -92,6 +103,11 @@ export default {
         show: false,
         text: '',
         icon: ''
+      },
+      // percent
+      percent: {
+        show: 'false',
+        progress: 0
       }
     }
   },
@@ -147,7 +163,25 @@ export default {
       this.fileImg = null
     },
     chooseVideo(e) {
-
+      let file = e.target.files[0]
+      let _this = this
+      this.xhr = util.uploadBigFile(file, this.percent, (obj) => {
+        _this.video = obj
+        _this.item.video = obj.url
+        if (!_this.item.name) {
+          _this.item.name = obj.name
+        }
+      }, () => {
+        util.req.changeError(this.toast)
+      })
+    },
+    deleteVideo() {
+      this.video = null
+      this.item.video = ''
+    },
+    cancleVideo() {
+      this.xhr.abort()
+      this.percent.show = 'false'
     },
     submit() {
       // 验证
@@ -155,7 +189,8 @@ export default {
         return
       }
       util.toast.show(this.toast, '正在提交', 'upload')
-      this.sendLogo()
+      console.log(this.item)
+      // this.sendLogo()
     },
     sendLogo() {
       let _this = this
@@ -200,11 +235,11 @@ export default {
     },
     verify() {
       if (!this.item.name) {
-        util.toast.fade(this.toast, '分类名称不能为空')
+        util.toast.fade(this.toast, '视频名称不能为空')
         return false
       }
-      if (this.item.sort && !/^\d+$/.test(this.item.sort)) {
-        util.toast.fade(this.toast, '顺序必须为数字')
+      if (!this.item.video) {
+        util.toast.fade(this.toast, '请上传视频')
         return false
       }
       return true
@@ -239,7 +274,8 @@ export default {
   },
   components: {
     toast,
-    editPic
+    editPic,
+    percent
   }
 }
 </script>

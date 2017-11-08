@@ -243,25 +243,27 @@ export default {
       })
     },
     sendData() {
-      // let _this = this
+      let _this = this
       let obj = null
       if (this.typeAdd) {
-        obj = {}
+        obj = api.productList.insert(this.item)
       } else {
-        obj = {}
+        obj = api.productList.update(this.item)
       }
-      console.log(obj)
-      console.log(this.item)
-      // _this.axios(obj).then((response) => {
-      //   let data = response.data
-      //   if (data.code === '200') {
-      //     _this.showSuccess()
-      //   } else {
-      //     _this.showError()
-      //   }
-      // }).catch(() => {
-      //   _this.showError()
-      // })
+      this.axios(obj).then((res) => {
+        let data = res.data
+        if (data.code === '200') {
+          _this.showSuccess()
+        } else if (data.code === '400') {
+          util.toast.fade(this.toast, '分类名称已存在', 'close')
+        } else {
+          util.req.changeError(_this.toast)
+        }
+      }).catch((err) => {
+        if (err) {
+          util.req.changeError(_this.toast)
+        }
+      })
     },
     verify() {
       if (!this.item.name) {

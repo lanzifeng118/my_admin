@@ -22,10 +22,6 @@ let navItems = [{
   name: '首页',
   style: 'home'
 }, {
-  src: '/admin/ad',
-  name: '广告图片',
-  style: 'pic'
-}, {
   src: '/admin/product',
   name: '产品管理',
   style: 'cart'

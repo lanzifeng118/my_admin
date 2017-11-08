@@ -59,6 +59,52 @@ let api = {
           }
         }
       }
+    },
+    queryByClassify(classify) {
+      return {
+        method: 'post',
+        url: productListUrl,
+        data: {
+          method: 'queryById',
+          data: {
+            classify: classify,
+            lang: LANG
+          }
+        }
+      }
+    },
+    insert(data) {
+      data.lang = LANG
+      return {
+        method: 'post',
+        url: productListUrl,
+        data: {
+          method: 'insert',
+          data: data
+        }
+      }
+    },
+    update(data) {
+      return {
+        method: 'post',
+        url: productListUrl,
+        data: {
+          method: 'update',
+          data: data
+        }
+      }
+    },
+    delete(id) {
+      return {
+        method: 'post',
+        url: productListUrl,
+        data: {
+          method: 'delete',
+          data: {
+            id: id.toString()
+          }
+        }
+      }
     }
   },
   // productClassify

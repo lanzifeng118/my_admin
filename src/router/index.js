@@ -31,10 +31,6 @@ import Info from 'components/p-info/info'
 import InfoList from 'components/p-info/infoList/infoList'
 import InfoAdd from 'components/p-info/infoAdd/infoAdd'
 import InfoEdit from 'components/p-info/InfoEdit/InfoEdit'
-// ad
-import Ad from 'components/p-ad/ad'
-import AdList from 'components/p-ad/list/list'
-import AdVideo from 'components/p-ad/video/video'
 
 Vue.use(Router)
 
@@ -84,18 +80,6 @@ export default new Router({
             {path: 'edit/:id', component: InfoEdit},
             // 英文
             {path: 'en', component: InfoList}
-          ]
-        },
-        {
-          path: 'ad',
-          component: Ad,
-          redirect: {name: 'adList'},
-          children: [
-            // 中文
-            {path: '/v', component: AdVideo},
-            {path: 'list', component: AdList, name: 'adList'},
-            // 英文
-            {path: 'en', component: AdVideo}
           ]
         },
         // product

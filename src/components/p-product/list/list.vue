@@ -40,7 +40,7 @@
             <th width="220">图片</th>
             <th width="110">显示</th>
             <th width="190">分类</th>
-            <th width="135">修改时间</th>
+            <th width="150">修改时间</th>
             <th width="140">操作</th>
           </tr>
         </thead>
@@ -60,7 +60,7 @@
             <!-- name -->
             <td>{{item.name}}</td>
             <!-- picture -->
-            <td class="picture product-list-img"><img :src="item.img" alt=""></td>
+            <td class="product-list-img"><img :src="item.img" alt=""></td>
             <!-- show -->
             <td
               class="pointer"
@@ -225,23 +225,23 @@
         this.pop.show = false
       },
       confirmPop() {
-        // let _this = this
-        // let deleteIds = this.deleteIds
+        let _this = this
+        let deleteIds = this.deleteIds
         this.pop.show = false
-        // this.axios(api.productClassify.delete(deleteIds)).then((res) => {
-        //   let data = res.data
-        //   if (data.code === '200') {
-        //     deleteIds.forEach((id) => {
-        //       for (let i = 0; i <= _this.items.length - 1; i++) {
-        //         if (_this.items[i].id === id) {
-        //           _this.items.splice(i, 1)
-        //           break
-        //         }
-        //       }
-        //     })
-        //     util.toast.fade(this.toast, '删除成功', 'check')
-        //   }
-        // })
+        this.axios(api.productList.delete(deleteIds)).then((res) => {
+          let data = res.data
+          if (data.code === '200') {
+            deleteIds.forEach((id) => {
+              for (let i = 0; i <= _this.items.length - 1; i++) {
+                if (_this.items[i].id === id) {
+                  _this.items.splice(i, 1)
+                  break
+                }
+              }
+            })
+            util.toast.fade(this.toast, '删除成功', 'check')
+          }
+        })
       }
     },
     components: {
@@ -254,6 +254,7 @@
 <style>
 .product-list-img img{
   max-width: 200px;
-  max-height: 150px;
+  max-height: 120px;
+  line-height: 0;
 }
 </style>
