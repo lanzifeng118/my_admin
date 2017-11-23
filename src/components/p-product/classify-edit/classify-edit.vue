@@ -123,6 +123,11 @@ export default {
   created() {
     this.getItem()
   },
+  watch: {
+    '$route' (to, from) {
+      this.getItem()
+    }
+  },
   methods: {
     getItem() {
       if (this.$route.path === '/admin/product/classifyadd') {

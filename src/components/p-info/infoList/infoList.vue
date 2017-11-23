@@ -14,53 +14,24 @@
       </router-link >
     </div>
     <div class="list-table-wrap">
-      <div v-if="!hasItems" class="list-table-wrap-none">
+      <div v-if="items.length <= 0" class="list-table-wrap-none">
         还没有相关信息，请添加
       </div>
-      <table v-if="hasItems">
+      <table v-if="items.length > 0">
         <thead>
           <tr>
             <!-- selectAll -->
             <th
-              width="100"
+              width="120"
               @click="toggleSelectAll"
               class="pointer"
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
+            <th width="120">排序</th>
             <th>名称</th>
-            <th width="150">显示</th>
-            <th width="220" class="list-th-time">
-              <p>发布时间</p>
-              <div class="list-th-time-triangle">
-                <span
-                  :class="{active: itemsOrder.createTime.asc}"
-                  class="icon icon-triangle_up_fill" @click="getItems('aboutus_createtime', 'asc')">
-                </span>
-                <span
-                  :class="{active: itemsOrder.createTime.desc}"
-                  class="icon icon-triangle_down_fill"
-                  @click="getItems('aboutus_createtime', 'desc')">
-                </span>
-              </div>
-            </th>
-            <th width="220" class="list-th-time">
-              <p>修改时间</p>
-              <div class="list-th-time-triangle">
-                <span
-                  class="icon icon-triangle_up_fill"
-                  :class="{active: itemsOrder.modifyTime.asc}"
-                  @click="getItems('aboutus_modifytime', 'asc')"
-                >
-                </span>
-                <span
-                  class="icon icon-triangle_down_fill"
-                  :class="{active: itemsOrder.modifyTime.desc}"
-                  @click="getItems('aboutus_modifytime', 'desc')"
-                >
-                </span>
-              </div>
-            </th>
+            <th width="180">显示</th>
+            <th width="220">修改时间</th>
             <th width="200">操作</th>
           </tr>
         </thead>
@@ -73,36 +44,41 @@
             >
               <span :class="[item.select ? 'icon-square_check_fill' : 'icon-square']"></span>
             </td>
+            <!-- order -->
+            <td class="order">
+              {{item.sort}}
+            </td>
             <td>{{item.title}}</td>
             <!-- show -->
             <td
               class="pointer"
-              :class="[item.show ? 'show' : 'not-show']"
-              @click="toggleShow(index)"
+              :class="[item.display === 'Y' ? 'show' : 'not-show']"
+              @click="toggleDisplay(index)"
             >
               <span class="icon-check"></span>
             </td>
-
-            <td>{{item.createTime}}</td>
-            <td>{{item.modifyTime}}</td>
-            <td>
-              <a href="#" target="_blank">浏览</a> | <router-link :to="'/admin/aboutus/edit/' + item.id">编辑</router-link> | <a href="javascipt: void(0)">删除</a>
+            <td>{{item.modifytime}}</td>
+            <td class="link">
+              <router-link :to="'/admin/aboutus/edit/' + item.id">编辑</router-link>
+              <span class="icon-cutting_line"></span>
+              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
     <pop
-      text="确定要删除所选项目？"
       type="warning"
-      v-show="popDeleteAll.show"
-      @confirm="confirmDeleteAll"
-      @close="closeDeleteAll"
+      :text="pop.text"
+      v-show="pop.show"
+      @confirm="confirmPop"
+      @close="closePop"
     >
     </pop>
     <toast
-      v-show="toastDeletAllShow"
-      text="没有选择项目哦！"
+      v-show="toast.show"
+      :text="toast.text"
+      :icon="toast.icon"
     >
     </toast>
   </div>
@@ -112,45 +88,72 @@
   import search from 'components/search/search'
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
+  import util from 'components/tools/util'
+  import api from 'components/tools/api'
 
   export default {
     data() {
       return {
         // items
-        hasItems: false,
         items: [],
-        itemsOrder: {
-          createTime: {
-            desc: false,
-            asc: false
-          },
-          modifyTime: {
-            desc: false,
-            asc: false
-          }
-        },
-        searchText: '',
+        // classify
+        classifySelect: '',
+        classify: [],
 
-        thSelect: false,
-        // delete
-        toastDeletAllShow: false,
-        popDeleteAll: {
+        deleteIds: [],
+        searchText: '',
+        // order
+        orderValue: [],
+        // toast
+        toast: {
           show: false,
-          items: []
-        }
+          text: '',
+          icon: ''
+        },
+        // pop
+        pop: {
+          text: '',
+          show: false
+        },
+        thSelect: false
       }
     },
     created() {
-      this.getItems('aboutus_modifytime', 'desc')
-    },
-    components: {
-      search,
-      pop,
-      toast
+      this.getItems()
     },
     methods: {
+      getItems(byWhat) {
+        let _this = this
+        let obj = null
+        let apiList = api.aboutus
+        switch (byWhat) {
+          case 'bySearch':
+            obj = apiList.queryBySearch(this.searchText, this.classifySelect)
+            break
+          default:
+            obj = apiList.query()
+        }
+        this.axios(obj).then((res) => {
+          let data = res.data
+          console.log(data)
+          if (data.code === '200') {
+            _this.items = _this.handleData(data.data)
+            console.log(_this.items)
+          } else {
+            util.req.queryError(this.toast)
+          }
+        })
+      },
+      handleData(data) {
+        let dataH = []
+        data.list.forEach((v) => {
+          v.select = false
+          dataH.push(v)
+        })
+        return dataH
+      },
       searchSubmit() {
-        this.getItems('aboutus_modifytime', 'desc', this.searchText)
+        this.getItems('bySearch')
       },
       toggleSelectAll() {
         this.thSelect = !this.thSelect
@@ -159,107 +162,68 @@
         })
       },
       toggleSelect(index) {
-        this.items[index].select = !this.items[index].select
+        let item = this.items[index]
+        item.select = !item.select
       },
-      toggleShow(index) {
+      toggleDisplay(index) {
+        let item = this.items[index]
+        if (item.display === 'Y') {
+          item.display = 'N'
+        } else {
+          item.display = 'Y'
+        }
         // ajax
-        this.items[index].show = !this.items[index].show
+      },
+      deleteItem(index) {
+        let arr = []
+        let item = this.items[index]
+        arr.push(item.id)
+        this.deleteIds = arr
+        this.pop.text = '确定删除[' + item.title +']'
+        this.pop.show = true
       },
       deleteAll() {
-        let _this = this
-        _this.popDeleteAll.items = []
-        // 检查是否选中选项
-        _this.items.forEach((value, index) => {
-          if (value.select === true) {
-            _this.popDeleteAll.items.push(index)
+        let arr = []
+        this.items.forEach((v) => {
+          if (v.select) {
+            arr.push(v.id)
           }
         })
-        if (_this.popDeleteAll.items.length <=0) {
-          _this.toastDeletAllShow = true
-          setTimeout(() => {
-            _this.toastDeletAllShow = false
-          }, 600)
+        if (arr.length <= 0) {
+          util.toast.fade(this.toast, '请选择需要删除的项目')
           return
         }
-        this.popDeleteAll.show = true
+        this.deleteIds = arr
+        this.pop.text = '确定删除所选项目'
+        this.pop.show = true
       },
-      confirmDeleteAll() {
-        // ajax
-        this.popDeleteAll.show = false
+      closePop() {
+        this.pop.show = false
       },
-      closeDeleteAll() {
-        this.popDeleteAll.show = false
-      },
-      getItems(sortcolumn, sorttype, keyword) {
+      confirmPop() {
         let _this = this
-        _this.axios({
-          method: 'post',
-          url: '/api/admin/aboutus',
-          headers: {'content-type': 'application/json'},
-          data: {
-            method: 'get',
-            language: 'cn',
-            sortcolumn: sortcolumn,
-            sorttype: sorttype,
-            keyword: keyword || ''
-          }
-        }).then((res) => {
+        let deleteIds = this.deleteIds
+        this.pop.show = false
+        this.axios(api.aboutus.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
-            _this.items = []
-            data.data.forEach((value, index) => {
-              let obj = {}
-              obj.id = value.aboutus_id
-              obj.title = value.aboutus_title
-              obj.createTime = value.aboutus_createtime
-              obj.modifyTime = value.aboutus_modifytime
-              obj.select = false
-              if (value.aboutus_diplay === 'Y') {
-                obj.show = true
-              } else {
-                obj.show = false
+            deleteIds.forEach((id) => {
+              for (let i = 0; i <= _this.items.length - 1; i++) {
+                if (_this.items[i].id === id) {
+                  _this.items.splice(i, 1)
+                  break
+                }
               }
-              _this.items.push(obj)
             })
-            if (_this.items.length > 0) {
-              _this.hasItems = true
-              if (sortcolumn === 'aboutus_modifytime') {
-                if (sorttype === 'desc') {
-                  _this.itemsOrder.modifyTime.desc = true
-                  _this.itemsOrder.modifyTime.asc = false
-                  _this.itemsOrder.createTime.desc = false
-                  _this.itemsOrder.createTime.asc = false
-                } else {
-                  _this.itemsOrder.modifyTime.desc = false
-                  _this.itemsOrder.modifyTime.asc = true
-                  _this.itemsOrder.createTime.desc = false
-                  _this.itemsOrder.createTime.asc = false
-                }
-              } else {
-                if (sorttype === 'desc') {
-                  _this.itemsOrder.modifyTime.desc = false
-                  _this.itemsOrder.modifyTime.asc = false
-                  _this.itemsOrder.createTime.desc = true
-                  _this.itemsOrder.createTime.asc = false
-                } else {
-                  _this.itemsOrder.modifyTime.desc = false
-                  _this.itemsOrder.modifyTime.asc = false
-                  _this.itemsOrder.createTime.desc = false
-                  _this.itemsOrder.createTime.asc = true
-                }
-              }
-            }
-          } else {
-            //
-            console.log('系统繁忙')
+            util.toast.fade(this.toast, '删除成功', 'check')
           }
         })
-        // .catch(error => {
-        //   if (error) {
-        //     _this.$router.push('/error')
-        //   }
-        // })
       }
+    },
+    components: {
+      search,
+      pop,
+      toast
     }
   }
 </script>

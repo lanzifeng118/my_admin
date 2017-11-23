@@ -34,7 +34,11 @@
         <tr>
           <td width="90" class="vertical-middle">显示</td>
           <td class="show">
-            <span :class="[item.display ? 'icon-square_check_fill' : 'icon-square']"></span>
+            <span
+              :class="[item.display === 'Y' ? 'icon-square_check_fill' : 'icon-square']"
+              @click="toggleDisplay"
+            >
+            </span>
           </td>
         </tr>
         <!-- 顺序 -->
@@ -123,7 +127,7 @@ export default {
       typeAdd: true,
       item: {
         name: '',
-        display: true,
+        display: 'Y',
         img: '',
         sort: '',
         resources: [],
@@ -159,10 +163,15 @@ export default {
   },
   created() {
     this.getItem()
-    this.getClassiy()
+  },
+  watch: {
+    '$route' (to, from) {
+      this.getItem()
+    }
   },
   methods: {
     getItem() {
+      this.getClassiy()
       if (this.$route.path === '/admin/product/add') {
         return
       }
@@ -213,6 +222,13 @@ export default {
       this.item.img = ''
       this.file = null
     },
+    toggleDisplay() {
+      if (this.item.display === 'Y') {
+        this.item.display = 'N'
+      } else {
+        this.item.display = 'Y'
+      }
+    },
     chooseResources(e) {
       let file = e.target.files[0]
       let _this = this
@@ -250,12 +266,13 @@ export default {
       } else {
         obj = api.productList.update(this.item)
       }
+      console.log(obj)
       this.axios(obj).then((res) => {
         let data = res.data
         if (data.code === '200') {
           _this.showSuccess()
         } else if (data.code === '400') {
-          util.toast.fade(this.toast, '分类名称已存在', 'close')
+          util.toast.fade(this.toast, '产品名称已存在', 'close')
         } else {
           util.req.changeError(_this.toast)
         }

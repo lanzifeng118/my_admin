@@ -29,7 +29,6 @@ import ExperienceBannerEdit from 'components/p-experience/banner-edit/banner-edi
 // info
 import Info from 'components/p-info/info'
 import InfoList from 'components/p-info/infoList/infoList'
-import InfoAdd from 'components/p-info/infoAdd/infoAdd'
 import InfoEdit from 'components/p-info/InfoEdit/InfoEdit'
 
 Vue.use(Router)
@@ -76,7 +75,7 @@ export default new Router({
           children: [
             // 中文
             {path: '/', component: InfoList},
-            {path: 'add', component: InfoAdd},
+            {path: 'add', component: InfoEdit},
             {path: 'edit/:id', component: InfoEdit},
             // 英文
             {path: 'en', component: InfoList}

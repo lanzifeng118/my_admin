@@ -7,11 +7,6 @@
     <router-link to="/admin/product/videoadd" class="f-right button list-btn-add">
       <span class="icon icon-round_add"></span>添加视频
     </router-link >
-    <!-- <label for="inputVideo" class="button f-right list-btn-add">
-      <span class="icon icon-round_add"></span>添加视频
-    </label>
-    <input type="file" id="inputVideo" accept="video/mp4"
-      @change="chooseVideo"> -->
   </div>
   <div class="list-table-wrap">
     <div v-if="items.length <= 0" class="list-table-wrap-none">
@@ -47,9 +42,9 @@
           </td>
           <!-- classify -->
           <td class="classify">
-            <p><span>{{item.classify}}</span></p>
+            <p v-if="item.classify"><span>{{item.classify}}</span></p>
           </td>
-          <td>{{item.createTime}}</td>
+          <td>{{item.modifytime}}</td>
           <td class="link">
             <router-link :to="'/admin/product/videoedit/' + item.id">编辑</router-link>
             <span class="icon-cutting_line"></span>
@@ -80,12 +75,18 @@
 import toast from 'components/toast/toast'
 import pop from 'components/pop/pop'
 import util from 'components/tools/util'
+import api from 'components/tools/api'
 
 export default {
   data() {
     return {
       // items
-      items: [{id: '5412', name: '02', img: '', createTime: '2017', select: false}],
+      items: [],
+      // classify
+      classifySelect: '',
+      classify: [],
+
+      deleteIds: [],
       // toast
       toast: {
         show: false,
@@ -102,10 +103,52 @@ export default {
   },
   created() {
     this.getItems()
+    this.getClassiy()
   },
   methods: {
-    getItems() {
-
+    getItems(byWhat) {
+      let _this = this
+      let obj = null
+      let apiList = api.productVideo
+      switch (byWhat) {
+        case 'byClassify':
+          obj = apiList.queryByClassify(this.classifySelect)
+          break
+        default:
+          obj = apiList.query()
+      }
+      this.axios(obj).then((res) => {
+        let data = res.data
+        if (data.code === '200') {
+          _this.items = _this.handleData(data.data)
+          console.log(_this.items)
+        } else {
+          util.req.queryError(this.toast)
+        }
+      })
+    },
+    getClassiy() {
+      let _this = this
+      this.axios(api.productClassify.query()).then((res) => {
+        let data = res.data
+        if (data.code === '200') {
+          _this.classify = data.data.list
+        } else {
+          util.req.queryError(this.toast)
+        }
+      }).catch((err) => {
+        if (err) {
+          util.req.queryError(this.toast)
+        }
+      })
+    },
+    handleData(data) {
+      let dataH = []
+      data.list.forEach((v) => {
+        v.select = false
+        dataH.push(v)
+      })
+      return dataH
     },
     // toggleSelect
     toggleSelectAll() {
@@ -145,10 +188,23 @@ export default {
       this.pop.show = false
     },
     confirmPop() {
-
-    },
-    playVideo() {
-
+      let _this = this
+      let deleteIds = this.deleteIds
+      this.pop.show = false
+      this.axios(api.productVideo.delete(deleteIds)).then((res) => {
+        let data = res.data
+        if (data.code === '200') {
+          deleteIds.forEach((id) => {
+            for (let i = 0; i <= _this.items.length - 1; i++) {
+              if (_this.items[i].id === id) {
+                _this.items.splice(i, 1)
+                break
+              }
+            }
+          })
+          util.toast.fade(this.toast, '删除成功', 'check')
+        }
+      })
     }
   },
   components: {
@@ -159,8 +215,11 @@ export default {
 </script>
 
 <style>
-.product-video-img {
+td.product-video-img {
+  line-height: 0;
+}
+.product-video-img img{
   max-width: 260px;
-  max-height: 200px;
+  max-height: 180px;
 }
 </style>

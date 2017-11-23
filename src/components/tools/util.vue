@@ -5,7 +5,6 @@ function myFileReader(file, callback) {
   let reader = new FileReader()
   reader.readAsDataURL(file)
   reader.onload = function(e) {
-    console.log(file)
     callback(e.target.result)
   }
 }

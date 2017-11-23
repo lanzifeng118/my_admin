@@ -47,9 +47,9 @@
               <span class=" icon icon-round_add"></span>选择视频
             </label>
             <input type="file" id="inputVideo" accept="video/mp4, application/pdf" @change="chooseVideo">
-            <div class="pdf-box" v-if="video" :title="video.name">
+            <div class="pdf-box" v-if="item.video" :title="item.name">
               <span class="icon icon-video">
-              {{video.name}}</span>
+              {{item.name}}</span>
               <span class="icon-round_close_fill" @click="deleteVideo"></span>
             </div>
           </td>
@@ -88,12 +88,11 @@ export default {
     return {
       typeAdd: true,
       item: {
-        name: '',
         classify: '',
+        name: '',
         img: '',
         video: ''
       },
-      video: null,
       // classify
       classify: [],
       // file
@@ -113,26 +112,30 @@ export default {
   },
   created() {
     this.getItem()
-    this.getClassiy()
+  },
+  watch: {
+    '$route' (to, from) {
+      this.getItem()
+    }
   },
   methods: {
     getItem() {
+      this.getClassiy()
       if (this.$route.path === '/admin/product/videoadd') {
         return
       }
       this.typeAdd = false
       let _this = this
       let id = this.$route.params.id
-      this.axios(api.productClassify.queryById(id)).then((res) => {
+      this.axios(api.productVideo.queryById(id)).then((res) => {
         let data = res.data
         if (data.code === '200') {
           if (data.data) {
             _this.item = data.data
           } else {
-            util.toast.show(_this.toast, '此分类不存在', 'close')
+            util.toast.show(_this.toast, '此视频不存在', 'close')
             this.goBack()
           }
-          console.log(data)
         }
       })
     },
@@ -156,6 +159,7 @@ export default {
       this.fileImg = e.target.files[0]
       util.myFileReader(this.fileImg, (result) => {
         _this.item.img = result
+        console.log(_this.item)
       })
     },
     deleteImg() {
@@ -166,7 +170,6 @@ export default {
       let file = e.target.files[0]
       let _this = this
       this.xhr = util.uploadBigFile(file, this.percent, (obj) => {
-        _this.video = obj
         _this.item.video = obj.url
         if (!_this.item.name) {
           _this.item.name = obj.name
@@ -176,7 +179,6 @@ export default {
       })
     },
     deleteVideo() {
-      this.video = null
       this.item.video = ''
     },
     cancleVideo() {
@@ -190,40 +192,33 @@ export default {
       }
       util.toast.show(this.toast, '正在提交', 'upload')
       console.log(this.item)
-      // this.sendLogo()
-    },
-    sendLogo() {
-      let _this = this
-      this.sendPic(this.fileLogo, 'logo', () => {
-        _this.sendImg()
-      })
+      this.sendImg()
     },
     sendImg() {
       let _this = this
-      this.sendPic(this.fileImg, 'img', () => {
-        _this.sendBanner()
-      })
-    },
-    sendBanner() {
-      let _this = this
-      this.sendPic(this.fileBanner, 'banner_img', () => {
+      if (this.fileImg) {
+        this.sendPic(this.fileImg, 'img', () => {
+          _this.sendData()
+        })
+      } else {
         _this.sendData()
-      })
+      }
     },
     sendData() {
       let _this = this
       let obj = null
+      let apiVideo = api.productVideo
       if (this.typeAdd) {
-        obj = api.productClassify.insert(_this.item)
+        obj = apiVideo.insert(_this.item)
       } else {
-        obj = api.productClassify.update(_this.item)
+        obj = apiVideo.update(_this.item)
       }
       _this.axios(obj).then((res) => {
         let data = res.data
         if (data.code === '200') {
           _this.showSuccess()
         } else if (data.code === '400') {
-          util.toast.fade(this.toast, '分类名称已存在', 'close')
+          util.toast.fade(this.toast, '视频名称已存在', 'close')
         } else {
           util.req.changeError(_this.toast)
         }
@@ -251,7 +246,7 @@ export default {
     goBack() {
       let _this = this
       setTimeout(() => {
-        _this.$router.push('/admin/product/classify')
+        _this.$router.push('/admin/product/video')
       }, 700)
     },
     uploadFile(file, callback) {

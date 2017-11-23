@@ -1,17 +1,24 @@
 <template>
   <div class="product-list">
     <div class="f-clearfix">
+      <!-- 分类 -->
+      <div class="f-left">
+        <select v-model="classifySelect" @change="changeSelect">
+          <option disabled value="">选择分类</option>
+          <option value="">所有分类</option>
+          <option
+            v-for="classifyItem in classify"
+            :value="classifyItem.name"
+          >
+            {{classifyItem.name}}
+          </option>
+        </select>
+      </div>
       <!-- search -->
       <div class="search f-left">
         <input class="search-input" v-model="searchText" placeholder="输入查找内容">
         <span class="search-icon icon-search" @click="searchSubmit"></span>
       </div>
-      <!-- 分类 -->
-      <select v-model="classifySelect" @change="changeSelect">
-        <option disabled value="">选择分类</option>
-        <option>所有分类</option>
-        <option v-for="classifyItem in classify">{{classifyItem.name}}</option>
-      </select>
       <!-- 删除 -->
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span>一键删除
@@ -65,13 +72,13 @@
             <td
               class="pointer"
               :class="[item.display === 'Y' ? 'show' : 'not-show']"
-              @click="toggleShow(index)"
+              @click="toggleDisplay(index)"
             >
               <span class="icon-check"></span>
             </td>
             <!-- classify -->
             <td class="classify">
-              <p><span>{{item.classify}}</span></p>
+              <p v-if="item.classify"><span>{{item.classify}}</span></p>
             </td>
             <td>{{item.modifytime}}</td>
             <td class="link">
@@ -138,17 +145,22 @@
       this.getClassiy()
     },
     methods: {
-      getItems(keyword) {
+      getItems(byWhat) {
         let _this = this
-        this.items = []
-        this.axios(api.productList.query()).then((res) => {
+        let obj = null
+        let apiList = api.productList
+        switch (byWhat) {
+          case 'bySearch':
+            obj = apiList.queryBySearch(this.searchText, this.classifySelect)
+            break
+          default:
+            obj = apiList.query()
+        }
+        this.axios(obj).then((res) => {
           let data = res.data
-          console.log(data)
           if (data.code === '200') {
-            data.data.list.forEach((v) => {
-              v.select = false
-              _this.items.push(v)
-            })
+            _this.items = _this.handleData(data.data)
+            console.log(_this.items)
           } else {
             util.req.queryError(this.toast)
           }
@@ -161,22 +173,27 @@
           if (data.code === '200') {
             _this.classify = data.data.list
           } else {
-            _this.queryErrorGoBack()
+            util.req.queryError(this.toast)
           }
         }).catch((err) => {
           if (err) {
-            _this.queryErrorGoBack()
+            util.req.queryError(this.toast)
           }
         })
       },
+      handleData(data) {
+        let dataH = []
+        data.list.forEach((v) => {
+          v.select = false
+          dataH.push(v)
+        })
+        return dataH
+      },
       searchSubmit() {
-        this.getItems(this.searchText)
+        this.getItems('bySearch')
       },
       changeSelect() {
-        if (this.classifySelect === '所有分类') {
-          this.getItems()
-          return
-        }
+        this.getItems('bySearch')
         // ajax
       },
       toggleSelectAll() {
@@ -189,7 +206,7 @@
         let item = this.items[index]
         item.select = !item.select
       },
-      toggleShow(index) {
+      toggleDisplay(index) {
         let item = this.items[index]
         if (item.display === 'Y') {
           item.display = 'N'
@@ -252,6 +269,9 @@
 </script>
 
 <style>
+.product-list .search {
+  margin-left: 10px;
+}
 .product-list-img img{
   max-width: 200px;
   max-height: 120px;

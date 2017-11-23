@@ -5,6 +5,8 @@ let basicInfoUrl = '/api/admin/basicinfo'
 let productListUrl = '/api/admin/product/list'
 let productClassifyUrl = '/api/admin/product/classify'
 let productBannerUrl = '/api/admin/product/banner'
+let productVideoUrl = 'api/admin/video'
+let aboutusUrl = 'api/admin/aboutus'
 
 let queryFun = (url) => {
   return {
@@ -18,7 +20,64 @@ let queryFun = (url) => {
     }
   }
 }
-
+let queryByIdFun = (url, id) => {
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: 'queryById',
+      data: {
+        id: id
+      }
+    }
+  }
+}
+let queryByClassifyFun = (url, classify) => {
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: 'queryByClassify',
+      data: {
+        classify: classify,
+        lang: LANG
+      }
+    }
+  }
+}
+let updateFun = (url, data) => {
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: 'update',
+      data: data
+    }
+  }
+}
+let deleteFun = (url, ids) => {
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: 'delete',
+      data: {
+        ids: ids.toString()
+      }
+    }
+  }
+}
+let insertFun = (url, data) => {
+  data.lang = LANG
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: 'insert',
+      data: data
+    }
+  }
+}
 let api = {
   uploadFile(data) {
     return {
@@ -33,14 +92,7 @@ let api = {
       return queryFun(basicInfoUrl)
     },
     update(data) {
-      return {
-        method: 'post',
-        url: basicInfoUrl,
-        data: {
-          method: 'update',
-          data: data
-        }
-      }
+      return updateFun(basicInfoUrl, data)
     }
   },
   // product
@@ -49,24 +101,19 @@ let api = {
       return queryFun(productListUrl)
     },
     queryById(id) {
-      return {
-        method: 'post',
-        url: productListUrl,
-        data: {
-          method: 'queryById',
-          data: {
-            id: id
-          }
-        }
-      }
+      return queryByIdFun(productListUrl, id)
     },
     queryByClassify(classify) {
+      return queryByClassifyFun(productListUrl, classify)
+    },
+    queryBySearch(keyword, classify) {
       return {
         method: 'post',
         url: productListUrl,
         data: {
-          method: 'queryById',
+          method: 'queryBySearch',
           data: {
+            name: keyword,
             classify: classify,
             lang: LANG
           }
@@ -74,37 +121,13 @@ let api = {
       }
     },
     insert(data) {
-      data.lang = LANG
-      return {
-        method: 'post',
-        url: productListUrl,
-        data: {
-          method: 'insert',
-          data: data
-        }
-      }
+      return insertFun(productListUrl, data)
     },
     update(data) {
-      return {
-        method: 'post',
-        url: productListUrl,
-        data: {
-          method: 'update',
-          data: data
-        }
-      }
+      return updateFun(productListUrl, data)
     },
     delete(id) {
-      return {
-        method: 'post',
-        url: productListUrl,
-        data: {
-          method: 'delete',
-          data: {
-            id: id.toString()
-          }
-        }
-      }
+      return deleteFun(productListUrl, id)
     }
   },
   // productClassify
@@ -113,49 +136,16 @@ let api = {
       return queryFun(productClassifyUrl)
     },
     queryById(id) {
-      return {
-        method: 'post',
-        url: productClassifyUrl,
-        data: {
-          method: 'queryById',
-          data: {
-            id: id
-          }
-        }
-      }
+      return queryByIdFun(productClassifyUrl, id)
     },
     delete(id) {
-      return {
-        method: 'post',
-        url: productClassifyUrl,
-        data: {
-          method: 'delete',
-          data: {
-            id: id.toString()
-          }
-        }
-      }
+      return deleteFun(productClassifyUrl, id)
     },
     insert(data) {
-      data.lang = LANG
-      return {
-        method: 'post',
-        url: productClassifyUrl,
-        data: {
-          method: 'insert',
-          data: data
-        }
-      }
+      return insertFun(productClassifyUrl, data)
     },
     update(data) {
-      return {
-        method: 'post',
-        url: productClassifyUrl,
-        data: {
-          method: 'update',
-          data: data
-        }
-      }
+      return updateFun(productClassifyUrl, data)
     }
   },
   // productBannerUrl
@@ -164,14 +154,46 @@ let api = {
       return queryFun(productBannerUrl)
     },
     update(data) {
-      return {
-        method: 'post',
-        url: productBannerUrl,
-        data: {
-          method: 'update',
-          data: data
-        }
-      }
+      return updateFun(productBannerUrl, data)
+    }
+  },
+  // productVideo
+  productVideo: {
+    query() {
+      return queryFun(productVideoUrl)
+    },
+    queryById(id) {
+      return queryByIdFun(productVideoUrl, id)
+    },
+    queryByClassify(classify) {
+      return queryByClassifyFun(productVideoUrl, classify)
+    },
+    delete(id) {
+      return deleteFun(productVideoUrl, id)
+    },
+    insert(data) {
+      return insertFun(productVideoUrl, data)
+    },
+    update(data) {
+      return updateFun(productVideoUrl, data)
+    }
+  },
+  // aboutus
+  aboutus: {
+    query() {
+      return queryFun(aboutusUrl)
+    },
+    queryById(id) {
+      return queryByIdFun(aboutusUrl, id)
+    },
+    delete(id) {
+      return deleteFun(aboutusUrl, id)
+    },
+    insert(data) {
+      return insertFun(aboutusUrl, data)
+    },
+    update(data) {
+      return updateFun(aboutusUrl, data)
     }
   }
 }
