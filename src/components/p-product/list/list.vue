@@ -159,7 +159,7 @@
         this.axios(obj).then((res) => {
           let data = res.data
           if (data.code === '200') {
-            _this.items = _this.handleData(data.data)
+            _this.items = _this.handleData(data.data.list)
             console.log(_this.items)
           } else {
             util.req.queryError(this.toast)
@@ -182,12 +182,10 @@
         })
       },
       handleData(data) {
-        let dataH = []
-        data.list.forEach((v) => {
+        data.forEach((v) => {
           v.select = false
-          dataH.push(v)
         })
-        return dataH
+        return data
       },
       searchSubmit() {
         this.getItems('bySearch')

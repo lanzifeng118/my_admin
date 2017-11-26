@@ -1,38 +1,17 @@
 <template>
-<div class="edit product-classify-edit">
+<div class="edit experience-classify-edit">
   <h2 class="edit-h2" v-if="!typeAdd">编辑分类</h2>
   <h2 class="edit-h2" v-if="typeAdd">添加分类</h2>
-  <router-link to="/admin/product/classify" class="edit-close-btn" >
+  <router-link to="/admin/experience/classify" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
   <div class="edit-table-wrap">
     <table>
       <tbody>
+        <!-- name -->
         <tr>
-          <td width="90"><span class="icon-nessisary"></span>分类名称</td>
+          <td width="100"><span class="icon-nessisary"></span>分类名称</td>
           <td><input type="text" v-model.trim="item.name"></td>
-        </tr>
-        <tr>
-          <td>顺序</td>
-          <td><input type="text" v-model.trim="item.order"></td>
-        </tr>
-        <!-- logo -->
-        <tr>
-          <td class="vertical-top">分类图片<span class="separate"></span></td>
-          <td>
-            <div class="edit-img f-clearfix">
-              <div class="edit-img-box pic">
-                <img class="" :src="item.logo" alt="">
-              </div>
-              <p class="edit-img-note">（宽度250px以内，高度50px，20kb以内）</p>
-            </div>
-            <div class="edit-upload">
-              <label for="inputLogo" class="button button-second">选择图片</label>
-              <input type="file" id="inputLogo" accept="image/png, image/jpeg, image/gif, image/jpg"
-              @change="chooseLogo">
-              <button type="button" class="button button-second edit-delete" @click="deleteLogo">删除图片</button>
-            </div>
-          </td>
         </tr>
         <tr>
           <td></td>
@@ -42,15 +21,9 @@
     </table>
   </div>
   <toast
-    v-show="toastA.show"
-    :text="toastA.text"
-    :icon="toastA.icon"
-  >
-  </toast>
-  <toast
-    v-show="toase.submitShow"
-    text="正在提交..."
-    icon="upload"
+    v-show="toast.show"
+    :text="toast.text"
+    :icon="toast.icon"
   >
   </toast>
 </div>
@@ -58,152 +31,130 @@
 
 <script>
 import toast from 'components/toast/toast'
+import util from 'components/tools/util'
+import api from 'components/tools/api'
+
 export default {
   data() {
     return {
       typeAdd: true,
       item: {
+        logo: '',
         name: '',
-        order: '',
-        logo: ''
+        sort: '',
+        img: '',
+        banner_img: '',
+        banner_ling: ''
       },
       // file
-      file: null,
+      fileLogo: null,
+      fileImg: null,
+      fileBanner: null,
       // toastA
-      toastA: {
+      toast: {
         show: false,
         text: '',
         icon: ''
-      },
-      // submit
-      toase: {
-        submitShow: false
       }
     }
   },
   created() {
     this.getItem()
   },
+  watch: {
+    '$route' (to, from) {
+      this.getItem()
+    }
+  },
   methods: {
     getItem() {
-      if (this.$route.path === '/admin/product/classifyadd') {
+      if (this.$route.path === '/admin/experience/classifyadd') {
         return
       }
       this.typeAdd = false
-      this.item = {id: '1', name: 'Phoenix', logo: '/static/images/PhoenixControls-logo.png', order: '1'}
-    },
-    chooseLogo(e) {
       let _this = this
-      if (e.target.files[0].size > 2048000) {
-        _this.file = null
-        _this.showToast('图片太大了', 'warn', 600)
-        return
-      }
-      _this.file = e.target.files[0]
-      let reader = new FileReader()
-      reader.readAsDataURL(_this.file)
-      reader.onload = function(e) {
-        _this.item.logo = e.target.result
-      }
-    },
-    deleteLogo() {
-      if (this.item.logo !== '') {
-        this.item.logo = ''
-      }
+      let id = this.$route.params.id
+      this.axios(api.experienceClassify.queryById(id)).then((res) => {
+        let data = res.data
+        console.log(data)
+        if (data.code === '200') {
+          if (data.data) {
+            _this.item = data.data
+          } else {
+            util.toast.show(_this.toast, '此分类不存在', 'close')
+            this.goBack()
+          }
+        }
+      })
     },
     submit() {
-      let _this = this
-      // 如果上传了图片
+      // 验证
       if (!this.verify()) {
         return
       }
-      _this.toase.submitShow = true
-      if (_this.file) {
-        let formData = new FormData()
-        formData.append('upload', this.file)
-        _this.axios({
-          method: 'post',
-          url: '/api/admin/upload',
-          headers: {'content-type': 'multipart/form-data'},
-          data: formData
-        }).then((response) => {
-          let data = response.data
-          if (data.code === '200') {
-            _this.item.logo = data.url
-            _this.sendData()
-          } else {
-            _this.showError()
-          }
-        }).catch(() => {
-          _this.showError()
-        })
-      } else {
-        _this.sendData()
-      }
-    },
-    verify() {
-      if (!this.item.name) {
-        this.showToast('分类名称不能为空')
-        return false
-      }
-      if (this.item.order && !/^\d+$/.test(this.item.order)) {
-        this.showToast('顺序必须为数字')
-        return false
-      }
-      return true
+      util.toast.show(this.toast, '正在提交', 'upload')
+      this.sendData()
     },
     sendData() {
       let _this = this
       let obj = null
       if (this.typeAdd) {
-        obj = {
-          method: 'post',
-          url: '/api/admin/basicinfo'
-        }
+        obj = api.experienceClassify.insert(_this.item)
       } else {
-        obj = {
-          method: 'post',
-          url: '/api/admin/basicinfo',
-          data: {
-            method: 'modify',
-            language: 'cn',
-            data: _this.item
-          }
-        }
+        obj = api.experienceClassify.update(_this.item)
       }
-      _this.axios(obj).then((response) => {
-        let data = response.data
+      _this.axios(obj).then((res) => {
+        let data = res.data
         if (data.code === '200') {
           _this.showSuccess()
+        } else if (data.code === '400') {
+          util.toast.fade(this.toast, '分类名称已存在', 'close')
         } else {
-          _this.showError()
+          util.req.changeError(_this.toast)
         }
-      }).catch(() => {
-        _this.showError()
+      }).catch((err) => {
+        if (err) {
+          util.req.changeError(_this.toast)
+        }
       })
     },
-    showError() {
-      this.toase.submitShow = false
-      this.showToast('出错了，请稍后再试！', 'sad')
+    verify() {
+      if (!this.item.name) {
+        util.toast.fade(this.toast, '分类名称不能为空')
+        return false
+      }
+      if (this.item.sort && !/^\d+$/.test(this.item.sort)) {
+        util.toast.fade(this.toast, '顺序必须为数字')
+        return false
+      }
+      return true
     },
     showSuccess() {
-      this.toase.submitShow = false
-      this.showToast('提交成功！', 'appreciate', 600, () => {
-        this.$router.push('/admin/product/classifylist')
+      util.toast.show(this.toast, '提交成功！', 'appreciate')
+      this.goBack()
+    },
+    goBack() {
+      let _this = this
+      setTimeout(() => {
+        _this.$router.push('/admin/experience/classify')
+      }, 700)
+    },
+    uploadFile(file, callback) {
+      let _this = this
+      util.uploadFile(this, file, callback, () => {
+        util.req.changeError(_this.toast)
       })
     },
-    showToast(text, icon, time, callback) {
+    sendPic(file, key, callback) {
       let _this = this
-      time = time || 600
-      _this.toastA.show = true
-      _this.toastA.text = text || ''
-      _this.toastA.icon = icon || 'warn'
-      setTimeout(() => {
-        _this.toastA.show = false
-        if (typeof (callback) === 'function') {
+      if (file) {
+        this.uploadFile(file, (url) => {
+          _this.item[key] = url
           callback()
-        }
-      }, time)
+        })
+      } else {
+        callback()
+      }
     }
   },
   components: {
@@ -213,5 +164,7 @@ export default {
 </script>
 
 <style>
-
+.experience-classify-edit-link {
+  width: 500px;
+}
 </style>

@@ -1,10 +1,7 @@
 <template>
-  <div class="product-classify">
+  <div class="experience-classify">
     <div class="f-clearfix">
-      <button class="f-right button" @click="deleteAll">
-        <span class="icon icon-delete"></span>一键删除
-      </button>
-      <router-link to="/admin/product/classifyadd" class="f-right button list-btn-add">
+      <router-link to="/admin/experience/classifyadd" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link >
     </div>
@@ -15,54 +12,41 @@
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <!-- selectAll -->
-            <th
-              width="80"
-              @click="toggleSelectAll"
-              class="pointer"
-            >
-              <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
-            </th>
-            <th width="120">排序</th>
+            <th width="180">排序</th>
             <th>名称</th>
-            <th width="480">图片</th>
-            <th width="140">操作</th>
+            <th width="250">修改时间</th>
+            <th width="180">操作</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in items">
-            <!-- select -->
-            <td
-              class="pointer"
-              @click="toggleSelect(index)"
-            >
-              <span :class="[item.select ? 'icon-square_check_fill' : 'icon-square']"></span>
-            </td>
             <!-- order -->
             <td class="order">
-              <input type="text">
+              {{item.sort}}
             </td>
             <!-- name -->
             <td>
               {{item.name}}
             </td>
-            <!-- name -->
-            <td class="product-classify-logo">
-              <img :src="item.logo" alt="">
+            <!-- modifyTime -->
+            <td>
+              {{item.modifytime}}
             </td>
             <td class="link">
-              <router-link :to="'/admin/product/classifyedit/' + item.id">编辑</router-link><span class="icon-cutting_line"></span><a href="javascipt: void(0)">删除</a>
+              <router-link :to="'/admin/experience/classifyedit/' + item.id">编辑</router-link>
+              <span class="icon-cutting_line"></span>
+              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
     <pop
-      text="确定要删除所选项目？"
       type="warning"
-      v-show="popDeleteAll.show"
-      @confirm="confirmDeleteAll"
-      @close="closeDeleteAll"
+      :text="pop.text"
+      v-show="pop.show"
+      @confirm="confirmPop"
+      @close="closePop"
     >
     </pop>
     <toast
@@ -77,6 +61,8 @@
 <script>
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
+  import util from 'components/tools/util'
+  import api from 'components/tools/api'
 
   export default {
     data() {
@@ -89,10 +75,10 @@
           text: '',
           icon: ''
         },
-
-        popDeleteAll: {
-          show: false,
-          items: []
+        // pop
+        pop: {
+          text: '',
+          show: false
         }
       }
     },
@@ -101,11 +87,49 @@
     },
     methods: {
       getItems() {
-        this.items = [
-          {id: '1', name: 'Phoenix', logo: '/static/images/PhoenixControls-logo.png', order: '1'},
-          {id: '2', name: 'drager', logo: '/static/images/drager-logo.png', order: '2'},
-          {id: '3', name: 'aircuity', logo: '/static/images/aircuity-logo.png', order: '3'}
-        ]
+        let _this = this
+        this.axios(api.experienceClassify.query()).then((res) => {
+          let data = res.data
+          if (data.code === '200') {
+            data.data.list.forEach((v) => {
+              v.select = false
+              _this.items.push(v)
+            })
+            console.log(this.items)
+          } else {
+            util.req.queryError(this.toast)
+          }
+        })
+      },
+      deleteItem(index) {
+        let arr = []
+        let item = this.items[index]
+        arr.push(item.id)
+        this.deleteIds = arr
+        this.pop.text = '确定删除[' + item.name +']'
+        this.pop.show = true
+      },
+      confirmPop() {
+        let _this = this
+        let deleteIds = this.deleteIds
+        this.pop.show = false
+        this.axios(api.experienceClassify.delete(deleteIds)).then((res) => {
+          let data = res.data
+          if (data.code === '200') {
+            deleteIds.forEach((id) => {
+              for (let i = 0; i <= _this.items.length - 1; i++) {
+                if (_this.items[i].id === id) {
+                  _this.items.splice(i, 1)
+                  break
+                }
+              }
+            })
+            util.toast.fade(this.toast, '删除成功', 'check')
+          }
+        })
+      },
+      closePop() {
+        this.pop.show = false
       }
     },
     components: {
@@ -116,7 +140,4 @@
 </script>
 
 <style>
-.product-classify-logo img {
-  height: 35px;
-}
 </style>

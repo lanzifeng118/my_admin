@@ -1,9 +1,6 @@
 <template>
   <div class="product-classify">
     <div class="f-clearfix">
-      <button class="f-right button" @click="deleteAll">
-        <span class="icon icon-delete"></span>一键删除
-      </button>
       <router-link to="/admin/product/classifyadd" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link >
@@ -15,35 +12,20 @@
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <!-- selectAll -->
-            <th
-              width="60"
-              @click="toggleSelectAll"
-              class="pointer"
-            >
-              <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
-            </th>
             <th width="120">排序</th>
             <th>名称</th>
-            <th width="130">logo图</th>
+            <th width="140">logo图</th>
             <th width="180">预览图</th>
-            <th width="200">广告图</th>
+            <th width="210">广告图</th>
             <th width="170">修改时间</th>
             <th width="120">操作</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in items">
-            <!-- select -->
-            <td
-              class="pointer"
-              @click="toggleSelect(index)"
-            >
-              <span :class="[item.select ? 'icon-square_check_fill' : 'icon-square']"></span>
-            </td>
             <!-- order -->
-            <td class="order">
-              <input v-model="item.sort">
+            <td>
+              {{item.sort}}
             </td>
             <!-- name -->
             <td>
@@ -113,8 +95,7 @@
         pop: {
           text: '',
           show: false
-        },
-        thSelect: false
+        }
       }
     },
     created() {
@@ -136,37 +117,12 @@
           }
         })
       },
-      toggleSelectAll() {
-        this.thSelect = !this.thSelect
-        this.items.forEach((v) => {
-          v.select = this.thSelect
-        })
-      },
-      toggleSelect(index) {
-        let item = this.items[index]
-        item.select = !item.select
-      },
       deleteItem(index) {
         let arr = []
         let item = this.items[index]
         arr.push(item.id)
         this.deleteIds = arr
         this.pop.text = '确定删除[' + item.name +']'
-        this.pop.show = true
-      },
-      deleteAll() {
-        let arr = []
-        this.items.forEach((v) => {
-          if (v.select) {
-            arr.push(v.id)
-          }
-        })
-        if (arr.length <= 0) {
-          util.toast.fade(this.toast, '请选择需要删除的项目')
-          return
-        }
-        this.deleteIds = arr
-        this.pop.text = '确定删除所选项目'
         this.pop.show = true
       },
       confirmPop() {

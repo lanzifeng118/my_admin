@@ -7,6 +7,10 @@ let productClassifyUrl = '/api/admin/product/classify'
 let productBannerUrl = '/api/admin/product/banner'
 let productVideoUrl = 'api/admin/video'
 let aboutusUrl = 'api/admin/aboutus'
+let aboutusBannerUrl = 'api/admin/aboutus/banner'
+let experienceListUrl = '/api/admin/experience/list'
+let experienceClassifyUrl = '/api/admin/experience/classify'
+let experienceBannerUrl = '/api/admin/experience/banner'
 
 let queryFun = (url) => {
   return {
@@ -194,6 +198,60 @@ let api = {
     },
     update(data) {
       return updateFun(aboutusUrl, data)
+    }
+  },
+  // aboutusBannerUrl
+  aboutusBanner: {
+    query() {
+      return queryFun(aboutusBannerUrl)
+    },
+    update(data) {
+      return updateFun(aboutusBannerUrl, data)
+    }
+  },
+  // experience
+  experienceList: {
+    query() {
+      return queryFun(experienceListUrl)
+    },
+    queryById(id) {
+      return queryByIdFun(experienceListUrl, id)
+    },
+    insert(data) {
+      return insertFun(experienceListUrl, data)
+    },
+    update(data) {
+      return updateFun(experienceListUrl, data)
+    },
+    delete(id) {
+      return deleteFun(experienceListUrl, id)
+    }
+  },
+  // experienceClassify
+  experienceClassify: {
+    query() {
+      return queryFun(experienceClassifyUrl)
+    },
+    queryById(id) {
+      return queryByIdFun(experienceClassifyUrl, id)
+    },
+    delete(id) {
+      return deleteFun(experienceClassifyUrl, id)
+    },
+    insert(data) {
+      return insertFun(experienceClassifyUrl, data)
+    },
+    update(data) {
+      return updateFun(experienceClassifyUrl, data)
+    }
+  },
+  // experienceBannerUrl
+  experienceBanner: {
+    query() {
+      return queryFun(experienceBannerUrl)
+    },
+    update(data) {
+      return updateFun(experienceBannerUrl, data)
     }
   }
 }

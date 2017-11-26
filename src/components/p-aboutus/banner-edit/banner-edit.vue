@@ -1,7 +1,7 @@
 <template>
-<div class="edit experience-banner-edit">
+<div class="edit aboutus-banner-edit">
   <h2 class="edit-h2">编辑广告图</h2>
-  <router-link to="/admin/experience/banner" class="edit-close-btn" >
+  <router-link to="/admin/aboutus/banner" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
   <div class="edit-table-wrap">
@@ -74,7 +74,7 @@ export default {
   methods: {
     getItem() {
       let _this = this
-      this.axios(api.experienceBanner.query()).then((res) => {
+      this.axios(api.aboutusBanner.query()).then((res) => {
         let data = res.data
         if (data.code === '200') {
           _this.item = data.data
@@ -121,7 +121,7 @@ export default {
     },
     sendData() {
       let _this = this
-      this.axios(api.experienceBanner.update(this.item)).then((res) => {
+      this.axios(api.aboutusBanner.update(this.item)).then((res) => {
         let data = res.data
         if (data.code === '200') {
           _this.showSuccess()
@@ -145,7 +145,7 @@ export default {
     goback() {
       let _this = this
       setTimeout(() => {
-        _this.$router.push('/admin/experience/banner')
+        _this.$router.push('/admin/aboutus/banner')
       }, 700)
     }
   },

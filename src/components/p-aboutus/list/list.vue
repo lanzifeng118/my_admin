@@ -1,11 +1,6 @@
 <template>
   <div class="info-list">
     <div class="f-clearfix">
-      <!-- search -->
-      <div class="search">
-        <input class="search-input" v-model="searchText" placeholder="输入查找内容">
-        <span class="search-icon icon-search" @click="searchSubmit"></span>
-      </div>
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span>一键删除
       </button>

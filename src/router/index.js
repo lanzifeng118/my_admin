@@ -26,10 +26,12 @@ import ExperienceClassify from 'components/p-experience/classify/classify'
 import ExperienceClassifyEdit from 'components/p-experience/classify-edit/classify-edit'
 import ExperienceBanner from 'components/p-experience/banner/banner'
 import ExperienceBannerEdit from 'components/p-experience/banner-edit/banner-edit'
-// info
-import Info from 'components/p-info/info'
-import InfoList from 'components/p-info/infoList/infoList'
-import InfoEdit from 'components/p-info/InfoEdit/InfoEdit'
+// aboutus
+import Aboutus from 'components/p-aboutus/aboutus'
+import AboutusList from 'components/p-aboutus/list/list'
+import AboutusEdit from 'components/p-aboutus/edit/edit'
+import AboutusBanner from 'components/p-aboutus/banner/banner'
+import AboutusBannerEdit from 'components/p-aboutus/banner-edit/banner-edit'
 
 Vue.use(Router)
 
@@ -71,14 +73,16 @@ export default new Router({
         },
         {
           path: 'aboutus',
-          component: Info,
+          component: Aboutus,
           children: [
             // 中文
-            {path: '/', component: InfoList},
-            {path: 'add', component: InfoEdit},
-            {path: 'edit/:id', component: InfoEdit},
+            {path: '/', component: AboutusList},
+            {path: 'add', component: AboutusEdit},
+            {path: 'edit/:id', component: AboutusEdit},
+            {path: 'banner', component: AboutusBanner},
+            {path: 'banneredit', component: AboutusBannerEdit},
             // 英文
-            {path: 'en', component: InfoList}
+            {path: 'en', component: AboutusList}
           ]
         },
         // product

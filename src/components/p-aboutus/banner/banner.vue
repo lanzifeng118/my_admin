@@ -1,7 +1,7 @@
 <template>
-  <div class="experience-banner">
-    <div class="f-clearfix experience-banner-top">
-      <router-link to="/admin/experience/banneredit" class="f-right button" >
+  <div class="aboutus-banner">
+    <div class="f-clearfix aboutus-banner-top">
+      <router-link to="/admin/aboutus/banneredit" class="f-right button" >
         <span class="icon icon-edit"></span>编辑
       </router-link>
     </div>
@@ -54,7 +54,7 @@
     methods: {
       getItems() {
         let _this = this
-        this.axios(api.experienceBanner.query()).then((res) => {
+        this.axios(api.aboutusBanner.query()).then((res) => {
           let data = res.data
           if (data.code === '200') {
             _this.item = data.data
@@ -76,10 +76,10 @@
 </script>
 
 <style>
-.experience-banner-top {
+.aboutus-banner-top {
   margin-bottom: 20px;
 }
-.experience-banner img {
+.aboutus-banner img {
   max-width: 800px;
   max-height: 180px;
 }

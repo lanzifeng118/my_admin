@@ -1,8 +1,8 @@
 <template>
 <div class="product-edit edit">
-  <h2 class="edit-h2" v-if="!typeAdd">编辑产品</h2>
-  <h2 class="edit-h2" v-if="typeAdd">添加产品</h2>
-  <router-link to="/admin/product/list" class="edit-close-btn" >
+  <h2 class="edit-h2" v-if="!typeAdd">编辑项目经验</h2>
+  <h2 class="edit-h2" v-if="typeAdd">添加项目经验</h2>
+  <router-link to="/admin/experience/list" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
   <div class="edit-table-wrap">
@@ -12,27 +12,50 @@
           <td width="90"><span class="icon-nessisary"></span>经验名称</td>
           <td><input type="text" v-model="item.name"></td>
         </tr>
+        <!-- 显示 -->
         <tr>
-          <td>顺序</td>
-          <td><input type="text" v-model="item.order"></td>
-        </tr>
-        <tr>
-          <td>分类</td>
-          <td>
-            <select v-model="item.classify">
-              <option disabled value="">选择分类</option>
-              <option>Phoenix</option>
-            </select>
+          <td width="90" class="vertical-middle">显示</td>
+          <td class="show">
+            <span
+              :class="[item.display === 'Y' ? 'icon-square_check_fill' : 'icon-square']"
+              @click="toggleDisplay"
+            >
+            </span>
           </td>
         </tr>
         <tr>
-          <td>图片</td>
-          <td class="pdf">
-            <button type="button" class="button button-second"><span class="icon icon-round_add"></span>添加PDF</button>
-            <p class="pdf-box" v-for="pdf in item.pdf">
-              {{pdf.name}}
-              <span class="icon-round_close_fill"></span>
-            </p>
+          <td>顺序</td>
+          <td><input type="text" v-model="item.sort"></td>
+        </tr>
+        <tr>
+          <td>Logo</td>
+          <td>
+            <!-- add  -->
+            <label for="addLogo" class="button button-second">添加图片</label>
+            <input type="file" id="addLogo" accept="image/png, image/jpeg, image/gif, image/jpg"
+            @change="addLogo">
+            <ul class="experience-eidt-logo-ul f-clearfix">
+              <li class="experience-eidt-logo-li" v-for="(logo, index) in item.logo">
+                <div class="experience-eidt-logo-img">
+                  <img :src="logo.img">
+                  <!-- changeLogo -->
+                  <label :for="'logo' + index">选择图片</label>
+                  <input type="file" :id="'logo' + index" accept="image/png, image/jpeg, image/gif, image/jpg"
+                  @change="changeLogo(key + '_'  + index, $event)">
+                </div>
+                <div class="experience-eidt-logo-input">
+                  分类<select v-model="logo.classify">
+                    <option disabled value="">选择分类</option>
+                    <option v-for="classifyItem in classify">{{classifyItem.name}}</option>
+                  </select>
+                </div>
+                <div class="experience-eidt-logo-input">
+                  顺序<input type="text" v-model="logo.sort">
+                </div>
+                <!-- delete ad -->
+                <span class="icon-round_close_fill" @click="deleteLogo(index)"></span>
+              </li>
+            </ul>
         </td>
         </tr>
         <tr>
@@ -43,168 +66,201 @@
     </table>
   </div>
   <toast
-    v-show="toastA.show"
-    :text="toastA.text"
-    :icon="toastA.icon"
+    v-show="toast.show"
+    :text="toast.text"
+    :icon="toast.icon"
   >
-  </toast>
-  <toast
-    v-show="toase.submitShow"
-    text="正在提交..."
-    icon="upload"
-  >
-  </toast>
   </toast>
 </div>
 </template>
 
 <script>
 import toast from 'components/toast/toast'
+import util from 'components/tools/util'
+import api from 'components/tools/api'
 export default {
   data() {
     return {
       typeAdd: true,
       item: {
         name: '',
-        pic: '',
-        order: '',
-        pdf: [],
-        brief: '',
-        classify: '',
-        detail: ''
+        logo: [],
+        sort: '',
+        display: 'Y'
+      },
+      // classify
+      classify: [],
+      // editor
+      editorOption: { // 编辑器的配置
+        placeholder: '输入内容...',
+        modules: {
+          toolbar: this.$store.state.quillEditor.nomal
+        }
       },
       // file
       file: null,
-      // toastA
-      toastA: {
+      // toast
+      toast: {
         show: false,
         text: '',
         icon: ''
       },
-      // submit
-      toase: {
-        submitShow: false
+      // percent
+      percent: {
+        show: 'false',
+        progress: 0
       }
     }
   },
   created() {
     this.getItem()
   },
+  watch: {
+    '$route' (to, from) {
+      this.getItem()
+    }
+  },
   methods: {
     getItem() {
-      if (this.$route.path === '/admin/product/add') {
+      this.getClassiy()
+      if (this.$route.path === '/admin/experience/add') {
         return
       }
       this.typeAdd = false
-      this.item = {id: '1', name: 'Phoenix', pic: '/static/images/prodct-phoenix-01.jpg', order: '1', classify: 'Phoenix', brief: 'Vantage solutions unify Phoenix Controls suite of scalable products for airflow control and system integration, monitoring, and management. The products range from precision valve controllers to network integration hardware and front-end displays of actionable data. Applications are standalone or implemented at the room, floor.', detail: '<p>Many times during an HVAC project implementation, the building management system (BMS) vendor suggests providing their generic controller for controlling third party devices such as air flow control valves. While this may reduce the upfront third party integration</p>', pdf: [{name: 'components.pdf'}, {name: 'toast.pdf'}]}
-    },
-    chooseLogo(e) {
       let _this = this
-      _this.file = e.target.files[0]
-      let reader = new FileReader()
-      reader.readAsDataURL(_this.file)
-      reader.onload = function(e) {
-        _this.item.logo = e.target.result
-      }
+      let id = this.$route.params.id
+      this.axios(api.experienceList.queryById(id)).then((res) => {
+        let data = res.data
+        console.log(data)
+        if (data.code === '200') {
+          if (data.data) {
+            _this.item = data.data
+          } else {
+            util.toast.show(_this.toast, '此产品不存在', 'close')
+            this.goBack()
+          }
+        }
+      }).catch((err) => {
+        if (err) {
+          console.log(err)
+          _this.queryErrorGoBack()
+        }
+      })
     },
-    deleteLogo() {
-      if (this.item.logo !== '') {
-        this.item.logo = ''
+    getClassiy() {
+      let _this = this
+      this.axios(api.experienceClassify.query()).then((res) => {
+        let data = res.data
+        if (data.code === '200') {
+          _this.classify = data.data.list
+        } else {
+          // _this.queryErrorGoBack()
+        }
+      }).catch((err) => {
+        if (err) {
+          // _this.queryErrorGoBack()
+        }
+      })
+    },
+    // Logo
+    addLogo(e) {
+      let _this = this
+      this.uploadFile(e.target.files[0], (url) => {
+        _this.item.logo.push({img: url, link: '', sort: '', lang: 'cn'})
+      })
+    },
+    changeLogo(index, e) {
+      let _this = this
+      console.log(index)
+      this.uploadFile(e.target.files[0], (url) => {
+        _this.item.logo[index].img = url
+      })
+    },
+    deleteLogo(index) {
+      this.item.logo.splice(index, 1)
+    },
+    toggleDisplay() {
+      if (this.item.display === 'Y') {
+        this.item.display = 'N'
+      } else {
+        this.item.display = 'Y'
       }
     },
     submit() {
-      let _this = this
-      // 如果上传了图片
       if (!this.verify()) {
         return
       }
-      _this.toase.submitShow = true
-      if (_this.file) {
-        let formData = new FormData()
-        formData.append('upload', this.file)
-        _this.axios({
-          method: 'post',
-          url: '/api/admin/upload',
-          headers: {'content-type': 'multipart/form-data'},
-          data: formData
-        }).then((response) => {
-          let data = response.data
-          if (data.code === '200') {
-            _this.item.logo = data.url
-            _this.sendData()
-          } else {
-            _this.showError()
-          }
-        }).catch(() => {
-          _this.showError()
-        })
-      } else {
-        _this.sendData()
-      }
-    },
-    verify() {
-      if (!this.item.name) {
-        this.showToast('分类名称不能为空')
-        return false
-      }
-      if (this.item.order && !/^\d+$/.test(this.item.order)) {
-        this.showToast('顺序必须为数字')
-        return false
-      }
-      return true
+      util.toast.show(this.toast, '正在提交', 'upload')
+      this.sendData()
     },
     sendData() {
       let _this = this
       let obj = null
       if (this.typeAdd) {
-        obj = {
-          method: 'post',
-          url: '/api/admin/basicinfo'
-        }
+        obj = api.experienceList.insert(this.item)
       } else {
-        obj = {
-          method: 'post',
-          url: '/api/admin/basicinfo',
-          data: {
-            method: 'modify',
-            language: 'cn',
-            data: _this.item
-          }
-        }
+        obj = api.experienceList.update(this.item)
       }
-      _this.axios(obj).then((response) => {
-        let data = response.data
+      console.log(obj)
+      this.axios(obj).then((res) => {
+        let data = res.data
         if (data.code === '200') {
           _this.showSuccess()
+        } else if (data.code === '400') {
+          util.toast.fade(this.toast, '项目经验名称已存在', 'close')
         } else {
-          _this.showError()
+          util.req.changeError(_this.toast)
         }
-      }).catch(() => {
+      }).catch((err) => {
+        if (err) {
+          util.req.changeError(_this.toast)
+        }
+      })
+    },
+    verify() {
+      if (!this.item.name) {
+        util.toast.fade(this.toast, '项目经验名称不能为空')
+        return false
+      }
+      if (this.item.sort && !util.isNum(this.item.sort)) {
+        util.toast.fade(this.toast, '顺序必须为数字')
+        return false
+      }
+      return true
+    },
+    showError() {
+      util.toast.fade(this.toast, '出错了，请稍后再试!', 'sad')
+    },
+    showSuccess() {
+      util.toast.show(this.toast, '提交成功！', 'appreciate')
+      this.goBack()
+    },
+    goBack() {
+      let _this = this
+      setTimeout(() => {
+        _this.$router.push('/admin/experience/list')
+      }, 700)
+    },
+    uploadFile(file, callback) {
+      let _this = this
+      util.uploadFile(this, file, callback, () => {
         _this.showError()
       })
     },
-    showError() {
-      this.toase.submitShow = false
-      this.showToast('出错了，请稍后再试！', 'sad')
-    },
-    showSuccess() {
-      this.toase.submitShow = false
-      this.showToast('提交成功！', 'appreciate', 600, () => {
-        this.$router.push('/admin/product/list')
-      })
-    },
-    showToast(text, icon, time, callback) {
+    sendPic(file, key, callback) {
       let _this = this
-      time = time || 600
-      _this.toastA.show = true
-      _this.toastA.text = text || ''
-      _this.toastA.icon = icon || 'warn'
-      setTimeout(() => {
-        _this.toastA.show = false
-        if (typeof (callback) === 'function') {
+      if (file) {
+        this.uploadFile(file, (url) => {
+          _this.item[key] = url
           callback()
-        }
-      }, time)
+        })
+      } else {
+        callback()
+      }
+    },
+    queryErrorGoBack() {
+      util.req.queryError(this.toast)
+      this.goBack()
     }
   },
   components: {
@@ -214,14 +270,68 @@ export default {
 </script>
 
 <style>
-.product-edit .edit-img {
+.experience-eidt-logo-li {
+  border: 1px solid #f1f1f1;
+  padding: 10px;
+  line-height: 0;
+  position: relative;
+  margin-top: 13px;
+  margin-right: 15px;
+  float: left;
+  width: 200px;
+}
+.experience-eidt-logo-img {
+  position: relative;
+  z-index: 9;
+  height: 73px;
+  overflow: hidden;
 
 }
-.product-edit .edit-img img {
-  max-width: 240px;
-  max-height: 180px;
+.experience-eidt-logo-li img {
+  width: 100%;
 }
-.product-edit .edit-img span {
-  left: 265px;
+.experience-eidt-logo-img label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 73px;
+  line-height: 73px;
+  text-align: center;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  opacity: 0;
+  transition: all 0.2s;
+}
+.experience-eidt-logo-img:hover label{
+  opacity: 1;
+  font-size: 16px;
+}
+
+.experience-eidt-logo-li:nth-child(4n) {
+  margin-right: 0;
+}
+
+.experience-eidt-logo-input {
+  margin-top: 10px;
+  text-align: center;
+}
+.experience-eidt-logo-input input,
+.experience-eidt-logo-input select {
+  margin-left: 8px;
+  width: 125px;
+}
+.experience-eidt-logo-li .icon-round_close_fill {
+  cursor: pointer;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  z-index: 10;
+  font-size: 22px;
+  transition: all 0.2s;
+}
+.experience-eidt-logo-li .icon-round_close_fill:hover {
+  color: #00d0bc;
 }
 </style>
