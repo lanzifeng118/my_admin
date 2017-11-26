@@ -12,18 +12,13 @@
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <th width="180">排序</th>
             <th>名称</th>
-            <th width="250">修改时间</th>
+            <th width="600">修改时间</th>
             <th width="180">操作</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in items">
-            <!-- order -->
-            <td class="order">
-              {{item.sort}}
-            </td>
             <!-- name -->
             <td>
               {{item.name}}

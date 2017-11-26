@@ -47,7 +47,7 @@
             <th width="220">图片</th>
             <th width="110">显示</th>
             <th width="190">分类</th>
-            <th width="150">修改时间</th>
+            <th width="170">修改时间</th>
             <th width="140">操作</th>
           </tr>
         </thead>

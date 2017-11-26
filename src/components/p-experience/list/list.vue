@@ -26,7 +26,7 @@
             <th width="150">排序</th>
             <th>名称</th>
             <th width="150">显示</th>
-            <th width="200">创建时间</th>
+            <th width="200">修改时间</th>
             <th width="150">操作</th>
           </tr>
         </thead>

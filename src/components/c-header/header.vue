@@ -7,7 +7,7 @@
       </div>
       <ul class="header-operate f-right">
         <li class="header-operate-item">
-          <a href="#"><span class="icon icon-look"></span>浏览前台</a>
+          <a href="http://lanzifeng.com/#/home" target="_blank"><span class="icon icon-look"></span>浏览前台</a>
         </li>
         <li class="header-operate-item">
           <a href="#"><span class="icon icon-people"></span>个人中心</a>

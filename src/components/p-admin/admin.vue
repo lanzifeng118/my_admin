@@ -58,17 +58,20 @@ export default {
     }
   },
   created() {
-    let _this = this
-    _this.axios.post('/api/admin/user', {
-      method: 'get'
-    }).then((response) => {
-      let data = response.data
-      if (data.code === '200') {
-        _this.$store.state.user.name = data.data.name
-        _this.$store.state.user.avatar = data.data.avatar
-        _this.$store.state.user.lastlogintime = data.data.lastlogintime
-      }
-    })
+    this.$store.state.user.name = '管理员'
+    this.$store.state.user.avatar = 'static/images/avatar.png'
+    this.$store.state.user.lastlogintime = new Date().toLocaleString()
+    // let _this = this
+    // _this.axios.post('/api/admin/user', {
+    //   method: 'get'
+    // }).then((response) => {
+    //   let data = response.data
+    //   if (data.code === '200') {
+    //     _this.$store.state.user.name = data.data.name
+    //     _this.$store.state.user.avatar = data.data.avatar
+    //     _this.$store.state.user.lastlogintime = data.data.lastlogintime
+    //   }
+    // })
   },
   components: {
     vHeader,
