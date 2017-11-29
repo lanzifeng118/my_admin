@@ -104,7 +104,6 @@ let req = {
     toast.fade(obj, '出错了，请稍后再试!', 'sad')
   }
 }
-
 export default {
   isNum,
   myFileReader,

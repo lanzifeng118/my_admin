@@ -32,6 +32,10 @@ import AboutusList from 'components/p-aboutus/list/list'
 import AboutusEdit from 'components/p-aboutus/edit/edit'
 import AboutusBanner from 'components/p-aboutus/banner/banner'
 import AboutusBannerEdit from 'components/p-aboutus/banner-edit/banner-edit'
+// friendlink
+import Friendlink from 'components/p-friendlink/friendlink'
+import FriendlinkList from 'components/p-friendlink/list/list'
+import FriendlinkEdit from 'components/p-friendlink/edit/edit'
 
 Vue.use(Router)
 
@@ -151,6 +155,19 @@ export default new Router({
             {path: 'classify/en', component: ExperienceClassify},
             {path: 'banner', component: ExperienceBanner},
             {path: 'banneredit', component: ExperienceBannerEdit, children: [{path: ':id'}]}
+          ]
+        },
+        // friendlink
+        {
+          path: 'friendlink',
+          component: Friendlink,
+          children: [
+            // 中文
+            {path: '/', component: FriendlinkList},
+            {path: 'add', component: FriendlinkEdit},
+            {path: 'edit/:id', component: FriendlinkEdit},
+            // 英文
+            {path: 'en', component: AboutusList}
           ]
         },
         // news

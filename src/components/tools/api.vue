@@ -11,16 +11,23 @@ let aboutusBannerUrl = 'api/admin/aboutus/banner'
 let experienceListUrl = '/api/admin/experience/list'
 let experienceClassifyUrl = '/api/admin/experience/classify'
 let experienceBannerUrl = '/api/admin/experience/banner'
+let friendlinkUrl = 'api/admin/friendlink'
 
-let queryFun = (url) => {
+let queryFun = (url, pageData) => {
+  let data = {
+    lang: LANG
+  }
+  if (pageData) {
+    for (var key in pageData) {
+      data[key] = pageData[key]
+    }
+  }
   return {
     method: 'post',
     url: url,
     data: {
       method: 'query',
-      data: {
-        lang: LANG
-      }
+      data: data
     }
   }
 }
@@ -101,28 +108,14 @@ let api = {
   },
   // product
   productList: {
-    query() {
-      return queryFun(productListUrl)
+    query(pageData) {
+      return queryFun(productListUrl, pageData)
     },
     queryById(id) {
       return queryByIdFun(productListUrl, id)
     },
     queryByClassify(classify) {
       return queryByClassifyFun(productListUrl, classify)
-    },
-    queryBySearch(keyword, classify) {
-      return {
-        method: 'post',
-        url: productListUrl,
-        data: {
-          method: 'queryBySearch',
-          data: {
-            name: keyword,
-            classify: classify,
-            lang: LANG
-          }
-        }
-      }
     },
     insert(data) {
       return insertFun(productListUrl, data)
@@ -252,6 +245,24 @@ let api = {
     },
     update(data) {
       return updateFun(experienceBannerUrl, data)
+    }
+  },
+  // friendlink
+  friendlink: {
+    query() {
+      return queryFun(friendlinkUrl)
+    },
+    queryById(id) {
+      return queryByIdFun(friendlinkUrl, id)
+    },
+    delete(id) {
+      return deleteFun(friendlinkUrl, id)
+    },
+    insert(data) {
+      return insertFun(friendlinkUrl, data)
+    },
+    update(data) {
+      return updateFun(friendlinkUrl, data)
     }
   }
 }

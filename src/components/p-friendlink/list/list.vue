@@ -1,29 +1,10 @@
 <template>
-  <div class="product-list">
+  <div class="friend-link-list">
     <div class="f-clearfix">
-      <!-- 分类 -->
-      <div class="f-left">
-        <select v-model="classifySelect" @change="changeSelect">
-          <option disabled value="">选择分类</option>
-          <option value="">所有分类</option>
-          <option
-            v-for="classifyItem in classify"
-            :value="classifyItem.name"
-          >
-            {{classifyItem.name}}
-          </option>
-        </select>
-      </div>
-      <!-- search -->
-      <div class="search f-left">
-        <input class="search-input" v-model="searchText" placeholder="输入查找内容">
-        <span class="search-icon icon-search" @click="searchSubmit"></span>
-      </div>
-      <!-- 删除 -->
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span>一键删除
       </button>
-      <router-link to="/admin/product/add" class="f-right button list-btn-add">
+      <router-link to="/admin/friendlink/add" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link >
     </div>
@@ -36,19 +17,17 @@
           <tr>
             <!-- selectAll -->
             <th
-              width="80"
+              width="120"
               @click="toggleSelectAll"
               class="pointer"
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="60">排序</th>
+            <th width="120">排序</th>
             <th>名称</th>
-            <th width="220">图片</th>
-            <th width="110">显示</th>
-            <th width="190">分类</th>
-            <th width="170">修改时间</th>
-            <th width="140">操作</th>
+            <th width="350">链接</th>
+            <th width="200">修改时间</th>
+            <th width="180">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -64,25 +43,14 @@
             <td class="order">
               {{item.sort}}
             </td>
-            <!-- name -->
-            <td>{{item.name}}</td>
-            <!-- picture -->
-            <td class="product-list-img"><img :src="item.img" alt=""></td>
-            <!-- show -->
-            <td
-              class="pointer"
-              :class="[item.display === 'Y' ? 'show' : 'not-show']"
-              @click="toggleDisplay(index)"
-            >
-              <span class="icon-check"></span>
-            </td>
-            <!-- classify -->
-            <td class="classify">
-              <p v-if="item.classify.trim()"><span>{{item.classify}}</span></p>
+            <td>{{item.title}}</td>
+            <!-- link -->
+            <td>
+              {{item.link}}
             </td>
             <td>{{item.modifytime}}</td>
             <td class="link">
-              <router-link :to="'/admin/product/edit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/friendlink/edit/' + item.id">编辑</router-link>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
@@ -90,13 +58,6 @@
         </tbody>
       </table>
     </div>
-    <paging
-      :paging="paging"
-      @pagingNextClick="pagingNextClick"
-      @pagingPreClick="pagingPreClick"
-      @pagingChange="pagingChange"
-    >
-    </paging>
     <pop
       type="warning"
       :text="pop.text"
@@ -115,8 +76,8 @@
 </template>
 
 <script>
+  import search from 'components/search/search'
   import pop from 'components/pop/pop'
-  import paging from 'components/c-paging/paging'
   import toast from 'components/toast/toast'
   import util from 'components/tools/util'
   import api from 'components/tools/api'
@@ -145,65 +106,34 @@
           text: '',
           show: false
         },
-        thSelect: false,
-        // paging
-        paging: {
-          size: 10,
-          no: 0,
-          list: []
-        }
+        thSelect: false
       }
     },
     created() {
       this.getItems()
-      this.getClassiy()
     },
     methods: {
       getItems() {
         let _this = this
-        let pageData = {
-          page_size: _this.paging.size,
-          page_no: _this.paging.no,
-          classify: _this.classifySelect,
-          name: _this.searchText
-        }
-        this.axios(api.productList.query(pageData)).then((res) => {
+        let apiList = api.friendlink
+        this.axios(apiList.query()).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
-            _this.items = _this.handleData(data.data.list)
-            _this.paging.list = new Array(Math.ceil(data.data.total / _this.paging.size))
+            _this.items = _this.handleData(data.data)
+            console.log(_this.items)
           } else {
-            util.req.queryError(this.toast)
-          }
-        })
-      },
-      getClassiy() {
-        let _this = this
-        this.axios(api.productClassify.query()).then((res) => {
-          let data = res.data
-          if (data.code === '200') {
-            _this.classify = data.data.list
-          } else {
-            util.req.queryError(this.toast)
-          }
-        }).catch((err) => {
-          if (err) {
             util.req.queryError(this.toast)
           }
         })
       },
       handleData(data) {
-        data.forEach((v) => {
+        let dataH = []
+        data.list.forEach((v) => {
           v.select = false
+          dataH.push(v)
         })
-        return data
-      },
-      searchSubmit() {
-        this.getItems()
-      },
-      changeSelect() {
-        this.getItems()
+        return dataH
       },
       toggleSelectAll() {
         this.thSelect = !this.thSelect
@@ -229,7 +159,7 @@
         let item = this.items[index]
         arr.push(item.id)
         this.deleteIds = arr
-        this.pop.text = '确定删除[' + item.name +']'
+        this.pop.text = '确定删除[' + item.title +']'
         this.pop.show = true
       },
       deleteAll() {
@@ -254,7 +184,7 @@
         let _this = this
         let deleteIds = this.deleteIds
         this.pop.show = false
-        this.axios(api.productList.delete(deleteIds)).then((res) => {
+        this.axios(api.friendlink.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {
@@ -268,36 +198,18 @@
             util.toast.fade(this.toast, '删除成功', 'check')
           }
         })
-      },
-      pagingPreClick() {
-        this.paging.no --
-        this.getItems()
-      },
-      pagingNextClick() {
-        this.paging.no ++
-        this.getItems()
-      },
-      pagingChange(index) {
-        console.log(index)
-        this.paging.no = index
-        this.getItems()
       }
     },
     components: {
+      search,
       pop,
-      toast,
-      paging
+      toast
     }
   }
 </script>
 
 <style>
-.product-list .search {
-  margin-left: 10px;
-}
-.product-list-img img{
-  max-width: 200px;
-  max-height: 120px;
-  line-height: 0;
+.friend-link-list {
+
 }
 </style>

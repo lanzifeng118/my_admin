@@ -42,7 +42,7 @@ let navItems = [{
   name: '客户反馈',
   style: 'feedback'
 }, {
-  src: '/admin/link',
+  src: '/admin/friendlink',
   name: '友情链接',
   style: 'share'
 }, {

@@ -129,7 +129,7 @@ export default {
         name: '',
         display: 'Y',
         img: '',
-        sort: '',
+        sort: 0,
         resources: [],
         brief: '',
         classify: '', // 读取接口
@@ -288,9 +288,10 @@ export default {
         return false
       }
       if (this.item.sort && !util.isNum(this.item.sort)) {
-        util.toast.fade(this.toast, '顺序必须为数字')
+        util.toast.fade(this.toast, '顺序必须为整数')
         return false
       }
+      this.item.sort = parseInt(this.item.sort)
       return true
     },
     showError() {
