@@ -20,7 +20,7 @@
           </th>
           <th>名称</th>
           <th width="280">预览图</th>
-          <th width="190">分类</th>
+          <th width="190">品牌</th>
           <th width="200">修改时间</th>
           <th width="200">操作</th>
         </tr>

@@ -46,12 +46,12 @@
           <td>顺序</td>
           <td><input type="text" v-model="item.sort"></td>
         </tr>
-        <!-- 分类 -->
+        <!-- 品牌 -->
         <tr>
-          <td>分类</td>
+          <td>品牌</td>
           <td>
             <select v-model="item.classify">
-              <option disabled value="">选择分类</option>
+              <option disabled value="">选择品牌</option>
               <option v-for="classifyItem in classify">{{classifyItem.name}}</option>
             </select>
           </td>

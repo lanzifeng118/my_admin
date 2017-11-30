@@ -1,5 +1,5 @@
 <template>
-  <div class="friendlink">
+  <div class="support">
     <tab :items="tabData"></tab>
     <div class="content-detail" :style="{minHeight: contentDetailMinHeigth + 'px'}">
       <router-view></router-view>
@@ -16,8 +16,8 @@
       return {
         contentDetailMinHeigth,
         tabData: [
-          {text: '友情链接列表', href: '/admin/friendlink', icon: 'search_list'},
-          {text: 'Friend Link List', href: '/admin/friendlink/en', icon: 'search_list'}
+          {text: '服务支持列表', href: '/admin/support', icon: 'search_list'},
+          {text: 'Service & Support List', href: '/admin/support/en', icon: 'search_list'}
         ]
       }
     },
@@ -28,6 +28,6 @@
 </script>
 
 <style>
-  .friendlink {
+  .support {
   }
 </style>

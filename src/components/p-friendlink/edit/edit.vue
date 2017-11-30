@@ -10,8 +10,8 @@
       <table>
         <tbody>
           <tr>
-            <td width="90">标题</td>
-            <td><input type="text" v-model="item.title"></td>
+            <td width="90">名称</td>
+            <td><input type="text" v-model="item.name"></td>
           </tr>
           <!-- 顺序 -->
           <tr>

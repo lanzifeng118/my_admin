@@ -38,8 +38,8 @@ let navItems = [{
   name: '新闻管理',
   style: 'notification'
 }, {
-  src: '/admin/feedback',
-  name: '客户反馈',
+  src: '/admin/support',
+  name: '服务支持',
   style: 'feedback'
 }, {
   src: '/admin/friendlink',

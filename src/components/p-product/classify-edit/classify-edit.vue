@@ -1,7 +1,7 @@
 <template>
 <div class="edit product-classify-edit">
-  <h2 class="edit-h2" v-if="!typeAdd">编辑分类</h2>
-  <h2 class="edit-h2" v-if="typeAdd">添加分类</h2>
+  <h2 class="edit-h2" v-if="!typeAdd">编辑品牌</h2>
+  <h2 class="edit-h2" v-if="typeAdd">添加品牌</h2>
   <router-link to="/admin/product/classify" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
@@ -10,7 +10,7 @@
       <tbody>
         <!-- name -->
         <tr>
-          <td width="100"><span class="icon-nessisary"></span>分类名称</td>
+          <td width="100"><span class="icon-nessisary"></span>品牌名称</td>
           <td><input type="text" v-model.trim="item.name"></td>
         </tr>
         <!-- sort -->
@@ -142,7 +142,7 @@ export default {
           if (data.data) {
             _this.item = data.data
           } else {
-            util.toast.show(_this.toast, '此分类不存在', 'close')
+            util.toast.show(_this.toast, '此品牌不存在', 'close')
             this.goBack()
           }
           console.log(data)
@@ -221,7 +221,7 @@ export default {
         if (data.code === '200') {
           _this.showSuccess()
         } else if (data.code === '400') {
-          util.toast.fade(this.toast, '分类名称已存在', 'close')
+          util.toast.fade(this.toast, '品牌名称已存在', 'close')
         } else {
           util.req.changeError(_this.toast)
         }
@@ -233,7 +233,7 @@ export default {
     },
     verify() {
       if (!this.item.name) {
-        util.toast.fade(this.toast, '分类名称不能为空')
+        util.toast.fade(this.toast, '品牌名称不能为空')
         return false
       }
       if (this.item.sort && !/^\d+$/.test(this.item.sort)) {

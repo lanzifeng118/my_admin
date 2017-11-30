@@ -12,6 +12,7 @@ let experienceListUrl = '/api/admin/experience/list'
 let experienceClassifyUrl = '/api/admin/experience/classify'
 let experienceBannerUrl = '/api/admin/experience/banner'
 let friendlinkUrl = 'api/admin/friendlink'
+let supportUrl = 'api/admin/support'
 
 let queryFun = (url, pageData) => {
   let data = {
@@ -263,6 +264,18 @@ let api = {
     },
     update(data) {
       return updateFun(friendlinkUrl, data)
+    }
+  },
+  // support
+  support: {
+    query() {
+      return queryFun(supportUrl)
+    },
+    queryById(id) {
+      return queryByIdFun(supportUrl, id)
+    },
+    delete(id) {
+      return deleteFun(supportUrl, id)
     }
   }
 }

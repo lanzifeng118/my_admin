@@ -1,29 +1,10 @@
 <template>
-  <div class="product-list">
+  <div class="support-list">
     <div class="f-clearfix">
-      <!-- 品牌 -->
-      <div class="f-left">
-        <select v-model="classifySelect" @change="changeSelect">
-          <option disabled value="">选择品牌</option>
-          <option value="">所有品牌</option>
-          <option
-            v-for="classifyItem in classify"
-            :value="classifyItem.name"
-          >
-            {{classifyItem.name}}
-          </option>
-        </select>
-      </div>
-      <!-- search -->
-      <div class="search f-left">
-        <input class="search-input" v-model="searchText" placeholder="输入查找内容">
-        <span class="search-icon icon-search" @click="searchSubmit"></span>
-      </div>
-      <!-- 删除 -->
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span>一键删除
       </button>
-      <router-link to="/admin/product/add" class="f-right button list-btn-add">
+      <router-link to="/admin/support/add" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link >
     </div>
@@ -42,13 +23,12 @@
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="60">排序</th>
-            <th>名称</th>
-            <th width="220">图片</th>
-            <th width="110">显示</th>
-            <th width="190">品牌</th>
-            <th width="170">修改时间</th>
-            <th width="140">操作</th>
+            <th>姓名</th>
+            <th width="180">话题</th>
+            <th width="400">信息</th>
+            <th width="100">回复</th>
+            <th width="160">时间</th>
+            <th width="120">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -60,29 +40,22 @@
             >
               <span :class="[item.select ? 'icon-square_check_fill' : 'icon-square']"></span>
             </td>
-            <!-- order -->
-            <td class="order">
-              {{item.sort}}
-            </td>
-            <!-- name -->
-            <td>{{item.name}}</td>
-            <!-- picture -->
-            <td class="product-list-img"><img :src="item.img" alt=""></td>
-            <!-- show -->
+            <td>{{item.firstName}} {{item.lastName}}</td>
+            <!-- topic -->
+            <td>{{item.topic}}</td>
+            <!-- message -->
+            <td class="message"><p>{{item.message}}</p></td>
+            <!-- reply -->
             <td
               class="pointer"
-              :class="[item.display === 'Y' ? 'show' : 'not-show']"
-              @click="toggleDisplay(index)"
+              @click="toggleReply(index)"
             >
-              <span class="icon-check"></span>
+              <span :class="[item.reply === 'Y' ? 'icon-square_check' : 'icon-square']"></span>
             </td>
-            <!-- classify -->
-            <td class="classify">
-              <p v-if="item.classify.trim()"><span>{{item.classify}}</span></p>
-            </td>
-            <td>{{item.modifytime}}</td>
+            <!-- time -->
+            <td>{{item.time}}</td>
             <td class="link">
-              <router-link :to="'/admin/product/edit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/support/detail/' + item.id">查看</router-link>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
@@ -90,13 +63,6 @@
         </tbody>
       </table>
     </div>
-    <paging
-      :paging="paging"
-      @pagingNextClick="pagingNextClick"
-      @pagingPreClick="pagingPreClick"
-      @pagingChange="pagingChange"
-    >
-    </paging>
     <pop
       type="warning"
       :text="pop.text"
@@ -115,8 +81,8 @@
 </template>
 
 <script>
+  import search from 'components/search/search'
   import pop from 'components/pop/pop'
-  import paging from 'components/c-paging/paging'
   import toast from 'components/toast/toast'
   import util from 'components/tools/util'
   import api from 'components/tools/api'
@@ -145,65 +111,41 @@
           text: '',
           show: false
         },
-        thSelect: false,
-        // paging
-        paging: {
-          size: 10,
-          no: 0,
-          list: []
-        }
+        thSelect: false
       }
     },
     created() {
       this.getItems()
-      this.getClassiy()
     },
     methods: {
       getItems() {
-        let _this = this
-        let pageData = {
-          page_size: _this.paging.size,
-          page_no: _this.paging.no,
-          classify: _this.classifySelect,
-          name: _this.searchText
-        }
-        this.axios(api.productList.query(pageData)).then((res) => {
-          let data = res.data
-          console.log(data)
-          if (data.code === '200') {
-            _this.items = _this.handleData(data.data.list)
-            _this.paging.list = new Array(Math.ceil(data.data.total / _this.paging.size))
-          } else {
-            util.req.queryError(this.toast)
-          }
-        })
-      },
-      getClassiy() {
-        let _this = this
-        this.axios(api.productClassify.query()).then((res) => {
-          let data = res.data
-          if (data.code === '200') {
-            _this.classify = data.data.list
-          } else {
-            util.req.queryError(this.toast)
-          }
-        }).catch((err) => {
-          if (err) {
-            util.req.queryError(this.toast)
-          }
-        })
+        let data = {}
+        data.list = [
+          {firstName: 'Yun', lastName: 'Chan', Email: 'lanzifeng@163.com', topic: 'aa', message: 'We appreciate your business and want to provide outstanding and excellent customer service! Please complete the form below. The boxes marked with * are required. We will respond as soon as possible.', tel: '1898402', company: 'xx', country: 'china', address: 'xxx', time: '2017.12.01 11:23:20', reply: 'Y'},
+          {firstName: 'Yun', lastName: 'Chan', Email: 'lanzifeng@163.com', topic: 'aa', message: 'hello', tel: '1898402', company: 'xx', country: 'china', address: 'xxx', time: '2017.12.01', reply: 'N'},
+          {firstName: 'Yun', lastName: 'Chan', Email: 'lanzifeng@163.com', topic: 'aa', message: 'hello', tel: '1898402', company: 'xx', country: 'china', address: 'xxx', time: '2017.12.01', reply: 'N'}
+        ]
+        this.items = this.handleData(data)
+        // let _this = this
+        // let apiList = api.support
+        // this.axios(apiList.query()).then((res) => {
+        //   let data = res.data
+        //   console.log(data)
+        //   if (data.code === '200') {
+        //     _this.items = _this.handleData(data.data)
+        //     console.log(_this.items)
+        //   } else {
+        //     util.req.queryError(this.toast)
+        //   }
+        // })
       },
       handleData(data) {
-        data.forEach((v) => {
+        let dataH = []
+        data.list.forEach((v) => {
           v.select = false
+          dataH.push(v)
         })
-        return data
-      },
-      searchSubmit() {
-        this.getItems()
-      },
-      changeSelect() {
-        this.getItems()
+        return dataH
       },
       toggleSelectAll() {
         this.thSelect = !this.thSelect
@@ -215,12 +157,12 @@
         let item = this.items[index]
         item.select = !item.select
       },
-      toggleDisplay(index) {
+      toggleReply(index) {
         let item = this.items[index]
-        if (item.display === 'Y') {
-          item.display = 'N'
+        if (item.reply === 'Y') {
+          item.reply = 'N'
         } else {
-          item.display = 'Y'
+          item.reply = 'Y'
         }
         // ajax
       },
@@ -229,7 +171,7 @@
         let item = this.items[index]
         arr.push(item.id)
         this.deleteIds = arr
-        this.pop.text = '确定删除[' + item.name +']'
+        this.pop.text = '确定删除[' + item.title +']'
         this.pop.show = true
       },
       deleteAll() {
@@ -254,7 +196,7 @@
         let _this = this
         let deleteIds = this.deleteIds
         this.pop.show = false
-        this.axios(api.productList.delete(deleteIds)).then((res) => {
+        this.axios(api.support.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {
@@ -268,36 +210,23 @@
             util.toast.fade(this.toast, '删除成功', 'check')
           }
         })
-      },
-      pagingPreClick() {
-        this.paging.no --
-        this.getItems()
-      },
-      pagingNextClick() {
-        this.paging.no ++
-        this.getItems()
-      },
-      pagingChange(index) {
-        console.log(index)
-        this.paging.no = index
-        this.getItems()
       }
     },
     components: {
+      search,
       pop,
-      toast,
-      paging
+      toast
     }
   }
 </script>
 
 <style>
-.product-list .search {
-  margin-left: 10px;
-}
-.product-list-img img{
-  max-width: 200px;
-  max-height: 120px;
-  line-height: 0;
+.support-list td.message p{
+  word-break: break-all;
+  max-height: 40px;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 </style>

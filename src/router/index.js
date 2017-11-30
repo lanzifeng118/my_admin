@@ -37,6 +37,11 @@ import Friendlink from 'components/p-friendlink/friendlink'
 import FriendlinkList from 'components/p-friendlink/list/list'
 import FriendlinkEdit from 'components/p-friendlink/edit/edit'
 
+// support
+import Support from 'components/p-support/support'
+import SupportList from 'components/p-support/list/list'
+import SupportDetail from 'components/p-support/detail/detail'
+
 Vue.use(Router)
 
 export default new Router({
@@ -167,7 +172,7 @@ export default new Router({
             {path: 'add', component: FriendlinkEdit},
             {path: 'edit/:id', component: FriendlinkEdit},
             // 英文
-            {path: 'en', component: AboutusList}
+            {path: 'en', component: FriendlinkList}
           ]
         },
         // news
@@ -175,10 +180,17 @@ export default new Router({
           path: 'news',
           component: Home
         },
-        // feedback
+        // support
         {
-          path: 'feedback',
-          component: Home
+          path: 'support',
+          component: Support,
+          children: [
+            // 中文
+            {path: '/', component: SupportList},
+            {path: 'detail/:id', component: SupportDetail},
+            // 英文
+            {path: 'en', component: SupportList}
+          ]
         }
       ]
     }
