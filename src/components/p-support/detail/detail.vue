@@ -2,7 +2,7 @@
 <template>
   <div class="support-detail">
     <h2 class="edit-h2">查看详情</h2>
-    <router-link to="/admin/friendlink" class="edit-close-btn" >
+    <router-link to="/admin/support" class="edit-close-btn" >
       <span class="icon-round_close_fill"></span>
     </router-link>
     <div class="display-table-wrap">
@@ -56,7 +56,7 @@
           <!-- time -->
           <tr>
             <td>时间<span class="separate"></span></td>
-            <td>{{item.time}}</td>
+            <td>{{item.createtime}}</td>
           </tr>
         </tbody>
       </table>
@@ -103,26 +103,25 @@ export default {
   },
   methods: {
     getItem() {
-      this.item = {firstName: 'Yun', lastName: 'Chan', email: 'lanzifeng@163.com', topic: 'aa', message: 'We appreciate your business and want to provide outstanding and excellent customer service! Please complete the form below. The boxes marked with * are required. We will respond as soon as possible.', tel: '1898402', company: 'xx', country: 'china', address: 'xxx', time: '2017.12.01', reply: 'N'}
-      // let _this = this
-      // let id = this.$route.params.id
-      // this.axios(api.friendlink.queryById(id)).then((res) => {
-      //   let data = res.data
-      //   console.log(data)
-      //   if (data.code === '200') {
-      //     if (data.data) {
-      //       _this.item = data.data
-      //     } else {
-      //       util.toast.show(_this.toast, '此友情链接不存在', 'close')
-      //       this.goBack()
-      //     }
-      //   }
-      // }).catch((err) => {
-      //   if (err) {
-      //     console.log(err)
-      //     _this.queryErrorGoBack()
-      //   }
-      // })
+      let _this = this
+      let id = this.$route.params.id
+      this.axios(api.support.queryById(id)).then((res) => {
+        let data = res.data
+        console.log(data)
+        if (data.code === '200') {
+          if (data.data) {
+            _this.item = data.data
+          } else {
+            util.toast.show(_this.toast, '此服务支持不存在', 'close')
+            this.goBack()
+          }
+        }
+      }).catch((err) => {
+        if (err) {
+          console.log(err)
+          _this.queryErrorGoBack()
+        }
+      })
     },
     toggleReply(index) {
       if (this.item.reply === 'Y') {
@@ -131,10 +130,23 @@ export default {
         this.item.reply = 'Y'
       }
       // ajax
+      let _this = this
+      this.axios(api.support.update({id: this.item.id, reply: this.item.reply})).then((res) => {
+        let data = res.data
+        if (data.code === '200') {
+          _this.showSuccess()
+        } else {
+          util.req.changeError(_this.toast)
+        }
+      }).catch((err) => {
+        if (err) {
+          util.req.changeError(_this.toast)
+        }
+      })
     },
     sendData() {
       let _this = this
-      let obj = api.friendlink.update(this.item)
+      let obj = api.support.update(this.item)
       this.axios(obj).then((res) => {
         let data = res.data
         if (data.code === '200') {
@@ -158,7 +170,7 @@ export default {
     goBack() {
       let _this = this
       setTimeout(() => {
-        _this.$router.push('/admin/friendlink')
+        _this.$router.push('/admin/support')
       }, 700)
     },
     queryErrorGoBack() {

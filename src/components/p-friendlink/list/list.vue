@@ -43,7 +43,7 @@
             <td class="order">
               {{item.sort}}
             </td>
-            <td>{{item.title}}</td>
+            <td>{{item.name}}</td>
             <!-- link -->
             <td>
               {{item.link}}
@@ -159,7 +159,7 @@
         let item = this.items[index]
         arr.push(item.id)
         this.deleteIds = arr
-        this.pop.text = '确定删除[' + item.title +']'
+        this.pop.text = '确定删除[' + item.name +']'
         this.pop.show = true
       },
       deleteAll() {

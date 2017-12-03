@@ -42,6 +42,15 @@ import Support from 'components/p-support/support'
 import SupportList from 'components/p-support/list/list'
 import SupportDetail from 'components/p-support/detail/detail'
 
+// product
+import News from 'components/p-news/news'
+import NewsList from 'components/p-news/list/list'
+import NewsEdit from 'components/p-news/edit/edit'
+import NewsClassify from 'components/p-news/classify/classify'
+import NewsClassifyEdit from 'components/p-news/classify-edit/classify-edit'
+import NewsBanner from 'components/p-news/banner/banner'
+import NewsBannerEdit from 'components/p-news/banner-edit/banner-edit'
+
 Vue.use(Router)
 
 export default new Router({
@@ -178,7 +187,31 @@ export default new Router({
         // news
         {
           path: 'news',
-          component: Home
+          component: News,
+          redirect: {name: 'newsList'},
+          children: [
+            {path: 'list', component: NewsList, name: 'newsList'},
+            {path: 'add', component: NewsEdit},
+            { path: 'edit',
+              component: NewsEdit,
+              children: [
+                {path: ':id'}
+              ]
+            },
+            {path: 'list/en', component: NewsList},
+            {path: 'classify', component: NewsClassify},
+            {
+              path: 'classifyedit',
+              component: NewsClassifyEdit,
+              children: [
+                {path: ':id'}
+              ]
+            },
+            {path: 'classifyadd', component: NewsClassifyEdit},
+            {path: 'classify/en', component: NewsClassify},
+            {path: 'banner', component: NewsBanner},
+            {path: 'banneredit', component: NewsBannerEdit, children: [{path: ':id'}]}
+          ]
         },
         // support
         {

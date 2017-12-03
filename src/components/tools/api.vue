@@ -274,6 +274,9 @@ let api = {
     queryById(id) {
       return queryByIdFun(supportUrl, id)
     },
+    update(data) {
+      return updateFun(supportUrl, data)
+    },
     delete(id) {
       return deleteFun(supportUrl, id)
     }

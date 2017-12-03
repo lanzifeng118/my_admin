@@ -117,7 +117,7 @@ export default {
         if (data.code === '200') {
           _this.showSuccess()
         } else if (data.code === '400') {
-          util.toast.fade(this.toast, '产品名称已存在', 'close')
+          util.toast.fade(this.toast, '名称已存在', 'close')
         } else {
           util.req.changeError(_this.toast)
         }
@@ -128,8 +128,8 @@ export default {
       })
     },
     verify() {
-      if (!this.item.title) {
-        util.toast.fade(this.toast, '标题不能为空')
+      if (!this.item.name) {
+        util.toast.fade(this.toast, '名称不能为空')
         return false
       }
       if (this.item.sort && !util.isNum(this.item.sort)) {
