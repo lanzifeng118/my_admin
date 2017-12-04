@@ -1,5 +1,5 @@
 <template>
-  <banner type="news"></banner>
+  <banner page="news"></banner>
 </template>
 
 <script>

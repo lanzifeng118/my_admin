@@ -1,5 +1,5 @@
 <template>
-  <banner type="experience"></banner>
+  <banner page="experience"></banner>
 </template>
 
 <script>

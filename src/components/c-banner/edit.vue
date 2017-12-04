@@ -1,7 +1,7 @@
 <template>
 <div class="edit banner-edit">
   <h2 class="edit-h2">编辑广告图</h2>
-  <router-link :to="'/admin/' + type +'/banner'" class="edit-close-btn" >
+  <router-link :to="listUrl" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
   <div class="edit-table-wrap">
@@ -50,7 +50,13 @@ import editPic from 'components/c-edit-pic/edit-pic'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 export default {
-  props: ['type'],
+  props: {
+    page: String,
+    lang: {
+      type: String,
+      default: 'cn'
+    }
+  },
   data() {
     return {
       item: {
@@ -68,13 +74,32 @@ export default {
 
     }
   },
+  computed: {
+    listUrl() {
+      let url = '/admin/' + this.page +'/banner'
+      if (this.lang === 'en') {
+        url += '/en'
+      }
+      return url
+    },
+    apiCal() {
+      let key = this.page + 'Banner'
+      let apiCal = null
+      if (this.lang === 'en') {
+        //
+      } else {
+        apiCal = api[key]
+      }
+      return apiCal
+    }
+  },
   created() {
     this.getItem()
   },
   methods: {
     getItem() {
       let _this = this
-      this.axios(api[this.type + 'Banner'].query()).then((res) => {
+      this.axios(this.apiCal.query()).then((res) => {
         let data = res.data
         if (data.code === '200') {
           _this.item = data.data
@@ -121,7 +146,7 @@ export default {
     },
     sendData() {
       let _this = this
-      this.axios(api[this.type + 'Banner'].update(this.item)).then((res) => {
+      this.axios(this.apiCal.update(this.item)).then((res) => {
         let data = res.data
         if (data.code === '200') {
           _this.showSuccess()
@@ -145,7 +170,7 @@ export default {
     goback() {
       let _this = this
       setTimeout(() => {
-        _this.$router.push('/admin/' + _this.type + '/banner')
+        _this.$router.push(_this.listUrl)
       }, 700)
     }
   },

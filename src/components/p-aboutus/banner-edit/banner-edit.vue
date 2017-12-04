@@ -1,5 +1,5 @@
 <template>
-  <banner-edit type="aboutus"></banner-edit>
+  <banner-edit page="aboutus"></banner-edit>
 </template>
 
 <script>

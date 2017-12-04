@@ -1,7 +1,7 @@
 <template>
   <div class="banner">
     <div class="f-clearfix banner-top">
-      <router-link :to="'/admin/' + type +'/banneredit'" class="f-right button" >
+      <router-link :to="editUrl" class="f-right button" >
         <span class="icon icon-edit"></span>编辑
       </router-link>
     </div>
@@ -36,7 +36,13 @@
   import util from 'components/tools/util'
 
   export default {
-    props: ['type'],
+    props: {
+      page: String,
+      lang: {
+        type: String,
+        default: 'cn'
+      }
+    },
     data() {
       return {
         // items
@@ -49,13 +55,32 @@
         }
       }
     },
+    computed: {
+      editUrl() {
+        let url = '/admin/' + this.page +'/banneredit'
+        if (this.lang === 'en') {
+          url += '/en'
+        }
+        return url
+      },
+      apiCal() {
+        let key = this.page + 'Banner'
+        let apiCal = null
+        if (this.lang === 'en') {
+          //
+        } else {
+          apiCal = api[key]
+        }
+        return apiCal
+      }
+    },
     created() {
       this.getItems()
     },
     methods: {
       getItems() {
         let _this = this
-        this.axios(api[this.type + 'Banner'].query()).then((res) => {
+        this.axios(this.apiCal.query()).then((res) => {
           let data = res.data
           if (data.code === '200') {
             _this.item = data.data
