@@ -44,7 +44,7 @@ import SupportDetail from 'components/p-support/detail/detail'
 import SupportBanner from 'components/p-support/banner/banner'
 import SupportBannerEdit from 'components/p-support/banner-edit/banner-edit'
 
-// product
+// news
 import News from 'components/p-news/news'
 import NewsList from 'components/p-news/list/list'
 import NewsEdit from 'components/p-news/edit/edit'
@@ -52,6 +52,12 @@ import NewsClassify from 'components/p-news/classify/classify'
 import NewsClassifyEdit from 'components/p-news/classify-edit/classify-edit'
 import NewsBanner from 'components/p-news/banner/banner'
 import NewsBannerEdit from 'components/p-news/banner-edit/banner-edit'
+
+// config
+import Config from 'components/p-config/config'
+import ConfigList from 'components/p-config/list/list'
+import ConfigEdit from 'components/p-config/edit/edit'
+import ConfigPassword from 'components/p-config/password/password'
 
 Vue.use(Router)
 
@@ -227,6 +233,17 @@ export default new Router({
             {path: 'banneredit', component: SupportBannerEdit, children: [{path: ':id'}]},
             // 英文
             {path: 'en', component: SupportList}
+          ]
+        },
+        // config
+        {
+          path: 'config',
+          component: Config,
+          children: [
+            // 中文
+            {path: '/', component: ConfigList},
+            {path: 'edit', component: ConfigEdit},
+            {path: 'password', component: ConfigPassword}
           ]
         }
       ]
