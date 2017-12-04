@@ -41,6 +41,8 @@ import FriendlinkEdit from 'components/p-friendlink/edit/edit'
 import Support from 'components/p-support/support'
 import SupportList from 'components/p-support/list/list'
 import SupportDetail from 'components/p-support/detail/detail'
+import SupportBanner from 'components/p-support/banner/banner'
+import SupportBannerEdit from 'components/p-support/banner-edit/banner-edit'
 
 // product
 import News from 'components/p-news/news'
@@ -221,6 +223,8 @@ export default new Router({
             // 中文
             {path: '/', component: SupportList},
             {path: 'detail/:id', component: SupportDetail},
+            {path: 'banner', component: SupportBanner},
+            {path: 'banneredit', component: SupportBannerEdit, children: [{path: ':id'}]},
             // 英文
             {path: 'en', component: SupportList}
           ]

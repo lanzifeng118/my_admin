@@ -13,6 +13,10 @@ let experienceClassifyUrl = '/api/admin/experience/classify'
 let experienceBannerUrl = '/api/admin/experience/banner'
 let friendlinkUrl = 'api/admin/friendlink'
 let supportUrl = 'api/admin/support'
+let supportBannerUrl = 'api/admin/support/banner'
+let newsListUrl = 'api/admin/news/list'
+let newsClassifyUrl = '/api/admin/news/classify'
+let newsBannerUrl = 'api/admin/news/banner'
 
 let queryFun = (url, pageData) => {
   let data = {
@@ -279,6 +283,63 @@ let api = {
     },
     delete(id) {
       return deleteFun(supportUrl, id)
+    }
+  },
+  // supportBannerUrl
+  supportBanner: {
+    query() {
+      return queryFun(supportBannerUrl)
+    },
+    update(data) {
+      return updateFun(supportBannerUrl, data)
+    }
+  },
+  // news
+  newsList: {
+    query(pageData) {
+      return queryFun(newsListUrl, pageData)
+    },
+    queryById(id) {
+      return queryByIdFun(newsListUrl, id)
+    },
+    queryByClassify(classify) {
+      return queryByClassifyFun(newsListUrl, classify)
+    },
+    insert(data) {
+      return insertFun(newsListUrl, data)
+    },
+    update(data) {
+      return updateFun(newsListUrl, data)
+    },
+    delete(id) {
+      return deleteFun(newsListUrl, id)
+    }
+  },
+  // newsClassify
+  newsClassify: {
+    query() {
+      return queryFun(newsClassifyUrl)
+    },
+    queryById(id) {
+      return queryByIdFun(newsClassifyUrl, id)
+    },
+    delete(id) {
+      return deleteFun(newsClassifyUrl, id)
+    },
+    insert(data) {
+      return insertFun(newsClassifyUrl, data)
+    },
+    update(data) {
+      return updateFun(newsClassifyUrl, data)
+    }
+  },
+  // newBannerUrl
+  newsBanner: {
+    query() {
+      return queryFun(newsBannerUrl)
+    },
+    update(data) {
+      return updateFun(newsBannerUrl, data)
     }
   }
 }

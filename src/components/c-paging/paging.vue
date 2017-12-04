@@ -1,6 +1,6 @@
 <template>
   <div class="paging">
-    <ul class="paging-ul noselect">
+    <ul class="paging-ul noselect" v-if="paging.list.length > 0">
       <li
         :class="{grey: paging.no === 0}"
         @click="pagingPreClick"

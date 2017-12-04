@@ -17,7 +17,9 @@
         contentDetailMinHeigth,
         tabData: [
           {text: '服务支持列表', href: '/admin/support', icon: 'search_list'},
-          {text: 'Service & Support List', href: '/admin/support/en', icon: 'search_list'}
+          {text: '广告图', href: '/admin/support/banner', icon: 'pic'},
+          {text: 'Service & Support List', href: '/admin/support/en', icon: 'search_list'},
+          {text: 'Banner', href: '/admin/support/banner/en', icon: 'pic'}
         ]
       }
     },

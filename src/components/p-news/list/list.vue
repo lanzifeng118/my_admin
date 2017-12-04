@@ -1,11 +1,24 @@
 <template>
-  <div class="product-list">
+  <div class="news-list">
     <div class="f-clearfix">
+      <!-- 分类 -->
+      <div class="f-left">
+        <select v-model="classifySelect" @change="changeSelect">
+          <option disabled value="">选择分类</option>
+          <option value="">所有分类</option>
+          <option
+            v-for="classifyItem in classify"
+            :value="classifyItem.name"
+          >
+            {{classifyItem.name}}
+          </option>
+        </select>
+      </div>
       <!-- 删除 -->
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span>一键删除
       </button>
-      <router-link to="/admin/product/add" class="f-right button list-btn-add">
+      <router-link to="/admin/news/add" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link >
     </div>
@@ -49,7 +62,7 @@
             <!-- name -->
             <td>{{item.name}}</td>
             <!-- picture -->
-            <td class="product-list-img"><img :src="item.img" alt=""></td>
+            <td class="news-list-img"><img :src="item.img" alt=""></td>
             <!-- show -->
             <td
               class="pointer"
@@ -64,7 +77,7 @@
             </td>
             <td>{{item.modifytime}}</td>
             <td class="link">
-              <router-link :to="'/admin/product/edit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/news/edit/' + item.id">编辑</router-link>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
@@ -113,7 +126,7 @@
         classify: [],
 
         deleteIds: [],
-        searchText: '',
+
         // order
         orderValue: [],
         // toast
@@ -146,10 +159,9 @@
         let pageData = {
           page_size: _this.paging.size,
           page_no: _this.paging.no,
-          classify: _this.classifySelect,
-          name: _this.searchText
+          classify: _this.classifySelect
         }
-        this.axios(api.productList.query(pageData)).then((res) => {
+        this.axios(api.newsList.query(pageData)).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
@@ -162,7 +174,7 @@
       },
       getClassiy() {
         let _this = this
-        this.axios(api.productClassify.query()).then((res) => {
+        this.axios(api.newsClassify.query()).then((res) => {
           let data = res.data
           if (data.code === '200') {
             _this.classify = data.data.list
@@ -180,9 +192,6 @@
           v.select = false
         })
         return data
-      },
-      searchSubmit() {
-        this.getItems()
       },
       changeSelect() {
         this.getItems()
@@ -236,7 +245,7 @@
         let _this = this
         let deleteIds = this.deleteIds
         this.pop.show = false
-        this.axios(api.productList.delete(deleteIds)).then((res) => {
+        this.axios(api.newsList.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {
@@ -274,10 +283,10 @@
 </script>
 
 <style>
-.product-list .search {
+.news-list .search {
   margin-left: 10px;
 }
-.product-list-img img{
+.news-list-img img{
   max-width: 200px;
   max-height: 120px;
   line-height: 0;

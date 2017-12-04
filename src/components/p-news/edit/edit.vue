@@ -23,7 +23,7 @@
               boxHeight="200"
               :img="item.img"
               id="inputImg"
-              note="（宽度240px，高度180px）"
+              note="（宽度307px，高度156px）"
               @choosePic="chooseImg"
               @deletePic="deleteImg"
             >

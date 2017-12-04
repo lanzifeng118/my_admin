@@ -1,16 +1,16 @@
 <template>
-  <banner-edit type="news"></banner-edit>
+  <banner type="support"></banner>
 </template>
 
 <script>
-  import bannerEdit from 'components/c-banner/edit'
+  import banner from 'components/c-banner/banner'
 
   export default {
     data() {
       return {}
     },
     components: {
-      bannerEdit
+      banner
     }
   }
 </script>
