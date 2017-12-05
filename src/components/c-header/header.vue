@@ -2,8 +2,8 @@
   <div class="header">
     <div class="header-wrap f-clearfix">
       <div class="header-info f-left">
-        <img :src="logoSrc"  height="50" alt="">
-        <span>xx管理后台</span>
+        <img :src="logoSrc" class="header-logo" alt="">
+        <span>Aressci 管理后台</span>
       </div>
       <ul class="header-operate f-right">
         <li class="header-operate-item">
@@ -33,11 +33,6 @@
 
 <style>
   .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 3;
-    width: 100%;
     height: 50px;
     margin-bottom: 15px;
     background-color: #363f46;
@@ -50,6 +45,10 @@
   }
   .header-info {
     font-size: 0
+  }
+  .header-logo {
+    height: 30px;
+    margin-top: 10px;
   }
   .header-info span {
     line-height: 50px;

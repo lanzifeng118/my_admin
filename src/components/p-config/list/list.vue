@@ -10,11 +10,7 @@
       <tbody>
         <tr>
           <td width="90">账号<span class="separate"></span></td>
-          <td>{{item.account}}</td>
-        </tr>
-        <tr>
-          <td>名称<span class="separate"></span></td>
-          <td>{{item.name}}</td>
+          <td>{{item.username}}</td>
         </tr>
         <tr>
           <td>邮箱<span class="separate"></span></td>
@@ -54,28 +50,7 @@ export default {
     }
   },
   created() {
-    this.item = {
-      account: 'lanzixxx',
-      name: '管理员',
-      email: 'xxx@163.com',
-      avatar: 'static/images/avatar.png'
-    }
-    // let _this = this
-    // _this.axios(api.basicInfo.query()).then((res) => {
-    //   let data = res.data
-    //   if (data.code === '200') {
-    //     _this.basicInfo = data.data
-    //   } else {
-    //     util.req.queryError(this.toast)
-    //   }
-    // }).catch((error) => {
-    //   if (error) {
-    //     console.log(error)
-    //     util.req.queryError(this.toast)
-    //   }
-    // })
-  },
-  methods: {
+    this.item = this.$store.state.user
   },
   components: {
     toast

@@ -1,6 +1,6 @@
 <template>
 <div class="basic-info">
-  <h2 class="basic-info-welcome">你好，{{user.name}}！<span>您上次登录时间为：{{user.lastlogintime}}</span></h2>
+  <h2 class="basic-info-welcome">你好，{{user.username}}！</h2>
   <router-link to="/admin/home/edit" class="basic-info-btn button" >
     <span class="icon icon-edit"></span>编辑
   </router-link>
@@ -78,17 +78,15 @@ export default {
   computed: {
     user() {
       return {
-        name: this.$store.state.user.name,
-        lastlogintime: this.$store.state.user.lastlogintime
+        username: this.$store.state.user.username
       }
     }
   },
   created() {
-    let _this = this
-    _this.axios(api.basicInfo.query()).then((res) => {
+    this.axios(api.basicInfo.query()).then((res) => {
       let data = res.data
       if (data.code === '200') {
-        _this.basicInfo = data.data
+        this.basicInfo = data.data
       } else {
         util.req.queryError(this.toast)
       }

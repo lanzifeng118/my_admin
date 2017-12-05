@@ -10,7 +10,7 @@
         <!-- password -->
         <tr>
           <td width="120">原密码</td>
-          <td><input type="password" v-model="item.odd"></td>
+          <td><input type="password" v-model="item.old"></td>
         </tr>
         <!-- password -->
         <tr>
@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       item: {
-        odd: '',
+        old: '',
         new: '',
         newComfirm: ''
       },
@@ -76,7 +76,7 @@ export default {
     },
     verify() {
       let item = this.item
-      if (!item.odd) {
+      if (!item.old) {
         util.toast.fade(this.toast, '原密码不能为空')
         return false
       }
@@ -91,21 +91,23 @@ export default {
       return true
     },
     sendData() {
-      let _this = this
-      this.axios(api.config.update(this.item)).then((res) => {
+      let id = this.$store.state.user.id
+      let newPassword = this.item.new
+      let oldPassword = this.item.old
+      let sendData = {id: id, new_password: newPassword, old_password: oldPassword}
+      this.axios(api.user.updateByPassword(sendData)).then((res) => {
         let data = res.data
         if (data.code === '200') {
-          _this.showSuccess()
-        } if (data.code === '400') {
+          this.showSuccess()
+        } else if (data.code === '300') {
           // 原密码错误，修改失败
           util.toast.fade(this.toast, '原密码不正确', 'close')
         } else {
-          _this.showError()
+          this.showError()
         }
       }).catch((err) => {
         if (err) {
-          console.log(err)
-          _this.showError()
+          this.showError()
         }
       })
     },
@@ -117,9 +119,8 @@ export default {
       this.goback()
     },
     goback() {
-      let _this = this
       setTimeout(() => {
-        _this.$router.push('/admin/config')
+        this.$router.push('/admin/config')
       }, 700)
     }
   },

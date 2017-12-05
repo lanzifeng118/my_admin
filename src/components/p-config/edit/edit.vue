@@ -10,12 +10,7 @@
         <!-- name -->
         <tr>
           <td width="100">账号</td>
-          <td><input type="text" v-model="item.account"></td>
-        </tr>
-        <!-- name -->
-        <tr>
-          <td>名称</td>
-          <td><input type="text" v-model="item.name"></td>
+          <td><input type="text" v-model="item.username"></td>
         </tr>
         <!-- email -->
         <tr>
@@ -68,10 +63,7 @@ export default {
   },
   data() {
     return {
-      item: {
-        img: '',
-        link: ''
-      },
+      item: {},
       // file
       file: null,
 
@@ -88,68 +80,59 @@ export default {
   },
   methods: {
     getItem() {
-
-      // let _this = this
-      // this.axios(api.config.query()).then((res) => {
-      //   let data = res.data
-      //   if (data.code === '200') {
-      //     _this.item = data.data
-      //   } else {
-      //     util.req.queryError(this.toast)
-      //     _this.goback()
-      //   }
-      // }).catch((err) => {
-      //   if (err) {
-      //     console.log(err)
-      //     util.req.queryError(this.toast)
-      //     _this.goback()
-      //   }
-      // })
+      this.item = this.$store.state.user
     },
     chooseImg(e) {
-      let _this = this
       this.file = e.target.files[0]
       util.myFileReader(this.file, (result) => {
-        _this.item.img = result
+        this.item.avatar = result
       })
     },
     deleteImg() {
-      this.item.img = ''
+      this.item.avatar = ''
       this.file = null
     },
     submit() {
+      if (!this.verify()) {
+        return
+      }
       // 如果上传了图片
       util.toast.show(this.toast, '正在提交', 'upload')
       this.sendImg()
     },
     sendImg() {
-      let _this = this
       if (this.file) {
         util.uploadFile(this, this.file, (url) => {
-          _this.item.img = url
-          _this.sendData()
+          this.item.avatar = url
+          this.sendData()
         }, () => {
-          _this.showError()
+          this.showError()
         })
       } else {
-        _this.sendData()
+        this.sendData()
       }
     },
     sendData() {
-      let _this = this
-      this.axios(api.config.update(this.item)).then((res) => {
+      this.axios(api.user.update(this.item)).then((res) => {
         let data = res.data
         if (data.code === '200') {
-          _this.showSuccess()
+          this.showSuccess()
         } else {
-          _this.showError()
+          this.showError()
         }
       }).catch((err) => {
         if (err) {
           console.log(err)
-          _this.showError()
+          this.showError()
         }
       })
+    },
+    verify() {
+      if (!this.item.username) {
+        util.toast.fade(this.toast, '用户名不能为空')
+        return false
+      }
+      return true
     },
     showError() {
       util.toast.fade(this.toast, '出错了，请稍后再试！', 'sad')
@@ -159,9 +142,8 @@ export default {
       this.goback()
     },
     goback() {
-      let _this = this
       setTimeout(() => {
-        _this.$router.push(_this.listUrl)
+        this.$router.push('/admin/config')
       }, 700)
     }
   },

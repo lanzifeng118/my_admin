@@ -1,6 +1,6 @@
 <script>
 const LANG = 'cn'
-// basicInfo
+let userUrl = '/api/admin/users'
 let basicInfoUrl = '/api/admin/basicinfo'
 let productListUrl = '/api/admin/product/list'
 let productClassifyUrl = '/api/admin/product/classify'
@@ -101,6 +101,24 @@ let api = {
       url: '/api/admin/upload',
       headers: {'content-type': 'multipart/form-data'},
       data: data
+    }
+  },
+  user: {
+    query(data) {
+      return queryFun(userUrl)
+    },
+    update(data) {
+      return updateFun(userUrl, data)
+    },
+    updateByPassword(data) {
+      return {
+        method: 'post',
+        url: userUrl,
+        data: {
+          method: 'updateByPassword',
+          data: data
+        }
+      }
     }
   },
   basicInfo: {

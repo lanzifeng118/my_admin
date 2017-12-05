@@ -1,7 +1,7 @@
 <template>
 <div class="nav" :style="{height: navMinHeight + 'px'}">
   <div class="nav-avatar">
-    <img :src="avatar" height="150" width="150" />
+    <img :src="avatar"/>
   </div>
   <ul class="nav-ul">
     <li
@@ -24,9 +24,41 @@
 import { navMinHeight } from 'components/tools/global'
 
 export default {
-  props: ['items'],
   data() {
     return {
+      items: [{
+        src: '/admin/home',
+        name: '首页',
+        style: 'home'
+      }, {
+        src: '/admin/product',
+        name: '产品管理',
+        style: 'cart'
+      }, {
+        src: '/admin/experience',
+        name: '项目经验',
+        style: 'experience'
+      }, {
+        src: '/admin/aboutus',
+        name: '关于我们',
+        style: 'evaluate'
+      }, {
+        src: '/admin/news',
+        name: '新闻管理',
+        style: 'notification'
+      }, {
+        src: '/admin/support',
+        name: '服务支持',
+        style: 'feedback'
+      }, {
+        src: '/admin/friendlink',
+        name: '友情链接',
+        style: 'share'
+      }, {
+        src: '/admin/config',
+        name: '系统设置',
+        style: 'config'
+      }],
       isActive: false,
       navMinHeight
     }
@@ -42,6 +74,10 @@ export default {
 <style>
 .nav {
   width: 150px;
+  float: left;
+  min-height:  600px;
+  border-radius: 3px;
+  overflow: hidden;
   background-color: #363f46;
 }
 .nav .icon {
@@ -49,6 +85,13 @@ export default {
 }
 .nav-avatar {
   font-size: 0;
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+}
+.nav-avatar img {
+  max-width: 150px;
+  max-height: 150px;
 }
 .nav-item {
   height: 45px;
