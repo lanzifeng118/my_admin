@@ -9,7 +9,11 @@
     <table>
       <tbody>
         <tr>
-          <td width="120">管理员名称<span class="separate"></span></td>
+          <td width="90">账号<span class="separate"></span></td>
+          <td>{{item.account}}</td>
+        </tr>
+        <tr>
+          <td>名称<span class="separate"></span></td>
           <td>{{item.name}}</td>
         </tr>
         <tr>
@@ -51,6 +55,7 @@ export default {
   },
   created() {
     this.item = {
+      account: 'lanzixxx',
       name: '管理员',
       email: 'xxx@163.com',
       avatar: 'static/images/avatar.png'

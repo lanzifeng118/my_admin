@@ -9,7 +9,12 @@
       <tbody>
         <!-- name -->
         <tr>
-          <td width="120">管理员名称</td>
+          <td width="100">账号</td>
+          <td><input type="text" v-model="item.account"></td>
+        </tr>
+        <!-- name -->
+        <tr>
+          <td>名称</td>
           <td><input type="text" v-model="item.name"></td>
         </tr>
         <!-- email -->
