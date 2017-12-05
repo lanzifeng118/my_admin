@@ -1,7 +1,7 @@
 <template>
-  <div class="product-classify">
+  <div class="news-classify">
     <div class="f-clearfix">
-      <router-link to="/admin/product/classifyadd" class="f-right button list-btn-add">
+      <router-link to="/admin/news/classifyadd" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link >
     </div>
@@ -33,7 +33,7 @@
               {{item.modifytime}}
             </td>
             <td class="link">
-              <router-link :to="'/admin/product/classifyedit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/news/classifyedit/' + item.id">编辑</router-link>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
@@ -89,7 +89,7 @@
     methods: {
       getItems() {
         let _this = this
-        this.axios(api.productClassify.query()).then((res) => {
+        this.axios(api.newsClassify.query()).then((res) => {
           let data = res.data
           if (data.code === '200') {
             data.data.list.forEach((v) => {
@@ -114,7 +114,7 @@
         let _this = this
         let deleteIds = this.deleteIds
         this.pop.show = false
-        this.axios(api.productClassify.delete(deleteIds)).then((res) => {
+        this.axios(api.newsClassify.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {
@@ -141,16 +141,4 @@
 </script>
 
 <style>
-.product-classify-logo img {
-  max-height: 35px;
-  max-width: 110px;
-}
-.product-classify-img img {
-  max-height: 80px;
-  max-width: 160px;
-}
-.product-classify-banner img{
-  max-height: 50px;
-  max-width: 180px;
-}
 </style>

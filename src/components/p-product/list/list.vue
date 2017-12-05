@@ -257,15 +257,9 @@
         this.axios(api.productList.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
-            deleteIds.forEach((id) => {
-              for (let i = 0; i <= _this.items.length - 1; i++) {
-                if (_this.items[i].id === id) {
-                  _this.items.splice(i, 1)
-                  break
-                }
-              }
-            })
             util.toast.fade(this.toast, '删除成功', 'check')
+            _this.paging.no = 0
+            _this.getItems()
           }
         })
       },
@@ -278,7 +272,6 @@
         this.getItems()
       },
       pagingChange(index) {
-        console.log(index)
         this.paging.no = index
         this.getItems()
       }

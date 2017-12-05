@@ -1,16 +1,16 @@
 <template>
-<div class="product-edit edit">
-  <h2 class="edit-h2" v-if="!typeAdd">编辑产品</h2>
-  <h2 class="edit-h2" v-if="typeAdd">添加产品</h2>
-  <router-link to="/admin/product/list" class="edit-close-btn" >
+<div class="news-edit edit">
+  <h2 class="edit-h2" v-if="!typeAdd">编辑新闻</h2>
+  <h2 class="edit-h2" v-if="typeAdd">添加新闻</h2>
+  <router-link to="/admin/news/list" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
   <div class="edit-table-wrap">
     <table>
       <tbody>
-        <!-- 产品名称 -->
+        <!-- 新闻标题 -->
         <tr>
-          <td width="90"><span class="icon-nessisary"></span>产品名称</td>
+          <td width="90"><span class="icon-nessisary"></span>新闻标题</td>
           <td><input type="text" v-model="item.name"></td>
         </tr>
         <!-- logo -->
@@ -46,33 +46,14 @@
           <td>顺序</td>
           <td><input type="text" v-model="item.sort"></td>
         </tr>
-        <!-- 品牌 -->
+        <!-- 分类 -->
         <tr>
-          <td>品牌</td>
+          <td>分类</td>
           <td>
             <select v-model="item.classify">
-              <option disabled value="">选择品牌</option>
+              <option disabled value="">选择分类</option>
               <option v-for="classifyItem in classify">{{classifyItem.name}}</option>
             </select>
-          </td>
-        </tr>
-        <!-- PDF -->
-        <tr>
-          <td>资源</td>
-          <td class="pdf">
-            <label for="inputResources" class="button button-second">
-              <span class=" icon icon-round_add"></span>添加文件
-            </label>
-            <input type="file" id="inputResources" accept="application/pdf, application/msword, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="chooseResources">
-            <ul>
-              <li class="pdf-box" v-for="(resource, resourceIndex) in item.resources" :title="resource.name">
-                <span v-if="resource.type === 'pdf'" class="icon icon-pdf"></span>
-                <span v-if="resource.type === 'doc'" class="icon icon-word"></span>
-                <span v-if="resource.type === 'xlsx' || resource.type === 'xls'" class="icon icon-excel"></span>
-                {{resource.name}}
-                <span class="icon-round_close_fill" @click="deleteResources(resourceIndex)"></span>
-              </li>
-            </ul>
           </td>
         </tr>
         <!-- 简要描述 -->
@@ -104,19 +85,12 @@
     :icon="toast.icon"
   >
   </toast>
-  <percent
-    :show="percent.show"
-    :progress="percent.progress"
-    @cancle="cancleResources"
-  >
-  </percent>
 </div>
 </template>
 
 <script>
 import { quillEditor } from 'vue-quill-editor'
 import toast from 'components/toast/toast'
-import percent from 'components/c-percent/percent'
 import editPic from 'components/c-edit-pic/edit-pic'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
@@ -130,7 +104,6 @@ export default {
         display: 'Y',
         img: '',
         sort: 0,
-        resources: [],
         brief: '',
         classify: '', // 读取接口
         detail: '',
@@ -153,11 +126,6 @@ export default {
         show: false,
         text: '',
         icon: ''
-      },
-      // percent
-      percent: {
-        show: 'false',
-        progress: 0
       }
     }
   },
@@ -172,20 +140,20 @@ export default {
   methods: {
     getItem() {
       this.getClassiy()
-      if (this.$route.path === '/admin/product/add') {
+      if (this.$route.path === '/admin/news/add') {
         return
       }
       this.typeAdd = false
       let _this = this
       let id = this.$route.params.id
-      this.axios(api.productList.queryById(id)).then((res) => {
+      this.axios(api.newsList.queryById(id)).then((res) => {
         let data = res.data
         console.log(data)
         if (data.code === '200') {
           if (data.data) {
             _this.item = data.data
           } else {
-            util.toast.show(_this.toast, '此产品不存在', 'close')
+            util.toast.show(_this.toast, '此新闻不存在', 'close')
             this.goBack()
           }
         }
@@ -198,7 +166,7 @@ export default {
     },
     getClassiy() {
       let _this = this
-      this.axios(api.productClassify.query()).then((res) => {
+      this.axios(api.newsClassify.query()).then((res) => {
         let data = res.data
         if (data.code === '200') {
           _this.classify = data.data.list
@@ -229,22 +197,6 @@ export default {
         this.item.display = 'Y'
       }
     },
-    chooseResources(e) {
-      let file = e.target.files[0]
-      let _this = this
-      this.xhr = util.uploadBigFile(file, this.percent, (obj) => {
-        _this.item.resources.push(obj)
-      }, () => {
-        util.req.changeError(this.toast)
-      })
-    },
-    deleteResources(index) {
-      this.item.resources.splice(index, 1)
-    },
-    cancleResources() {
-      this.xhr.abort()
-      this.percent.show = 'false'
-    },
     submit() {
       if (!this.verify()) {
         return
@@ -262,9 +214,9 @@ export default {
       let _this = this
       let obj = null
       if (this.typeAdd) {
-        obj = api.productList.insert(this.item)
+        obj = api.newsList.insert(this.item)
       } else {
-        obj = api.productList.update(this.item)
+        obj = api.newsList.update(this.item)
       }
       console.log(obj)
       this.axios(obj).then((res) => {
@@ -272,7 +224,7 @@ export default {
         if (data.code === '200') {
           _this.showSuccess()
         } else if (data.code === '400') {
-          util.toast.fade(this.toast, '产品名称已存在', 'close')
+          util.toast.fade(this.toast, '新闻标题已存在', 'close')
         } else {
           util.req.changeError(_this.toast)
         }
@@ -284,7 +236,7 @@ export default {
     },
     verify() {
       if (!this.item.name) {
-        util.toast.fade(this.toast, '产品名称不能为空')
+        util.toast.fade(this.toast, '新闻标题不能为空')
         return false
       }
       if (this.item.sort && !util.isNum(this.item.sort)) {
@@ -304,7 +256,7 @@ export default {
     goBack() {
       let _this = this
       setTimeout(() => {
-        _this.$router.push('/admin/product/list')
+        _this.$router.push('/admin/news/list')
       }, 700)
     },
     uploadFile(file, callback) {
@@ -332,17 +284,10 @@ export default {
   components: {
     quillEditor,
     toast,
-    editPic,
-    percent
+    editPic
   }
 }
 </script>
 
 <style>
-.product-edit .edit-img {
-
-}
-.product-edit .edit-img img {
-
-}
 </style>
