@@ -54,6 +54,8 @@ import AboutusBannerEditEn from 'components/p-aboutus/banner-edit-en/banner-edit
 import Friendlink from 'components/p-friendlink/friendlink'
 import FriendlinkList from 'components/p-friendlink/list/list'
 import FriendlinkEdit from 'components/p-friendlink/edit/edit'
+import FriendlinkListEn from 'components/p-friendlink/list-en/list'
+import FriendlinkEditEn from 'components/p-friendlink/edit-en/edit'
 
 // support
 import Support from 'components/p-support/support'
@@ -260,13 +262,16 @@ export default new Router({
         {
           path: 'friendlink',
           component: Friendlink,
+          redirect: {name: 'friendlinkList'},
           children: [
             // 中文
-            {path: '/', component: FriendlinkList},
+            {path: 'list', component: FriendlinkList, name: 'friendlinkList'},
             {path: 'add', component: FriendlinkEdit},
             {path: 'edit/:id', component: FriendlinkEdit},
             // 英文
-            {path: 'en', component: FriendlinkList}
+            {path: 'listen', component: FriendlinkListEn},
+            {path: 'adden', component: FriendlinkEditEn},
+            {path: 'editen/:id', component: FriendlinkEditEn}
           ]
         },
         // news

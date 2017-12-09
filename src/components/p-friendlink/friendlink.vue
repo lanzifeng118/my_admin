@@ -16,8 +16,8 @@
       return {
         contentDetailMinHeigth,
         tabData: [
-          {text: '友情链接列表', href: '/admin/friendlink', icon: 'search_list'},
-          {text: 'Friend Link List', href: '/admin/friendlink/en', icon: 'search_list'}
+          {text: '友情链接列表', href: '/admin/friendlink/list', icon: 'search_list'},
+          {text: 'Friend Link List', href: '/admin/friendlink/listen', icon: 'search_list'}
         ]
       }
     },
