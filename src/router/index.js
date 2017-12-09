@@ -70,6 +70,13 @@ import NewsClassify from 'components/p-news/classify/classify'
 import NewsClassifyEdit from 'components/p-news/classify-edit/classify-edit'
 import NewsBanner from 'components/p-news/banner/banner'
 import NewsBannerEdit from 'components/p-news/banner-edit/banner-edit'
+// en
+import NewsListEn from 'components/p-news/list-en/list'
+import NewsEditEn from 'components/p-news/edit-en/edit'
+import NewsClassifyEn from 'components/p-news/classify-en/classify'
+import NewsClassifyEditEn from 'components/p-news/classify-edit-en/classify-edit'
+import NewsBannerEn from 'components/p-news/banner-en/banner'
+import NewsBannerEditEn from 'components/p-news/banner-edit-en/banner-edit'
 
 // config
 import Config from 'components/p-config/config'
@@ -281,9 +288,28 @@ export default new Router({
               ]
             },
             {path: 'classifyadd', component: NewsClassifyEdit},
-            {path: 'classify/en', component: NewsClassify},
             {path: 'banner', component: NewsBanner},
-            {path: 'banneredit', component: NewsBannerEdit, children: [{path: ':id'}]}
+            {path: 'banneredit', component: NewsBannerEdit, children: [{path: ':id'}]},
+            // en
+            {path: 'listen', component: NewsListEn, name: 'newsList'},
+            {path: 'adden', component: NewsEditEn},
+            { path: 'editen',
+              component: NewsEditEn,
+              children: [
+                {path: ':id'}
+              ]
+            },
+            {path: 'classifyen', component: NewsClassifyEn},
+            {
+              path: 'classifyediten',
+              component: NewsClassifyEditEn,
+              children: [
+                {path: ':id'}
+              ]
+            },
+            {path: 'classifyadden', component: NewsClassifyEditEn},
+            {path: 'banneren', component: NewsBannerEn},
+            {path: 'bannerediten', component: NewsBannerEditEn, children: [{path: ':id'}]}
           ]
         },
         // support

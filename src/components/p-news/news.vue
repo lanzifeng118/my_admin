@@ -19,9 +19,9 @@
           {text: '新闻列表', href: '/admin/news/list', icon: 'search_list'},
           {text: '分类列表', href: '/admin/news/classify', icon: 'classify'},
           {text: '广告图', href: '/admin/news/banner', icon: 'pic'},
-          {text: 'Product List', href: '/admin/news/list/en', icon: 'search_list'},
-          {text: 'Classify', href: '/admin/news/classify/en', icon: 'classify'},
-          {text: 'Banner', href: '/admin/news/banner/en', icon: 'pic'}
+          {text: 'News List', href: '/admin/news/listen', icon: 'search_list'},
+          {text: 'Classify', href: '/admin/news/classifyen', icon: 'classify'},
+          {text: 'Banner', href: '/admin/news/banneren', icon: 'pic'}
         ]
       }
     },

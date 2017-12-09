@@ -4,8 +4,8 @@
       <!-- 分类 -->
       <div class="f-left">
         <select v-model="classifySelect" @change="changeSelect">
-          <option disabled value="">选择分类</option>
-          <option value="">所有分类</option>
+          <option disabled value="">Choose Classify</option>
+          <option value="">All Classifies</option>
           <option
             v-for="classifyItem in classify"
             :value="classifyItem.name"
@@ -16,10 +16,10 @@
       </div>
       <!-- 删除 -->
       <button class="f-right button" @click="deleteAll">
-        <span class="icon icon-delete"></span>一键删除
+        <span class="icon icon-delete"></span>Delete All
       </button>
-      <router-link to="/admin/news/add" class="f-right button list-btn-add">
-        <span class="icon icon-round_add"></span>添加
+      <router-link to="/admin/news/adden" class="f-right button list-btn-add">
+        <span class="icon icon-round_add"></span>Add
       </router-link >
     </div>
     <div class="list-table-wrap">
@@ -37,13 +37,13 @@
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="60">排序</th>
-            <th>标题</th>
-            <th width="220">预览图</th>
-            <th width="110">显示</th>
-            <th width="190">分类</th>
-            <th width="170">修改时间</th>
-            <th width="140">操作</th>
+            <th width="60">Order</th>
+            <th>Title</th>
+            <th width="220">Preview Pic</th>
+            <th width="110">Display</th>
+            <th width="190">Classify</th>
+            <th width="170">Edit Time</th>
+            <th width="140">Operate</th>
           </tr>
         </thead>
         <tbody>
@@ -77,9 +77,9 @@
             </td>
             <td>{{item.modifytime}}</td>
             <td class="link">
-              <router-link :to="'/admin/news/edit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/news/editen/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
+              <a href="javascipt: void(0)" @click="deleteItem(index)">Delete All </a>
             </td>
           </tr>
         </tbody>
@@ -114,7 +114,7 @@
   import paging from 'components/c-paging/paging'
   import toast from 'components/toast/toast'
   import util from 'components/tools/util'
-  import api from 'components/tools/api'
+  import api from 'components/tools/api-en'
 
   export default {
     data() {
