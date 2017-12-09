@@ -9,42 +9,42 @@
       <tbody>
         <tr>
           <td width="100">公司名称<span class="separate"></span></td>
-          <td>{{basicInfo.name}}</td>
+          <td>{{item.name}}</td>
         </tr>
         <tr>
           <td class="vertical-middle">LOGO<span class="separate"></span></td>
-          <td><img class="basic-info-img" :src="basicInfo.logo" alt=""></td>
+          <td><img class="basic-info-img" :src="item.logo" alt=""></td>
         </tr>
         <tr>
           <td>地址<span class="separate"></span></td>
-          <td>{{basicInfo.address}}</td>
+          <td>{{item.address}}</td>
         </tr>
         <tr>
           <td>邮箱<span class="separate"></span></td>
-          <td>{{basicInfo.email}}</td>
+          <td>{{item.email}}</td>
         </tr>
         <tr>
           <td>电话<span class="separate"></span></td>
-          <td>{{basicInfo.telephone}}</td>
+          <td>{{item.telephone}}</td>
         </tr>
         <tr>
           <td>工作时间<span class="separate"></span></td>
-          <td>{{basicInfo.worktime}}</td>
+          <td>{{item.worktime}}</td>
         </tr>
         <tr>
           <td>广告图<span class="separate"></span></td>
           <td>
             <ul class="basic-info-banner-ul f-clearfix">
-              <li class="basic-info-banner-li" v-for="banner in basicInfo.banner">
+              <li class="basic-info-banner-li" v-for="banner in item.banner">
                 <img :src="banner.img" alt="">
-                <a :href="banner.link" v-if="banner.link">{{banner.link}}</a>
+                <a :href="banner.link" v-if="banner.link" target="_blank">{{banner.link}}</a>
               </li>
             </ul>
           </td>
         </tr>
         <tr>
           <td>简介<span class="separate"></span></td>
-          <td v-html="basicInfo.brief" class="basic-info-breif"></td>
+          <td v-html="item.brief" class="basic-info-breif"></td>
         </tr>
       </tbody>
     </table>
@@ -67,7 +67,7 @@ import util from 'components/tools/util'
 export default {
   data() {
     return {
-      basicInfo: {},
+      item: {},
       toast: {
         show: false,
         text: '',
@@ -86,18 +86,15 @@ export default {
     this.axios(api.basicInfo.query()).then((res) => {
       let data = res.data
       if (data.code === '200') {
-        this.basicInfo = data.data
+        this.item = data.data
       } else {
         util.req.queryError(this.toast)
       }
     }).catch((error) => {
       if (error) {
-        console.log(error)
         util.req.queryError(this.toast)
       }
     })
-  },
-  methods: {
   },
   components: {
     toast

@@ -1,7 +1,7 @@
 <template>
   <div class="friendlink">
     <tab :items="tabData"></tab>
-    <div class="content-detail" :style="{minHeight: contentDetailMinHeigth + 'px'}">
+    <div class="content-detail" :style="{height: contentDetailMinHeigth + 'px'}">
       <router-view></router-view>
     </div>
   </div>

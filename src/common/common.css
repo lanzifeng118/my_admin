@@ -329,6 +329,7 @@ table {
 }
 .content-detail {
   padding: 30px;
+  overflow: auto;
   border-radius: 3px;
   min-height: 535px;
   background-color: #fff;
