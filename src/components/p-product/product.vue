@@ -20,11 +20,10 @@
           {text: '品牌列表', href: '/admin/product/classify', icon: 'classify'},
           {text: '广告图', href: '/admin/product/banner', icon: 'pic'},
           {text: '视频', href: '/admin/product/video', icon: 'video'},
-          {text: 'Product List', href: '/admin/product/list/en', icon: 'search_list'},
-          {text: 'Classify', href: '/admin/product/classify/en', icon: 'classify'},
-          {text: 'Banner', href: '/admin/product/banner/en', icon: 'pic'},
-          {text: 'Video', href: '/admin/product/video/en', icon: 'video'}
-
+          {text: 'Product List', href: '/admin/product/listen', icon: 'search_list'},
+          {text: 'Brand', href: '/admin/product/classifyen', icon: 'classify'},
+          {text: 'Banner', href: '/admin/product/banneren', icon: 'pic'},
+          {text: 'Video', href: '/admin/product/videoen', icon: 'video'}
         ]
       }
     },

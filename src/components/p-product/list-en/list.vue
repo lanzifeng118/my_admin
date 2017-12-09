@@ -1,11 +1,11 @@
 <template>
   <div class="product-list">
     <div class="f-clearfix">
-      <!-- 品牌 -->
+      <!-- Brand -->
       <div class="f-left">
         <select v-model="classifySelect" @change="changeSelect">
-          <option disabled value="">选择品牌</option>
-          <option value="">所有品牌</option>
+          <option disabled value="">Choose Brand</option>
+          <option value="">All Brand</option>
           <option
             v-for="classifyItem in classify"
             :value="classifyItem.name"
@@ -21,10 +21,10 @@
       </div>
       <!-- 删除 -->
       <button class="f-right button" @click="deleteAll">
-        <span class="icon icon-delete"></span>一键删除
+        <span class="icon icon-delete"></span>Delete All
       </button>
-      <router-link to="/admin/product/add" class="f-right button list-btn-add">
-        <span class="icon icon-round_add"></span>添加
+      <router-link to="/admin/product/adden" class="f-right button list-btn-add">
+        <span class="icon icon-round_add"></span>Add
       </router-link >
     </div>
     <div class="list-table-wrap">
@@ -42,13 +42,13 @@
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="60">排序</th>
-            <th>名称</th>
-            <th width="220">预览图</th>
-            <th width="110">显示</th>
-            <th width="190">品牌</th>
-            <th width="170">修改时间</th>
-            <th width="140">操作</th>
+            <th width="60">Order</th>
+            <th>Name</th>
+            <th width="220">Preview Picture</th>
+            <th width="110">Display</th>
+            <th width="190">Brand</th>
+            <th width="170">Edit Time</th>
+            <th width="140">Operate</th>
           </tr>
         </thead>
         <tbody>
@@ -67,7 +67,7 @@
             <!-- name -->
             <td>{{item.name}}</td>
             <!-- picture -->
-            <td class="product-list-img"><img v-if="item.img" :src="item.img" alt=""></td>
+            <td class="product-list-img"><img :src="item.img" alt=""></td>
             <!-- show -->
             <td
               class="pointer"
@@ -82,9 +82,9 @@
             </td>
             <td>{{item.modifytime}}</td>
             <td class="link">
-              <router-link :to="'/admin/product/edit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/product/editen/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
+              <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
             </td>
           </tr>
         </tbody>
@@ -119,7 +119,7 @@
   import paging from 'components/c-paging/paging'
   import toast from 'components/toast/toast'
   import util from 'components/tools/util'
-  import api from 'components/tools/api'
+  import api from 'components/tools/api-en'
 
   export default {
     data() {

@@ -2,7 +2,7 @@
   <div class="banner">
     <div class="f-clearfix banner-top">
       <router-link :to="editUrl" class="f-right button" >
-        <span class="icon icon-edit"></span>编辑
+        <span class="icon icon-edit"></span>{{eidtText}}
       </router-link>
     </div>
     <div class="display-table-wrap">
@@ -10,12 +10,12 @@
         <tbody>
           <!-- link -->
           <tr>
-            <td width="100">链接<span class="separate"></span></td>
+            <td width="100">{{LinkText}}<span class="separate"></span></td>
             <td><a :href="item.link" target="_blank">{{item.link}}</a></td>
           </tr>
           <!-- img -->
           <tr>
-            <td width="100" class="vertical-top">广告图<span class="separate"></span></td>
+            <td width="100" class="vertical-top">{{BannerText}}<span class="separate"></span></td>
             <td><img v-if="item.img" :src="item.img" alt=""></td>
           </tr>
         </tbody>
@@ -33,6 +33,7 @@
 <script>
   import toast from 'components/toast/toast'
   import api from 'components/tools/api'
+  import apiEn from 'components/tools/api-en'
   import util from 'components/tools/util'
 
   export default {
@@ -59,7 +60,7 @@
       editUrl() {
         let url = '/admin/' + this.page +'/banneredit'
         if (this.lang === 'en') {
-          url += '/en'
+          url += 'en'
         }
         return url
       },
@@ -67,11 +68,32 @@
         let key = this.page + 'Banner'
         let apiCal = null
         if (this.lang === 'en') {
-          //
+          apiCal = apiEn[key]
         } else {
           apiCal = api[key]
         }
         return apiCal
+      },
+      eidtText() {
+        if (this.lang === 'en') {
+          return 'Edit'
+        } else {
+          return '编辑'
+        }
+      },
+      LinkText() {
+        if (this.lang === 'en') {
+          return 'Link'
+        } else {
+          return '链接'
+        }
+      },
+      BannerText() {
+        if (this.lang === 'en') {
+          return 'Banner'
+        } else {
+          return '广告图'
+        }
       }
     },
     created() {

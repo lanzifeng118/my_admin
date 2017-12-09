@@ -1,6 +1,6 @@
 <template>
 <div class="edit banner-edit">
-  <h2 class="edit-h2">编辑广告图</h2>
+  <h2 class="edit-h2">{{eidtText}}</h2>
   <router-link :to="listUrl" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
@@ -9,11 +9,11 @@
       <tbody>
         <!-- img -->
         <tr>
-          <td width="90">超链接</td>
+          <td width="90">{{LinkText}}</td>
           <td><input type="text" v-model="item.link" style="width: 500px"></td>
         </tr>
         <tr>
-          <td class="vertical-top">广告图片<span class="separate"></span></td>
+          <td class="vertical-top">{{BannerText}}<span class="separate"></span></td>
           <td>
             <edit-pic
               logo="true"
@@ -30,7 +30,7 @@
         </tr>
         <tr>
           <td></td>
-          <td><button type="button" class="button" @click="submit">提交</button></td>
+          <td><button type="button" class="button" @click="submit">{{SubmitText}}</button></td>
         </tr>
       </tbody>
     </table>
@@ -49,6 +49,7 @@ import toast from 'components/toast/toast'
 import editPic from 'components/c-edit-pic/edit-pic'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
+import apiEn from 'components/tools/api-en'
 export default {
   props: {
     page: String,
@@ -78,7 +79,7 @@ export default {
     listUrl() {
       let url = '/admin/' + this.page +'/banner'
       if (this.lang === 'en') {
-        url += '/en'
+        url += 'en'
       }
       return url
     },
@@ -86,11 +87,39 @@ export default {
       let key = this.page + 'Banner'
       let apiCal = null
       if (this.lang === 'en') {
-        //
+        apiCal = apiEn[key]
       } else {
         apiCal = api[key]
       }
       return apiCal
+    },
+    eidtText() {
+      if (this.lang === 'en') {
+        return 'Edit Banner'
+      } else {
+        return '编辑广告图'
+      }
+    },
+    LinkText() {
+      if (this.lang === 'en') {
+        return 'Link'
+      } else {
+        return '链接'
+      }
+    },
+    BannerText() {
+      if (this.lang === 'en') {
+        return 'Banner'
+      } else {
+        return '广告图'
+      }
+    },
+    SubmitText() {
+      if (this.lang === 'en') {
+        return 'Submit'
+      } else {
+        return '提交'
+      }
     }
   },
   created() {

@@ -1,7 +1,7 @@
 <template>
   <div class="product-classify">
     <div class="f-clearfix">
-      <router-link to="/admin/product/classifyadd" class="f-right button list-btn-add">
+      <router-link to="/admin/product/classifyadden" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link >
     </div>
@@ -12,13 +12,13 @@
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <th width="120">排序</th>
-            <th>名称</th>
-            <th width="140">logo图</th>
-            <th width="180">预览图</th>
-            <th width="210">广告图</th>
-            <th width="170">修改时间</th>
-            <th width="120">操作</th>
+            <th width="120">Order</th>
+            <th>Name</th>
+            <th width="140">Logo Pic</th>
+            <th width="180">Preview Pic</th>
+            <th width="210">Banner Pic</th>
+            <th width="170">Edit Time</th>
+            <th width="120">Operate</th>
           </tr>
         </thead>
         <tbody>
@@ -48,7 +48,7 @@
               {{item.modifytime}}
             </td>
             <td class="link">
-              <router-link :to="'/admin/product/classifyedit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/product/classifyediten/' + item.id">编辑</router-link>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
@@ -77,7 +77,7 @@
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
   import util from 'components/tools/util'
-  import api from 'components/tools/api'
+  import api from 'components/tools/api-en'
 
   export default {
     data() {

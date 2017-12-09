@@ -7,6 +7,7 @@
         :style="'width:' + boxWidth + 'px; height:' + boxHeight + 'px;line-height:' + boxHeightMin2 + 'px'"
       >
         <img
+          v-show="img"
           :style="'max-width:' + boxWidthMin2 + 'px; max-height:' + boxHeightMin2 + 'px;'"
           :src="img"
         >

@@ -1,8 +1,8 @@
 <template>
 <div class="product-edit edit">
-  <h2 class="edit-h2" v-if="!typeAdd">编辑产品</h2>
-  <h2 class="edit-h2" v-if="typeAdd">添加产品</h2>
-  <router-link to="/admin/product/list" class="edit-close-btn" >
+  <h2 class="edit-h2" v-if="!typeAdd">Edit Product</h2>
+  <h2 class="edit-h2" v-if="typeAdd">Add Product</h2>
+  <router-link to="/admin/product/listen" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
   <div class="edit-table-wrap">
@@ -10,12 +10,12 @@
       <tbody>
         <!-- 产品名称 -->
         <tr>
-          <td width="90"><span class="icon-nessisary"></span>产品名称</td>
+          <td width="100"><span class="icon-nessisary"></span>Name</td>
           <td><input type="text" v-model="item.name"></td>
         </tr>
         <!-- logo -->
         <tr>
-          <td class="vertical-top">预览图</td>
+          <td class="vertical-top">Preview Pic</td>
           <td>
             <edit-pic
               logo="true"
@@ -32,7 +32,7 @@
         </tr>
         <!-- 显示 -->
         <tr>
-          <td width="90" class="vertical-middle">显示</td>
+          <td width="90" class="vertical-middle">Display</td>
           <td class="show">
             <span
               :class="[item.display === 'Y' ? 'icon-square_check_fill' : 'icon-square']"
@@ -43,25 +43,25 @@
         </tr>
         <!-- 顺序 -->
         <tr>
-          <td>顺序</td>
+          <td>Order</td>
           <td><input type="text" v-model="item.sort"></td>
         </tr>
         <!-- 品牌 -->
         <tr>
-          <td>品牌</td>
+          <td>Brand</td>
           <td>
             <select v-model="item.classify">
-              <option disabled value="">选择品牌</option>
+              <option disabled value="">Choose Brand</option>
               <option v-for="classifyItem in classify">{{classifyItem.name}}</option>
             </select>
           </td>
         </tr>
         <!-- PDF -->
         <tr>
-          <td>资源</td>
+          <td>Resource</td>
           <td class="pdf">
             <label for="inputResources" class="button button-second">
-              <span class=" icon icon-round_add"></span>添加文件
+              <span class=" icon icon-round_add"></span>Add File
             </label>
             <input type="file" id="inputResources" accept="application/pdf, application/msword, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="chooseResources">
             <ul>
@@ -77,19 +77,19 @@
         </tr>
         <!-- 简要描述 -->
         <tr>
-          <td class="vertical-top">简要描述</td>
+          <td class="vertical-top">Brief</td>
           <td><textarea rows="3" type="text" v-model="item.brief"></textarea></td>
         </tr>
         <!-- 详细介绍 -->
         <tr>
-          <td class="vertical-top">详细介绍</td>
+          <td class="vertical-top">Detail</td>
           <td>
               <editor @input="editorChange" :value="item.detail"></editor>
           </td>
         </tr>
         <tr>
           <td></td>
-          <td><button type="button" class="button" @click="submit">提交</button></td>
+          <td><button type="button" class="button" @click="submit">Submit</button></td>
         </tr>
       </tbody>
     </table>
@@ -115,7 +115,7 @@ import toast from 'components/toast/toast'
 import percent from 'components/c-percent/percent'
 import editPic from 'components/c-edit-pic/edit-pic'
 import util from 'components/tools/util'
-import api from 'components/tools/api'
+import api from 'components/tools/api-en'
 
 export default {
   data() {
@@ -164,7 +164,7 @@ export default {
     },
     getItem() {
       this.getClassiy()
-      if (this.$route.path === '/admin/product/add') {
+      if (this.$route.path === '/admin/product/adden') {
         return
       }
       this.typeAdd = false
@@ -296,7 +296,7 @@ export default {
     goBack() {
       let _this = this
       setTimeout(() => {
-        _this.$router.push('/admin/product/list')
+        _this.$router.push('/admin/product/listen')
       }, 700)
     },
     uploadFile(file, callback) {

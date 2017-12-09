@@ -11,13 +11,21 @@ import BasicInfoEnEdit from 'components/p-home/basicInfoEnEdit/basicInfoEnEdit'
 // product
 import Product from 'components/p-product/product'
 import ProductList from 'components/p-product/list/list'
+import ProductListEn from 'components/p-product/list-en/list'
 import ProductEdit from 'components/p-product/edit/edit'
+import ProductEditEn from 'components/p-product/edit-en/edit'
 import ProductClassify from 'components/p-product/classify/classify'
+import ProductClassifyEn from 'components/p-product/classify-en/classify'
 import ProductClassifyEdit from 'components/p-product/classify-edit/classify-edit'
+import ProductClassifyEditEn from 'components/p-product/classify-edit-en/classify-edit'
 import ProductVideo from 'components/p-product/video/video'
+import ProductVideoEn from 'components/p-product/video-en/video'
 import ProductVideoEdit from 'components/p-product/video-edit/video-edit'
+import ProductVideoEditEn from 'components/p-product/video-edit-en/video-edit'
 import ProductBanner from 'components/p-product/banner/banner'
+import ProductBannerEn from 'components/p-product/banner-en/banner'
 import ProductBannerEdit from 'components/p-product/banner-edit/banner-edit'
+import ProductBannerEditEn from 'components/p-product/banner-edit-en/banner-edit'
 // experience
 import Experience from 'components/p-experience/experience'
 import ExperienceList from 'components/p-experience/list/list'
@@ -118,15 +126,23 @@ export default new Router({
           redirect: {name: 'productList'},
           children: [
             {path: 'list', component: ProductList, name: 'productList'},
+            {path: 'listen', component: ProductListEn},
             {path: 'add', component: ProductEdit},
+            {path: 'adden', component: ProductEditEn},
             { path: 'edit',
               component: ProductEdit,
               children: [
                 {path: ':id'}
               ]
             },
-            {path: 'list/en', component: ProductList},
+            { path: 'editen',
+              component: ProductEditEn,
+              children: [
+                {path: ':id'}
+              ]
+            },
             {path: 'classify', component: ProductClassify},
+            {path: 'classifyen', component: ProductClassifyEn},
             {
               path: 'classifyedit',
               component: ProductClassifyEdit,
@@ -134,11 +150,21 @@ export default new Router({
                 {path: ':id'}
               ]
             },
+            {
+              path: 'classifyediten',
+              component: ProductClassifyEditEn,
+              children: [
+                {path: ':id'}
+              ]
+            },
             {path: 'classifyadd', component: ProductClassifyEdit},
-            {path: 'classify/en', component: ProductClassify},
+            {path: 'classifyadden', component: ProductClassifyEditEn},
             {path: 'banner', component: ProductBanner},
+            {path: 'banneren', component: ProductBannerEn},
             {path: 'banneredit', component: ProductBannerEdit},
+            {path: 'bannerediten', component: ProductBannerEditEn},
             {path: 'video', component: ProductVideo},
+            {path: 'videoen', component: ProductVideoEn},
             {
               path: 'videoedit',
               component: ProductVideoEdit,
@@ -146,8 +172,15 @@ export default new Router({
                 {path: ':id'}
               ]
             },
+            {
+              path: 'videoediten',
+              component: ProductVideoEditEn,
+              children: [
+                {path: ':id'}
+              ]
+            },
             {path: 'videoadd', component: ProductVideoEdit},
-            {path: 'video/en', component: ProductVideo}
+            {path: 'videoadden', component: ProductVideoEditEn}
           ]
         },
         // experience
