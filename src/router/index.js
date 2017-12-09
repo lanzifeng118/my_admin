@@ -29,11 +29,17 @@ import ProductBannerEditEn from 'components/p-product/banner-edit-en/banner-edit
 // experience
 import Experience from 'components/p-experience/experience'
 import ExperienceList from 'components/p-experience/list/list'
+import ExperienceListEn from 'components/p-experience/list-en/list'
 import ExperienceEdit from 'components/p-experience/edit/edit'
+import ExperienceEditEn from 'components/p-experience/edit-en/edit'
 import ExperienceClassify from 'components/p-experience/classify/classify'
+import ExperienceClassifyEn from 'components/p-experience/classify-en/classify'
 import ExperienceClassifyEdit from 'components/p-experience/classify-edit/classify-edit'
+import ExperienceClassifyEditEn from 'components/p-experience/classify-edit-en/classify-edit'
 import ExperienceBanner from 'components/p-experience/banner/banner'
+import ExperienceBannerEn from 'components/p-experience/banner-en/banner'
 import ExperienceBannerEdit from 'components/p-experience/banner-edit/banner-edit'
+import ExperienceBannerEditEn from 'components/p-experience/banner-edit-en/banner-edit'
 // aboutus
 import Aboutus from 'components/p-aboutus/aboutus'
 import AboutusList from 'components/p-aboutus/list/list'
@@ -190,15 +196,23 @@ export default new Router({
           redirect: {name: 'experienceList'},
           children: [
             {path: 'list', component: ExperienceList, name: 'experienceList'},
+            {path: 'listen', component: ExperienceListEn, name: 'experienceList'},
             {path: 'add', component: ExperienceEdit},
+            {path: 'adden', component: ExperienceEditEn},
             { path: 'edit',
               component: ExperienceEdit,
               children: [
                 {path: ':id'}
               ]
             },
-            {path: 'list/en', component: ExperienceList},
+            { path: 'editen',
+              component: ExperienceEditEn,
+              children: [
+                {path: ':id'}
+              ]
+            },
             {path: 'classify', component: ExperienceClassify},
+            {path: 'classifyen', component: ExperienceClassifyEn},
             {
               path: 'classifyedit',
               component: ExperienceClassifyEdit,
@@ -206,10 +220,19 @@ export default new Router({
                 {path: ':id'}
               ]
             },
+            {
+              path: 'classifyediten',
+              component: ExperienceClassifyEditEn,
+              children: [
+                {path: ':id'}
+              ]
+            },
             {path: 'classifyadd', component: ExperienceClassifyEdit},
-            {path: 'classify/en', component: ExperienceClassify},
+            {path: 'classifyadden', component: ExperienceClassifyEditEn},
             {path: 'banner', component: ExperienceBanner},
-            {path: 'banneredit', component: ExperienceBannerEdit, children: [{path: ':id'}]}
+            {path: 'banneren', component: ExperienceBannerEn},
+            {path: 'banneredit', component: ExperienceBannerEdit, children: [{path: ':id'}]},
+            {path: 'bannerediten', component: ExperienceBannerEditEn, children: [{path: ':id'}]}
           ]
         },
         // friendlink
