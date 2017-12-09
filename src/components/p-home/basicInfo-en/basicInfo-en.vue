@@ -1,82 +1,103 @@
 <template>
 <div class="basic-info">
-  <h2 class="basic-info-welcome">Hello，{{user.name}}！<span>The last time you login is {{user.lastlogintime}}</span></h2>
-  <router-link to="/admin/home/enedit" class="basic-info-btn button" >
+  <h2 class="basic-info-welcome">Hello，{{user.username}}！</h2>
+  <router-link to="/admin/home/edit/en" class="basic-info-btn button" >
     <span class="icon icon-edit"></span>Edit
   </router-link>
   <div class="display-table-wrap">
     <table>
       <tbody>
         <tr>
-          <td width="100">Co. Name<span class="separate"></span></td>
-          <td>{{basicInfo.name}}</td>
+          <td width="100">CO. Name<span class="separate"></span></td>
+          <td>{{item.name}}</td>
         </tr>
         <tr>
-          <td class="vertical-middle">LOGO<span class="separate"></span></td>
-          <td><img class="basic-info-img" :src="basicInfo.logo" alt=""></td>
+          <td class="vertical-middle">Logo<span class="separate"></span></td>
+          <td><img class="basic-info-img" :src="item.logo" alt=""></td>
         </tr>
         <tr>
           <td>Address<span class="separate"></span></td>
-          <td>{{basicInfo.address}}</td>
+          <td>{{item.address}}</td>
         </tr>
         <tr>
           <td>Email<span class="separate"></span></td>
-          <td>{{basicInfo.email}}</td>
+          <td>{{item.email}}</td>
         </tr>
         <tr>
-          <td>Telephone<span class="separate"></span></td>
-          <td>{{basicInfo.telephone}}</td>
+          <td>Tel<span class="separate"></span></td>
+          <td>{{item.telephone}}</td>
         </tr>
         <tr>
-          <td>Brief<span class="separate"></span></td>
-          <td v-html="basicInfo.brief" class="basic-info-breif"></td>
+          <td>Work Time<span class="separate"></span></td>
+          <td>{{item.worktime}}</td>
+        </tr>
+        <tr>
+          <td>Ad<span class="separate"></span></td>
+          <td>
+            <ul class="basic-info-banner-ul f-clearfix">
+              <li class="basic-info-banner-li" v-for="banner in item.banner">
+                <img :src="banner.img" alt="">
+                <a :href="banner.link" v-if="banner.link" target="_blank">{{banner.link}}</a>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Breif<span class="separate"></span></td>
+          <td v-html="item.brief" class="basic-info-breif"></td>
         </tr>
       </tbody>
     </table>
+    <toast
+      v-show="toast.show"
+      :text="toast.text"
+      :icon="toast.icon"
+    >
+    </toast>
   </div>
+
 </div>
 </template>
 
 <script>
+import toast from 'components/toast/toast'
+import api from 'components/tools/api-en'
+import util from 'components/tools/util'
+
 export default {
   data() {
     return {
-      basicInfo: {
-        name: '',
-        address: '',
-        email: '',
-        telephone: '',
-        logo: '',
-        brief: ''
+      item: {},
+      toast: {
+        show: false,
+        text: '',
+        icon: ''
       }
     }
   },
   computed: {
     user() {
       return {
-        name: this.$store.state.user.name,
-        lastlogintime: this.$store.state.user.lastlogintime
+        username: this.$store.state.user.username
       }
     }
   },
   created() {
-    let _this = this
-    _this.axios({
-      method: 'post',
-      url: '/api/admin/basicinfo',
-      headers: {'content-type': 'application/json'},
-      data: {
-        method: 'get',
-        language: 'en'
-      }
-    }).then((response) => {
-      let data = response.data
+    this.axios(api.basicInfo.query()).then((res) => {
+      let data = res.data
       if (data.code === '200') {
-        _this.basicInfo = data.data
+        this.item = data.data
       } else {
-        console.log('出错了')
+        util.req.queryError(this.toast)
+      }
+    }).catch((error) => {
+      if (error) {
+        util.req.queryError(this.toast)
       }
     })
+  },
+  components: {
+    toast
   }
 }
 </script>

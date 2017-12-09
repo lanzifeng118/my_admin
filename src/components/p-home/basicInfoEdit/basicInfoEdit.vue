@@ -40,6 +40,10 @@
           <td>电话</td>
           <td><input type="text" v-model="basicInfo.telephone"></td>
         </tr>
+        <tr>
+          <td>工作时间</td>
+          <td><input type="text" v-model="basicInfo.worktime"></td>
+        </tr>
         <!-- ad -->
         <tr>
           <td>广告图</td>

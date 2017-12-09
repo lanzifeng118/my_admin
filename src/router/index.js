@@ -94,7 +94,7 @@ export default new Router({
             {path: 'edit', component: BasicInfoEdit},
             // 英文
             {path: 'en', component: BasicInfoEn},
-            {path: 'enedit', component: BasicInfoEnEdit}
+            {path: 'edit/en', component: BasicInfoEnEdit}
           ]
         },
         {

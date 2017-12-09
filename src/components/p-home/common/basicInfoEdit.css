@@ -76,6 +76,12 @@
   margin-top: 10px;
   text-align: center;
 }
+.basic-info-edit-banner-input span {
+  display: inline-block;
+  text-align: right;
+  width: 35px;
+  line-height: 30px;
+}
 .basic-info-edit-banner-input input {
   margin-left: 8px;
 }

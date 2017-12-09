@@ -1,46 +1,80 @@
 <template>
 <div class="basic-info-edit">
   <h2 class="edit-h2">Edit Basic Information</h2>
-  <router-link to="/admin/home/en" class="edit-close-btn" >
+  <router-link to="/admin/home" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
   <div class="edit-table-wrap">
     <table>
       <tbody>
         <tr>
-          <td width="90">Co. Name</td>
+          <td width="90">CO. Name</td>
           <td><input type="text" v-model="basicInfo.name"></td>
         </tr>
         <!-- logo -->
         <tr>
           <td class="vertical-top">LOGO<span class="separate"></span></td>
           <td>
-            <div class="basic-info-edit-img">
-              <img class="" :src="basicInfo.logo" alt="">
-              <span>（400px × 120px，100kb以内）</span>
-            </div>
-            <div class="basic-info-edit-upload">
-              <label for="inputLogo" class="button">choose</label>
-              <input type="file" id="inputLogo" accept="image/png, image/jpeg, image/gif, image/jpg"
-              @change="chooseLogo">
-              <button type="button" class="button basic-info-edit-delete" @click="deleteLogo">delete</button>
-            </div>
+            <edit-pic
+              logo="true"
+              boxWidth="402"
+              boxHeight="122"
+              :img="basicInfo.logo"
+              id="inputLogo"
+              note="（400px × 120px，100kb以内）"
+              @choosePic="chooseLogo"
+              @deletePic="deleteLogo"
+              >
+            </edit-pic>
           </td>
         </tr>
         <tr>
-          <td>Address</td>
-          <td><input type="text" v-model="basicInfo.address"></td>
+          <td class="vertical-middle">Address</td>
+          <td><textarea type="text" rows="2" v-model="basicInfo.address"></textarea></td>
         </tr>
         <tr>
           <td>Email</td>
           <td><input type="text" v-model="basicInfo.email"></td>
         </tr>
         <tr>
-          <td>Telephone</td>
+          <td>Tel</td>
           <td><input type="text" v-model="basicInfo.telephone"></td>
         </tr>
         <tr>
-          <td>Brief</td>
+          <td>Work Time</td>
+          <td><input type="text" v-model="basicInfo.worktime"></td>
+        </tr>
+        <!-- ad -->
+        <tr>
+          <td>Ad</td>
+          <td>
+            <!-- add ad -->
+            <label for="addAd" class="button button-second">Add Picture</label>
+            <input type="file" id="addAd" accept="image/png, image/jpeg, image/gif, image/jpg"
+            @change="addAd">
+            <ul class="basic-info-edit-banner-ul f-clearfix">
+              <li class="basic-info-edit-banner-li" v-for="(banner, index) in basicInfo.banner">
+                <div class="basic-info-edit-banner-img">
+                  <img :src="banner.img">
+                  <!-- changeAd -->
+                  <label :for="'ad' + index">Choose Picture</label>
+                  <input type="file" :id="'ad' + index" accept="image/png, image/jpeg, image/gif, image/jpg"
+                  @change="changeAd(index, $event)">
+                </div>
+                <div class="basic-info-edit-banner-input">
+                  <span>Link</span><input type="text" v-model="banner.link" placeholder="">
+                </div>
+                <div class="basic-info-edit-banner-input">
+                  <span>Order</span><input type="text" v-model="banner.sort" placeholder="">
+                </div>
+                <!-- delete ad -->
+                <span class="icon-round_close_fill" @click="deleteAd(index)"></span>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Profile</td>
           <td>
             <quill-editor
               v-model="basicInfo.brief"
@@ -51,20 +85,15 @@
         </tr>
         <tr>
           <td></td>
-          <td><button type="button" class="button" @click="submit">submit</button></td>
+          <td><button type="button" class="button" @click="submit">提交</button></td>
         </tr>
       </tbody>
     </table>
   </div>
   <toast
-    v-show="toastLogoErrorShow"
-    text="图片太大啦！"
-  >
-  </toast>
-  <toast
-    v-show="toase.submitShow"
-    :text="toase.submitText"
-    :icon="toase.submitIcon"
+    v-show="toast.show"
+    :text="toast.text"
+    :icon="toast.icon"
   >
   </toast>
 </div>
@@ -72,99 +101,82 @@
 
 <script>
 import { quillEditor } from 'vue-quill-editor'
+import editPic from 'components/c-edit-pic/edit-pic'
 import toast from 'components/toast/toast'
+import util from 'components/tools/util'
+import api from 'components/tools/api-en'
 export default {
   data() {
     return {
-      basicInfo: {
-        name: '',
-        address: '',
-        email: '',
-        telephone: '',
-        logo: '',
-        brief: ''
-      },
+      basicInfo: {},
       // quill
       editorOption: {
         placeholder: '输入内容...',
         modules: {
-          toolbar: [
-            ['bold', 'italic'], // toggled buttons
-            [{'color': []}, {'background': []}], // dropdown with defaults from theme
-            ['clean'] // remove formatting button
-          ]
+          toolbar: this.$store.state.quillEditor.easy
         }
       },
       // file
       file: null,
-      toastLogoErrorShow: false,
-      // submit
-      toase: {
-        submitShow: false,
-        submitText: '正在提交...',
-        submitIcon: 'upload'
+
+      // toast
+      toast: {
+        show: false,
+        text: '',
+        icon: ''
       }
     }
   },
   created() {
     let _this = this
-    _this.axios({
-      method: 'post',
-      url: '/api/admin/basicinfo',
-      headers: {'content-type': 'application/json'},
-      data: {
-        method: 'get',
-        language: 'en'
+    _this.axios(api.basicInfo.query()).then((res) => {
+      let data = res.data
+      if (data.code === '200') {
+        _this.basicInfo = data.data
+      } else {
+        util.req.queryError(this.toast)
       }
-    }).then((response) => {
-      let data = response.data.data
-      _this.basicInfo = data
     })
   },
   methods: {
     chooseLogo(e) {
       let _this = this
-      if (e.target.files[0].size > 102400) {
-        _this.toastLogoErrorShow = true
-        _this.file = null
-        setTimeout(() => {
-          _this.toastLogoErrorShow = false
-        }, 500)
-        return
-      }
-      _this.file = e.target.files[0]
-      let reader = new FileReader()
-      reader.readAsDataURL(_this.file)
-      reader.onload = function(e) {
-        _this.basicInfo.logo = e.target.result
-      }
+      this.file = e.target.files[0]
+      util.myFileReader(this.file, (result) => {
+        _this.basicInfo.logo = result
+      })
     },
     deleteLogo() {
-      if (this.basicInfo.logo !== '') {
-        this.basicInfo.logo = ''
-      }
+      this.basicInfo.logo = ''
+      this.file = null
+    },
+    // ad
+    addAd(e) {
+      let _this = this
+      this.uploadFile(e.target.files[0], (url) => {
+        _this.basicInfo.banner.push({img: url, link: '', sort: '', lang: 'cn'})
+      })
+    },
+    changeAd(index, e) {
+      let _this = this
+      this.uploadFile(e.target.files[0], (url) => {
+        _this.basicInfo.banner[index].img = url
+      })
+    },
+    deleteAd(index) {
+      this.basicInfo.banner.splice(index, 1)
     },
     submit() {
-      let _this = this
       // 如果上传了图片
-      _this.toase.submitShow = true
-      if (_this.file) {
-        let formData = new FormData()
-        formData.append('upload', this.file)
-        _this.axios({
-          method: 'post',
-          url: '/api/admin/upload',
-          headers: {'content-type': 'multipart/form-data'},
-          data: formData
-        }).then((response) => {
-          let data = response.data
-          if (data.code === '200') {
-            _this.basicInfo.logo = data.url
-            // basicinfo
-            _this.sendBasicInfo()
-          } else {
-            _this.showError()
-          }
+      util.toast.show(this.toast, '正在提交', 'upload')
+      this.sendLogo()
+    },
+    sendLogo() {
+      let _this = this
+      if (this.file) {
+        _this.uploadFile(_this.file, (url) => {
+          _this.basicInfo.logo = url
+          _this.sendBasicInfo()
         })
       } else {
         _this.sendBasicInfo()
@@ -172,17 +184,7 @@ export default {
     },
     sendBasicInfo() {
       let _this = this
-      // basicinfo
-      _this.axios({
-        method: 'post',
-        url: '/api/admin/basicinfo',
-        headers: {'Content-Type': 'application/json'},
-        data: {
-          method: 'modify',
-          language: 'en',
-          data: _this.basicInfo
-        }
-      }).then((response) => {
+      this.axios(api.basicInfo.update(this.basicInfo)).then((response) => {
         let data = response.data
         if (data.code === '200') {
           _this.showSuccess()
@@ -191,27 +193,27 @@ export default {
         }
       })
     },
-    showError() {
+    uploadFile(file, callback) {
       let _this = this
-      _this.toase.submitText = '出错了！'
-      _this.toase.submitIcon = 'sad'
-      setTimeout(() => {
-        _this.toase.submitShow = false
-      }, 500)
+      util.uploadFile(this, file, callback, () => {
+        _this.showError()
+      })
+    },
+    showError() {
+      util.req.changeError(this.toast)
     },
     showSuccess() {
       let _this = this
-      _this.toase.submitText = '提交成功！'
-      _this.toase.submitIcon = 'appreciate'
+      util.toast.show(this.toast, '提交成功！', 'appreciate')
       setTimeout(() => {
-        _this.toase.submitShow = false
         _this.$router.push('/admin/home/en')
-      }, 500)
+      }, 700)
     }
   },
   components: {
     quillEditor,
-    toast
+    toast,
+    editPic
   }
 }
 </script>
