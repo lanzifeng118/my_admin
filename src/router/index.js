@@ -98,7 +98,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: {name: 'admin'}
+      redirect: {name: 'home'}
     },
     {
       path: '/login',

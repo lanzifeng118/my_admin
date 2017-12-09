@@ -35,8 +35,6 @@
 
 <script>
 import toast from 'components/toast/toast'
-// import api from 'components/tools/api'
-// import util from 'components/tools/util'
 
 export default {
   data() {

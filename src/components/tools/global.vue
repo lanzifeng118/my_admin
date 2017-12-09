@@ -24,17 +24,10 @@ if (document.documentElement && document.documentElement.clientHeight && documen
 contentDetailMinHeigth = winHeigth - 145
 navMinHeight = winHeigth - 80
 
-function getCookie() {
-  // let cookie = document.cookie
-  // console.log(cookie)
-  return true
-}
-
 export default {
   winWidth,
   winHeigth,
   contentDetailMinHeigth,
-  navMinHeight,
-  getCookie
+  navMinHeight
 }
 </script>

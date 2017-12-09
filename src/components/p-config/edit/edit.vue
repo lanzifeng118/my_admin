@@ -10,7 +10,7 @@
         <!-- name -->
         <tr>
           <td width="100">账号</td>
-          <td><input type="text" v-model="item.username"></td>
+          <td>{{item.username}}</td>
         </tr>
         <!-- email -->
         <tr>

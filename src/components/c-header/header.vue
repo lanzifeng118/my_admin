@@ -13,7 +13,7 @@
           <a href="http://lanzifeng.com" target="_blank"><span class="icon icon-chinese"></span>中文前台</a>
         </li>
         <li class="header-operate-item">
-          <a href="#"><span class="icon icon-exit"></span>退出登陆</a>
+          <a  @click="logout"><span class="icon icon-exit"></span>退出登陆</a>
         </li>
       </ul>
     </div>
@@ -26,6 +26,20 @@
     data() {
       return {
         logoSrc
+      }
+    },
+    methods: {
+      logout() {
+        this.axios({
+          method: 'post',
+          url: '/api/admin/logout'
+        }).then((res) => {
+          let data = res.data
+          if (data.code === '200') {
+            let redirect = this.$route.path
+            this.$router.push({path: '/login', query: { redirect: redirect }})
+          }
+        })
       }
     }
   }

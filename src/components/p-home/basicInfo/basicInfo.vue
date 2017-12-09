@@ -83,18 +83,30 @@ export default {
     }
   },
   created() {
-    this.axios(api.basicInfo.query()).then((res) => {
-      let data = res.data
-      if (data.code === '200') {
-        this.item = data.data
-      } else {
-        util.req.queryError(this.toast)
-      }
-    }).catch((error) => {
-      if (error) {
-        util.req.queryError(this.toast)
-      }
-    })
+    console.log('aaa')
+    this.getItem()
+  },
+  watch: {
+    '$route' (to, from) {
+      this.getItem()
+    }
+  },
+  methods: {
+    getItem() {
+      this.axios(api.basicInfo.query()).then((res) => {
+        let data = res.data
+        console.log(data)
+        if (data.code === '200') {
+          this.item = data.data
+        } else {
+          util.req.queryError(this.toast)
+        }
+      }).catch((error) => {
+        if (error) {
+          util.req.queryError(this.toast)
+        }
+      })
+    }
   },
   components: {
     toast

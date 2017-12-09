@@ -61,7 +61,6 @@
       checkPassword() {
         if (this.user.password !== '') {
           this.passwordWarn = false
-          return
         }
       },
       enterSubmit(e) {
@@ -70,39 +69,60 @@
         }
       },
       submit() {
-        let _this = this
-        let checkUsername = _this.checkUsername()
+        let checkUsername = this.checkUsername()
         if (!checkUsername) {
           this.usernameWarn = true
           return
         }
-        if (_this.user.password === '') {
+        if (this.user.password === '') {
           this.passwordWarn = true
           return
         }
-        _this.login.text = '登录中...'
-        _this.axios({
+        this.usernameWarn = false
+        this.passwordWarn = false
+        this.login.failure = false
+        this.login.text = '登录中...'
+        this.axios({
           method: 'post',
           url: '/api/admin/login',
-          headers: {'Content-Type': 'application/json'},
-          data: _this.user
-        }).then((response) => {
-          let data = response.data
+          data: this.user
+        }).then((res) => {
+          let data = res.data
           if (data.code === '200') {
-            _this.login.text = '登录成功！'
-            _this.$store.state.hasLogin = true
+            this.login.text = '登录成功！'
             setTimeout(() => {
-              _this.$router.push('/admin')
+              let redirect = this.getRedirect()
+              if (redirect) {
+                this.$router.push(redirect)
+              } else {
+                this.$router.push('/admin/home')
+              }
             }, 300)
           } else {
-            _this.login.text = '登录'
-            _this.login.failure = true
+            this.login.text = '登录'
+            this.login.failure = true
           }
         }).catch((error) => {
           if (error) {
-            _this.$router.push('/error')
+            this.$router.push('/error')
           }
         })
+      },
+      getRedirect() {
+        let search = window.location.href.split('?')[1]
+        let obj = {}
+        if (search) {
+          let searchArr = search.split('&')
+          searchArr.forEach((v, i) => {
+            let arr = v.split('=')
+            obj[arr[0]] = arr[1]
+          })
+        }
+        let redirect = obj.redirect
+        if (redirect) {
+          redirect = decodeURIComponent(redirect)
+        }
+        return redirect
       }
     }
   }

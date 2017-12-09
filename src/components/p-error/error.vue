@@ -8,7 +8,7 @@
         <p>很抱歉，现在暂时无法处理您的访问请求！</p>
       </div>
       <div class="error-back" @click="back">
-        <span class="icon icon-back"></span>返回刷新
+        <span class="icon icon-back"></span>返回首页
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@
     },
     methods: {
       back() {
-        this.$router.back()
+        this.$router.push('/admin/home')
       }
     }
   }

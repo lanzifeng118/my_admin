@@ -104,12 +104,24 @@ let req = {
     toast.fade(obj, '出错了，请稍后再试!', 'sad')
   }
 }
+
+function getCookie() {
+  let cookie = document.cookie.replace(' ', '')
+  let arr = cookie.split(';')
+  let obj = {}
+  arr.forEach((v, i) => {
+    let arrV = v.split('=')
+    obj[arrV[0]] = arrV[1]
+  })
+  return obj
+}
 export default {
   isNum,
   myFileReader,
   uploadFile,
   uploadBigFile,
   toast,
-  req
+  req,
+  getCookie
 }
 </script>
