@@ -46,6 +46,10 @@ import AboutusList from 'components/p-aboutus/list/list'
 import AboutusEdit from 'components/p-aboutus/edit/edit'
 import AboutusBanner from 'components/p-aboutus/banner/banner'
 import AboutusBannerEdit from 'components/p-aboutus/banner-edit/banner-edit'
+import AboutusListEn from 'components/p-aboutus/list-en/list'
+import AboutusEditEn from 'components/p-aboutus/edit-en/edit'
+import AboutusBannerEn from 'components/p-aboutus/banner-en/banner'
+import AboutusBannerEditEn from 'components/p-aboutus/banner-edit-en/banner-edit'
 // friendlink
 import Friendlink from 'components/p-friendlink/friendlink'
 import FriendlinkList from 'components/p-friendlink/list/list'
@@ -114,15 +118,20 @@ export default new Router({
         {
           path: 'aboutus',
           component: Aboutus,
+          redirect: {name: 'aboutusList'},
           children: [
             // 中文
-            {path: '/', component: AboutusList},
+            {path: 'list', component: AboutusList, name: 'aboutusList'},
             {path: 'add', component: AboutusEdit},
             {path: 'edit/:id', component: AboutusEdit},
             {path: 'banner', component: AboutusBanner},
             {path: 'banneredit', component: AboutusBannerEdit},
             // 英文
-            {path: 'en', component: AboutusList}
+            {path: 'listen', component: AboutusListEn},
+            {path: 'adden', component: AboutusEditEn},
+            {path: 'editen/:id', component: AboutusEditEn},
+            {path: 'banneren', component: AboutusBannerEn},
+            {path: 'bannerediten', component: AboutusBannerEditEn}
           ]
         },
         // product

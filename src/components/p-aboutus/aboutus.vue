@@ -16,10 +16,10 @@
       return {
         contentDetailMinHeigth,
         tabData: [
-          {text: '关于我们列表', href: '/admin/aboutus', icon: 'search_list'},
+          {text: '关于我们列表', href: '/admin/aboutus/list', icon: 'search_list'},
           {text: '广告图', href: '/admin/aboutus/banner', icon: 'pic'},
-          {text: 'About Us List', href: '/admin/aboutus/en', icon: 'search_list'},
-          {text: 'Banner', href: '/admin/aboutus/banner/en', icon: 'pic'}
+          {text: 'About Us List', href: '/admin/aboutus/listen', icon: 'search_list'},
+          {text: 'Banner', href: '/admin/aboutus/banneren', icon: 'pic'}
         ]
       }
     },
