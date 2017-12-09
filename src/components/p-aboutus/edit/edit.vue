@@ -36,11 +36,7 @@
           <tr>
             <td>内容</td>
             <td>
-              <quill-editor
-                v-model="item.detail"
-                :options="editorOption"
-              >
-              </quill-editor>
+              <editor @input="editorChange" :value="item.detail"></editor>
             </td>
           </tr>
           <tr>
@@ -60,7 +56,7 @@
 </template>
 
 <script>
-import { quillEditor } from 'vue-quill-editor'
+import editor from 'components/c-editor/editor'
 import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
@@ -76,13 +72,6 @@ export default {
         display: 'Y',
         brief: '',
         detail: ''
-      },
-      // editor
-      editorOption: { // 编辑器的配置
-        placeholder: '输入内容...',
-        modules: {
-          toolbar: this.$store.state.quillEditor.nomal
-        }
       },
       // toast
       toast: {
@@ -101,6 +90,9 @@ export default {
     }
   },
   methods: {
+    editorChange(content) {
+      this.item.detail = content
+    },
     getItem() {
       if (this.$route.path === '/admin/aboutus/add') {
         return
@@ -194,7 +186,7 @@ export default {
     }
   },
   components: {
-    quillEditor,
+    editor,
     toast
   }
 }

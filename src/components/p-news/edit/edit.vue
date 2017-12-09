@@ -65,11 +65,7 @@
         <tr>
           <td class="vertical-top">详细介绍</td>
           <td>
-            <quill-editor
-              v-model="item.detail"
-              :options="editorOption"
-              >
-            </quill-editor>
+            <editor @input="editorChange" :value="item.detail"></editor>
           </td>
         </tr>
         <tr>
@@ -89,7 +85,7 @@
 </template>
 
 <script>
-import { quillEditor } from 'vue-quill-editor'
+import editor from 'components/c-editor/editor'
 import toast from 'components/toast/toast'
 import editPic from 'components/c-edit-pic/edit-pic'
 import util from 'components/tools/util'
@@ -138,6 +134,9 @@ export default {
     }
   },
   methods: {
+    editorChange(content) {
+      this.item.detail = content
+    },
     getItem() {
       this.getClassiy()
       if (this.$route.path === '/admin/news/add') {
@@ -282,7 +281,7 @@ export default {
     }
   },
   components: {
-    quillEditor,
+    editor,
     toast,
     editPic
   }

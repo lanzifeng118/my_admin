@@ -6,7 +6,7 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
-import {getCookie} from 'components/tools/global'
+// import {getCookie} from 'components/tools/global'
 
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
@@ -38,27 +38,27 @@ const store = new Vuex.Store({
   }
 })
 
-router.beforeEach((to, from, next) => {
-  store.state.hasLogin = getCookie()
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    goPage(store.state.hasLogin, '/login')
-  } else if (to.meta.loginPage) {
-    goPage(!store.state.hasLogin, '/admin')
-  } else {
-    next()
-  }
-
-  function goPage(hasLogin, path) {
-    if (hasLogin) {
-      next()
-    } else {
-      next({
-        path: path,
-        query: {redirect: to.fullPath}
-      })
-    }
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   store.state.hasLogin = getCookie()
+//   if (to.matched.some(record => record.meta.requiresAuth)) {
+//     goPage(store.state.hasLogin, '/login')
+//   } else if (to.meta.loginPage) {
+//     goPage(!store.state.hasLogin, '/admin')
+//   } else {
+//     next()
+//   }
+//
+//   function goPage(hasLogin, path) {
+//     if (hasLogin) {
+//       next()
+//     } else {
+//       next({
+//         path: path,
+//         query: {redirect: to.fullPath}
+//       })
+//     }
+//   }
+// })
 
 /* eslint-disable no-new */
 new Vue({

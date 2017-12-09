@@ -84,22 +84,7 @@
         <tr>
           <td class="vertical-top">详细介绍</td>
           <td>
-            <quill-editor
-              v-model="item.detail"
-              :options="editorOption"
-              >
-                <div id="toolbar" slot="toolbar">
-                  <span class="ql-formats">
-                    <button type="button" @click="imgClick">
-                      <svg viewBox="0 0 18 18">
-                          <rect class="ql-stroke" height="10" width="12" x="3" y="4"></rect>
-                          <circle class="ql-fill" cx="6" cy="7" r="1"></circle>
-                          <polyline class="ql-even ql-fill" points="5 12 5 11 7 9 8 10 11 7 13 9 13 12 5 12"></polyline>
-                      </svg>
-                    </button>
-                </span>
-                </div>
-            </quill-editor>
+              <editor @input="editorChange" :value="item.detail"></editor>
           </td>
         </tr>
         <tr>
@@ -125,7 +110,7 @@
 </template>
 
 <script>
-import { quillEditor } from 'vue-quill-editor'
+import editor from 'components/c-editor/editor'
 import toast from 'components/toast/toast'
 import percent from 'components/c-percent/percent'
 import editPic from 'components/c-edit-pic/edit-pic'
@@ -150,13 +135,6 @@ export default {
       },
       // classify
       classify: [],
-      // editor
-      editorOption: { // 编辑器的配置
-        placeholder: '输入内容...',
-        modules: {
-          toolbar: this.$store.state.quillEditor.nomal
-        }
-      },
       // file
       file: null,
       // toast
@@ -181,6 +159,9 @@ export default {
     }
   },
   methods: {
+    editorChange(content) {
+      this.item.detail = content
+    },
     getItem() {
       this.getClassiy()
       if (this.$route.path === '/admin/product/add') {
@@ -341,7 +322,7 @@ export default {
     }
   },
   components: {
-    quillEditor,
+    editor,
     toast,
     editPic,
     percent
@@ -350,10 +331,4 @@ export default {
 </script>
 
 <style>
-.product-edit .edit-img {
-
-}
-.product-edit .edit-img img {
-
-}
 </style>

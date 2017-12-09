@@ -166,6 +166,7 @@
 }
 .login-submit button {
   width: 100%;
+  border-color: #41a8ed;
   background-color: #41a8ed;
   border-radius: 2px;
   height: 40px;
