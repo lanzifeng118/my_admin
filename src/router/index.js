@@ -98,7 +98,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: {name: 'home'}
+      redirect: {name: 'admin'}
     },
     {
       path: '/login',
@@ -119,10 +119,11 @@ export default new Router({
         {
           path: 'home',
           name: 'home',
+          redirect: 'homeList',
           component: Home,
           children: [
             // 中文
-            {path: '/', component: BasicInfo},
+            {path: '/', component: BasicInfo, name: 'homeList'},
             {path: 'edit', component: BasicInfoEdit},
             // 英文
             {path: 'en', component: BasicInfoEn},
