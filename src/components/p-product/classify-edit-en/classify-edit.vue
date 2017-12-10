@@ -13,6 +13,11 @@
           <td width="100"><span class="icon-nessisary"></span>Name</td>
           <td><input type="text" v-model.trim="item.name"></td>
         </tr>
+        <!-- fullName -->
+        <tr>
+          <td width="100"><span class="icon-nessisary"></span>Full Name</td>
+          <td><input type="text" v-model.trim="item.full_name"></td>
+        </tr>
         <!-- sort -->
         <tr>
           <td>Order</td>
@@ -234,6 +239,10 @@ export default {
     verify() {
       if (!this.item.name) {
         util.toast.fade(this.toast, '品牌名称不能为空')
+        return false
+      }
+      if (!this.item.full_name) {
+        util.toast.fade(this.toast, '品牌全称不能为空')
         return false
       }
       if (this.item.sort && !/^\d+$/.test(this.item.sort)) {

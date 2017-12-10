@@ -12,6 +12,10 @@
           <td>{{item.name}}</td>
         </tr>
         <tr>
+          <td width="100">Full Name<span class="separate"></span></td>
+          <td>{{item.full_name}}</td>
+        </tr>
+        <tr>
           <td class="vertical-middle">Logo<span class="separate"></span></td>
           <td><img class="basic-info-img" :src="item.logo" alt=""></td>
         </tr>

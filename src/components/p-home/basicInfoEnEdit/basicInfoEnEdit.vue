@@ -11,6 +11,10 @@
           <td width="90">CO. Name</td>
           <td><input type="text" v-model="basicInfo.name"></td>
         </tr>
+        <tr>
+          <td width="90">Full Name</td>
+          <td><input type="text" v-model="basicInfo.full_name"></td>
+        </tr>
         <!-- logo -->
         <tr>
           <td class="vertical-top">LOGO<span class="separate"></span></td>

@@ -12,6 +12,10 @@
           <td>{{item.name}}</td>
         </tr>
         <tr>
+          <td width="100">全称<span class="separate"></span></td>
+          <td>{{item.full_name}}</td>
+        </tr>
+        <tr>
           <td class="vertical-middle">LOGO<span class="separate"></span></td>
           <td><img class="basic-info-img" :src="item.logo" alt=""></td>
         </tr>
