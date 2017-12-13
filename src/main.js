@@ -40,7 +40,7 @@ const store = new Vuex.Store({
 
 router.beforeEach((to, from, next) => {
   store.state.hasLogin = getCookie().account
-  console.log(to.matched)
+  // console.log(to.matched)
   if (to.matched.length === 0) {
     from.name ? next({name: from.name}) : next('/admin/home')
     return
