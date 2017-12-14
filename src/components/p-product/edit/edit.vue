@@ -18,7 +18,6 @@
           <td class="vertical-top">预览图</td>
           <td>
             <edit-pic
-              logo="true"
               boxWidth="240"
               boxHeight="200"
               :img="item.img"

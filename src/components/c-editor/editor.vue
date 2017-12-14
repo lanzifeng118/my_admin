@@ -10,13 +10,22 @@
         <span class="ql-formats">
           <button type="button" class="ql-bold"></button>
           <button type="button" class="ql-italic"></button>
-          <button type="button" class="ql-underline"></button>
-          <button type="button" class="ql-strike"></button>
           <select class="ql-align">
             <option selected="selected"></option>
             <option value="center"></option>
             <option value="right"></option>
             <option value="justify"></option>
+          </select>
+        </span>
+        <span class="ql-formats">
+          <select class="ql-header">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+            <option value="4"></option>
+            <option value="5"></option>
+            <option value="6"></option>
+            <option selected="selected"></option>
           </select>
         </span>
         <span class="ql-formats">
@@ -185,4 +194,37 @@ export default {
 }
 </script>
 <style>
+.editor .quill-editor  h1 {
+  font-size: 14px;
+  color: #0d93b8;
+  font-weight: bold;
+  margin: 15px 0;
+}
+.editor .quill-editor h2 {
+  font-size: 15px;
+  padding-left: 10px;
+  border-left: 2px solid #0d93b8;
+  margin: 15px 0;
+}
+.editor .quill-editor p {
+  margin-bottom: 10px;
+}
+.editor .quill-editor ul {
+  margin: 10px 0 10px 15px;
+}
+.editor .quill-editor li {
+  position: relative;
+  display: block;
+  padding: 0 0 5px 12px;
+  line-height: 1.5em;
+}
+.editor .quill-editor li::before {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: #86b513;
+  top: 7px;
+  left: 0px;
+}
 </style>
