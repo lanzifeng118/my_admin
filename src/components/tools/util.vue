@@ -107,7 +107,6 @@ let req = {
 
 function getCookie() {
   let cookie = document.cookie.replace(/ /g, '')
-  console.log(cookie)
   let arr = cookie.split(';')
   let obj = {}
   arr.forEach((v, i) => {

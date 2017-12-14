@@ -9,12 +9,12 @@
     <table>
       <tbody>
         <tr>
-          <td width="90"><span class="icon-nessisary"></span>经验名称</td>
+          <td width="100"><span class="icon-nessisary"></span>经验名称</td>
           <td><input type="text" v-model="item.name"></td>
         </tr>
         <!-- 显示 -->
         <tr>
-          <td width="90" class="vertical-middle">显示</td>
+          <td class="vertical-middle">显示</td>
           <td class="show">
             <span
               :class="[item.display === 'Y' ? 'icon-square_check_fill' : 'icon-square']"
@@ -41,7 +41,7 @@
                   <!-- changeLogo -->
                   <label :for="'logo' + index">选择图片</label>
                   <input type="file" :id="'logo' + index" accept="image/png, image/jpeg, image/gif, image/jpg"
-                  @change="changeLogo(key + '_'  + index, $event)">
+                  @change="changeLogo(index, $event)">
                 </div>
                 <div class="experience-eidt-logo-input">
                   分类<select v-model="logo.classify">

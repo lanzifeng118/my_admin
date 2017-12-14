@@ -43,7 +43,7 @@
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
             <th width="60">Order</th>
-            <th>Name</th>
+            <th>Product Name</th>
             <th width="220">Preview Picture</th>
             <th width="110">Display</th>
             <th width="190">Brand</th>

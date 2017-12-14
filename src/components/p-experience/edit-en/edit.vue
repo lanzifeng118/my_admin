@@ -41,7 +41,7 @@
                   <!-- changeLogo -->
                   <label :for="'logo' + index">选择图片</label>
                   <input type="file" :id="'logo' + index" accept="image/png, image/jpeg, image/gif, image/jpg"
-                  @change="changeLogo(key + '_'  + index, $event)">
+                  @change="changeLogo(index, $event)">
                 </div>
                 <div class="experience-eidt-logo-input">
                   分类<select v-model="logo.classify">

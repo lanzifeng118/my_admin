@@ -43,7 +43,7 @@
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
             <th width="60">排序</th>
-            <th>名称</th>
+            <th>产品名称</th>
             <th width="220">预览图</th>
             <th width="110">显示</th>
             <th width="190">品牌</th>
