@@ -28,6 +28,11 @@
             <td>Message<span class="separate"></span></td>
             <td class="message">{{item.message}}</td>
           </tr>
+          <!-- salutation -->
+          <tr>
+            <td>Salutation<span class="separate"></span></td>
+            <td class="message">{{item.salutation}}</td>
+          </tr>
           <!-- name -->
           <tr>
             <td width="70">Name<span class="separate"></span></td>

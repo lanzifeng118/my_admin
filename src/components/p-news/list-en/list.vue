@@ -73,7 +73,7 @@
             </td>
             <!-- classify -->
             <td class="classify">
-              <p v-if="item.classify.trim()"><span>{{item.classify}}</span></p>
+              <p v-if="item.classify && item.classify.trim()"><span>{{item.classify}}</span></p>
             </td>
             <td>{{item.modifytime}}</td>
             <td class="link">

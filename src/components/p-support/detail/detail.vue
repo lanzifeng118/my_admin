@@ -28,6 +28,11 @@
             <td>信息<span class="separate"></span></td>
             <td class="message">{{item.message}}</td>
           </tr>
+          <!-- solutiion -->
+          <tr>
+            <td>称呼<span class="separate"></span></td>
+            <td class="message">{{item.salutation}}</td>
+          </tr>
           <!-- name -->
           <tr>
             <td width="70">姓名<span class="separate"></span></td>
