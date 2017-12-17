@@ -32,6 +32,10 @@
           <td>{{item.telephone}}</td>
         </tr>
         <tr>
+          <td>Linkman<span class="separate"></span></td>
+          <td>{{item.linkman}}</td>
+        </tr>
+        <tr>
           <td>Work Time<span class="separate"></span></td>
           <td>{{item.worktime}}</td>
         </tr>

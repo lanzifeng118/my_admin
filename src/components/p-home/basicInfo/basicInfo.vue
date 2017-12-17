@@ -32,6 +32,10 @@
           <td>{{item.telephone}}</td>
         </tr>
         <tr>
+          <td>联系人<span class="separate"></span></td>
+          <td>{{item.linkman}}</td>
+        </tr>
+        <tr>
           <td>工作时间<span class="separate"></span></td>
           <td>{{item.worktime}}</td>
         </tr>

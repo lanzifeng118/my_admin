@@ -38,8 +38,8 @@
               <span :class="[item.select ? 'icon-square_check_fill' : 'icon-square']"></span>
             </td>
             <td>{{item.firstName}} {{item.lastName}}</td>
-            <!-- topic -->
-            <td>{{item.topic}}</td>
+            <!-- classify -->
+            <td>{{item.classify}}</td>
             <!-- message -->
             <td class="message"><p>{{item.message}}</p></td>
             <!-- reply -->

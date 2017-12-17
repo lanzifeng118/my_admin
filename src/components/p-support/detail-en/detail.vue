@@ -18,10 +18,10 @@
             <span :class="[item.reply === 'Y' ? 'icon-square_check' : 'icon-square']"></span>
           </td>
         </tr>
-          <!-- topic -->
+          <!-- classify -->
           <tr>
             <td>Topic<span class="separate"></span></td>
-            <td>{{item.topic}}</td>
+            <td>{{item.classify}}</td>
           </tr>
           <!-- message -->
           <tr>

@@ -63,11 +63,15 @@ import SupportList from 'components/p-support/list/list'
 import SupportDetail from 'components/p-support/detail/detail'
 import SupportBanner from 'components/p-support/banner/banner'
 import SupportBannerEdit from 'components/p-support/banner-edit/banner-edit'
+import SupportClassify from 'components/p-support/classify/classify'
+import SupportClassifyEdit from 'components/p-support/classify-edit/classify-edit'
 // en
 import SupportListEn from 'components/p-support/list-en/list'
 import SupportDetailEn from 'components/p-support/detail-en/detail'
 import SupportBannerEn from 'components/p-support/banner-en/banner'
 import SupportBannerEditEn from 'components/p-support/banner-edit-en/banner-edit'
+import SupportClassifyEn from 'components/p-support/classify-en/classify'
+import SupportClassifyEditEn from 'components/p-support/classify-edit-en/classify-edit'
 
 // news
 import News from 'components/p-news/news'
@@ -331,11 +335,29 @@ export default new Router({
           children: [
             // 中文
             {path: 'list', component: SupportList, name: 'supportList'},
+            {path: 'classify', component: SupportClassify},
+            {path: 'classifyadd', component: SupportClassifyEdit},
+            {
+              path: 'classifyedit',
+              component: SupportClassifyEdit,
+              children: [
+                {path: ':id'}
+              ]
+            },
             {path: 'detail/:id', component: SupportDetail},
             {path: 'banner', component: SupportBanner},
             {path: 'banneredit', component: SupportBannerEdit, children: [{path: ':id'}]},
             // 英文
             {path: 'listen', component: SupportListEn, name: 'supportList'},
+            {path: 'classifyen', component: SupportClassifyEn},
+            {path: 'classifyadden', component: SupportClassifyEditEn},
+            {
+              path: 'classifyediten',
+              component: SupportClassifyEditEn,
+              children: [
+                {path: ':id'}
+              ]
+            },
             {path: 'detailen/:id', component: SupportDetailEn},
             {path: 'banneren', component: SupportBannerEn},
             {path: 'bannerediten', component: SupportBannerEditEn, children: [{path: ':id'}]}

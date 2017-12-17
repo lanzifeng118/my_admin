@@ -17,8 +17,10 @@
         contentDetailMinHeigth,
         tabData: [
           {text: '服务支持列表', href: '/admin/support/list', icon: 'search_list'},
+          {text: '话题列表', href: '/admin/support/classify', icon: 'classify'},
           {text: '广告图', href: '/admin/support/banner', icon: 'pic'},
           {text: 'Service & Support List', href: '/admin/support/listen', icon: 'search_list'},
+          {text: 'Topic', href: '/admin/support/classifyen', icon: 'classify'},
           {text: 'Banner', href: '/admin/support/banneren', icon: 'pic'}
         ]
       }

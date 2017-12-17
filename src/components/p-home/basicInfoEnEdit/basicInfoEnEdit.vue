@@ -45,6 +45,10 @@
           <td><input type="text" v-model="basicInfo.telephone"></td>
         </tr>
         <tr>
+          <td>Linkman</td>
+          <td><input type="text" v-model="basicInfo.linkman"></td>
+        </tr>
+        <tr>
           <td>Work Time</td>
           <td><input type="text" v-model="basicInfo.worktime"></td>
         </tr>

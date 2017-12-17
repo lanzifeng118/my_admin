@@ -14,6 +14,7 @@ let experienceBannerUrl = '/api/admin/experience/banner'
 let friendlinkUrl = '/api/admin/friendlink'
 let supportUrl = '/api/admin/support'
 let supportBannerUrl = '/api/admin/support/banner'
+let supportClassifyUrl = '/api/admin/support/classify'
 let newsListUrl = '/api/admin/news/list'
 let newsClassifyUrl = '/api/admin/news/classify'
 let newsBannerUrl = '/api/admin/news/banner'
@@ -310,6 +311,24 @@ let api = {
     },
     update(data) {
       return updateFun(supportBannerUrl, data)
+    }
+  },
+  // supportClassify
+  supportClassify: {
+    query() {
+      return queryFun(supportClassifyUrl)
+    },
+    queryById(id) {
+      return queryByIdFun(supportClassifyUrl, id)
+    },
+    delete(id) {
+      return deleteFun(supportClassifyUrl, id)
+    },
+    insert(data) {
+      return insertFun(supportClassifyUrl, data)
+    },
+    update(data) {
+      return updateFun(supportClassifyUrl, data)
     }
   },
   // news
