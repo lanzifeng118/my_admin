@@ -143,7 +143,7 @@
         thSelect: false,
         // paging
         paging: {
-          size: 2,
+          size: 10,
           no: 0,
           list: []
         }

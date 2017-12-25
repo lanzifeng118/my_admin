@@ -125,15 +125,15 @@ export default {
         return
       }
       this.typeAdd = false
-      let _this = this
       let id = this.$route.params.id
       this.axios(api.productVideo.queryById(id)).then((res) => {
         let data = res.data
         if (data.code === '200') {
           if (data.data) {
-            _this.item = data.data
+            this.item = data.data
+            this.item.classify = this.item.classify.trim()
           } else {
-            util.toast.show(_this.toast, '此视频不存在', 'close')
+            util.toast.show(this.toast, '此视频不存在', 'close')
             this.goBack()
           }
         }

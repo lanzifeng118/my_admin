@@ -132,6 +132,7 @@ export default {
         if (data.code === '200') {
           if (data.data) {
             _this.item = data.data
+            this.item.classify = this.item.classify.trim()
           } else {
             util.toast.show(_this.toast, '此视频不存在', 'close')
             this.goBack()
