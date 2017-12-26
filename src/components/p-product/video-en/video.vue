@@ -1,6 +1,19 @@
 <template>
 <div class="product-video">
   <div class="f-clearfix">
+    <!-- Brand -->
+    <div class="f-left">
+      <select v-model="classifySelect" @change="changeSelect">
+        <option disabled value="">Choose Brand</option>
+        <option value="">All Brand</option>
+        <option
+          v-for="classifyItem in classify"
+          :value="classifyItem.name"
+        >
+          {{classifyItem.name}}
+        </option>
+      </select>
+    </div>
     <button class="f-right button" @click="deleteAll">
       <span class="icon icon-delete"></span>Delete All
     </button>
@@ -141,6 +154,13 @@ export default {
           util.req.queryError(this.toast)
         }
       })
+    },
+    changeSelect() {
+      if (this.classifySelect) {
+        this.getItems('byClassify')
+      } else {
+        this.getItems()
+      }
     },
     handleData(data) {
       let dataH = []

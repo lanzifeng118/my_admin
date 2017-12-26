@@ -32,7 +32,7 @@
               boxHeight="147"
               :img="item.img"
               id="inputImg"
-              note="(宽度292px，高度145px)"
+              note="(宽度232px，高度141px)"
               @choosePic="chooseImg"
               @deletePic="deleteImg"
             >
@@ -46,7 +46,7 @@
             <label for="inputVideo" class="button button-second">
               <span class=" icon icon-round_add"></span>选择视频
             </label>
-            <input type="file" id="inputVideo" accept="video/mp4, application/pdf" @change="chooseVideo">
+            <input type="file" id="inputVideo" accept="video/mp4" @change="chooseVideo">
             <div class="pdf-box" v-if="item.video" :title="item.name">
               <span class="icon icon-video">
               {{item.name}}</span>

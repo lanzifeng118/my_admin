@@ -13,10 +13,6 @@
           <td>{{item.username}}</td>
         </tr>
         <tr>
-          <td>邮箱<span class="separate"></span></td>
-          <td>{{item.email}}</td>
-        </tr>
-        <tr>
           <td class="vertical-top">头像<span class="separate"></span></td>
           <td class="avatar"><img v-if="item.avatar" :src="item.avatar"></td>
         </tr>

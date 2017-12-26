@@ -1,6 +1,19 @@
 <template>
 <div class="product-video">
   <div class="f-clearfix">
+    <!-- 品牌 -->
+    <div class="f-left">
+      <select v-model="classifySelect" @change="changeSelect">
+        <option disabled value="">选择品牌</option>
+        <option value="">所有品牌</option>
+        <option
+          v-for="classifyItem in classify"
+          :value="classifyItem.name"
+        >
+          {{classifyItem.name}}
+        </option>
+      </select>
+    </div>
     <button class="f-right button" @click="deleteAll">
       <span class="icon icon-delete"></span>一键删除
     </button>
@@ -141,6 +154,13 @@ export default {
           util.req.queryError(this.toast)
         }
       })
+    },
+    changeSelect() {
+      if (this.classifySelect) {
+        this.getItems('byClassify')
+      } else {
+        this.getItems()
+      }
     },
     handleData(data) {
       let dataH = []

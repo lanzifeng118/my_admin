@@ -12,11 +12,6 @@
           <td width="100">账号</td>
           <td>{{item.username}}</td>
         </tr>
-        <!-- email -->
-        <tr>
-          <td width="120">邮箱</td>
-          <td><input type="text" v-model="item.email"></td>
-        </tr>
         <tr>
           <td class="vertical-top">头像<span class="separate"></span></td>
           <td>
