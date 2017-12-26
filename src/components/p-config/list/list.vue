@@ -35,7 +35,6 @@ import toast from 'components/toast/toast'
 export default {
   data() {
     return {
-      item: {},
       toast: {
         show: false,
         text: '',
@@ -43,8 +42,10 @@ export default {
       }
     }
   },
-  created() {
-    this.item = this.$store.state.user
+  computed: {
+    item() {
+      return this.$store.state.user
+    }
   },
   components: {
     toast

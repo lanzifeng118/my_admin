@@ -215,7 +215,7 @@
         })
       },
       showSuccess() {
-        util.toast.fade(this.toast, '提交成功！', 'appreciate')
+        util.toast.fade(this.toast, '修改成功！', 'appreciate')
       }
     },
     components: {

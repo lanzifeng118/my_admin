@@ -49,16 +49,8 @@ import editPic from 'components/c-edit-pic/edit-pic'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 export default {
-  props: {
-    page: String,
-    lang: {
-      type: String,
-      default: 'cn'
-    }
-  },
   data() {
     return {
-      item: {},
       // file
       file: null,
 
@@ -70,13 +62,12 @@ export default {
 
     }
   },
-  created() {
-    this.getItem()
+  computed: {
+    item() {
+      return this.$store.state.user
+    }
   },
   methods: {
-    getItem() {
-      this.item = this.$store.state.user
-    },
     chooseImg(e) {
       this.file = e.target.files[0]
       util.myFileReader(this.file, (result) => {
