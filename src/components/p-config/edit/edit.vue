@@ -18,7 +18,7 @@
             <edit-pic
               boxWidth="160"
               boxHeight="160"
-              :img="item.avatar"
+              :img="img"
               id="inputLogo"
               note="（宽度150px，高度150px）"
               @choosePic="chooseImg"
@@ -53,7 +53,7 @@ export default {
     return {
       // file
       file: null,
-
+      img: '',
       toast: {
         show: false,
         text: '',
@@ -62,26 +62,31 @@ export default {
 
     }
   },
+  watch: {
+    item() {
+      this.img = this.item.avatar
+    }
+  },
   computed: {
     item() {
       return this.$store.state.user
     }
   },
+  created() {
+    this.img = this.item.avatar
+  },
   methods: {
     chooseImg(e) {
       this.file = e.target.files[0]
       util.myFileReader(this.file, (result) => {
-        this.item.avatar = result
+        this.img = result
       })
     },
     deleteImg() {
-      this.item.avatar = ''
+      this.img = ''
       this.file = null
     },
     submit() {
-      if (!this.verify()) {
-        return
-      }
       // 如果上传了图片
       util.toast.show(this.toast, '正在提交', 'upload')
       this.sendImg()
@@ -89,7 +94,7 @@ export default {
     sendImg() {
       if (this.file) {
         util.uploadFile(this, this.file, (url) => {
-          this.item.avatar = url
+          this.img = url
           this.sendData()
         }, () => {
           this.showError()
@@ -99,6 +104,7 @@ export default {
       }
     },
     sendData() {
+      this.item.avatar = this.img
       this.axios(api.user.update(this.item)).then((res) => {
         let data = res.data
         if (data.code === '200') {
@@ -112,13 +118,6 @@ export default {
           this.showError()
         }
       })
-    },
-    verify() {
-      if (!this.item.username) {
-        util.toast.fade(this.toast, '用户名不能为空')
-        return false
-      }
-      return true
     },
     showError() {
       util.toast.fade(this.toast, '出错了，请稍后再试！', 'sad')
