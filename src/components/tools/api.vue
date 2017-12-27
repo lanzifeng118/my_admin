@@ -73,6 +73,16 @@ let updateFun = (url, data) => {
     }
   }
 }
+let updateForDisplayFun = (url, data) => {
+  return {
+    method: 'post',
+    url: url,
+    data: {
+      method: 'updateForDisplay',
+      data: data
+    }
+  }
+}
 let deleteFun = (url, ids) => {
   return {
     method: 'post',
@@ -135,11 +145,17 @@ let api = {
     query() {
       return queryFun(bannerUrl)
     },
+    queryById(id) {
+      return queryByIdFun(bannerUrl, id)
+    },
     insert(data) {
       return insertFun(bannerUrl, data)
     },
     update(data) {
       return updateFun(bannerUrl, data)
+    },
+    updateForDisplay(data) {
+      return updateForDisplayFun(bannerUrl, data)
     },
     delete(id) {
       return deleteFun(bannerUrl, id)

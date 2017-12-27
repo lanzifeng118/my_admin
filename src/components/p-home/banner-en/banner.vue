@@ -43,7 +43,7 @@
             <td class="order">
               {{item.sort}}
             </td>
-            <td><img :src="item.img" alt=""></td>
+            <td class="img"><img :src="item.img" style="max-width: 320px;" alt=""></td>
             <!-- show -->
             <td
               class="pointer"
@@ -153,13 +153,23 @@
           item.display = 'Y'
         }
         // ajax
+        // ajax
+        this.axios(api.banner.updateForDisplay({id: item.id, display: item.display})).then((res) => {
+          let data = res.data
+          console.log(data)
+          if (data.code === '200') {
+            util.toast.fade(this.toast, '修改成功！', 'appreciate')
+          } else {
+            util.req.changeError(this.toast)
+          }
+        })
       },
       deleteItem(index) {
         let arr = []
         let item = this.items[index]
         arr.push(item.id)
         this.deleteIds = arr
-        this.pop.text = '确定删除[' + item.title +']'
+        this.pop.text = '确定删除该条广告'
         this.pop.show = true
       },
       deleteAll() {

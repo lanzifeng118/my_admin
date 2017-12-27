@@ -26,6 +26,11 @@
               </edit-pic>
             </td>
           </tr>
+          <!-- 链接 -->
+          <tr>
+            <td>Link</td>
+            <td><input type="text" v-model="item.link"></td>
+          </tr>
           <!-- 顺序 -->
           <tr>
             <td>Order</td>
@@ -71,7 +76,7 @@ export default {
       // item
       item: {
         img: '',
-        sort: '',
+        sort: '1',
         display: 'Y'
       },
       // toast
@@ -123,7 +128,12 @@ export default {
         return
       }
       util.toast.show(this.toast, '正在提交', 'upload')
-      this.sendData()
+      this.sendImg()
+    },
+    sendImg() {
+      this.sendPic(this.file, 'img', () => {
+        this.sendData()
+      })
     },
     sendData() {
       let obj = null
@@ -192,6 +202,21 @@ export default {
     queryErrorGoBack() {
       util.req.queryError(this.toast)
       this.goBack()
+    },
+    uploadFile(file, callback) {
+      util.uploadFile(this, file, callback, () => {
+        this.showError()
+      })
+    },
+    sendPic(file, key, callback) {
+      if (file) {
+        this.uploadFile(file, (url) => {
+          this.item[key] = url
+          callback()
+        })
+      } else {
+        callback()
+      }
     }
   },
   components: {
