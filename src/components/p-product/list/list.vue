@@ -160,30 +160,28 @@
     },
     methods: {
       getItems() {
-        let _this = this
         let pageData = {
-          page_size: _this.paging.size,
-          page_no: _this.paging.no,
-          classify: _this.classifySelect,
-          name: _this.searchText
+          page_size: this.paging.size,
+          page_no: this.paging.no,
+          classify: this.classifySelect,
+          name: this.searchText
         }
         this.axios(api.productList.query(pageData)).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
-            _this.items = _this.handleData(data.data.list)
-            _this.paging.list = new Array(Math.ceil(data.data.total / _this.paging.size))
+            this.items = this.handleData(data.data.list)
+            this.paging.list = new Array(Math.ceil(data.data.total / this.paging.size))
           } else {
             util.req.queryError(this.toast)
           }
         })
       },
       getClassiy() {
-        let _this = this
         this.axios(api.productClassify.query()).then((res) => {
           let data = res.data
           if (data.code === '200') {
-            _this.classify = data.data.list
+            this.classify = data.data.list
           } else {
             util.req.queryError(this.toast)
           }
@@ -223,6 +221,15 @@
           item.display = 'Y'
         }
         // ajax
+        this.axios(api.productList.updateForDisplay({id: item.id, display: item.display})).then((res) => {
+          let data = res.data
+          console.log(data)
+          if (data.code === '200') {
+            util.toast.fade(this.toast, '修改成功！', 'appreciate')
+          } else {
+            util.req.changeError(this.toast)
+          }
+        })
       },
       deleteItem(index) {
         let arr = []
@@ -251,15 +258,14 @@
         this.pop.show = false
       },
       confirmPop() {
-        let _this = this
         let deleteIds = this.deleteIds
         this.pop.show = false
         this.axios(api.productList.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             util.toast.fade(this.toast, '删除成功', 'check')
-            _this.paging.no = 0
-            _this.getItems()
+            this.paging.no = 0
+            this.getItems()
           }
         })
       },

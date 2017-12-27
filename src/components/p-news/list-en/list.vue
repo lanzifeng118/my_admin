@@ -214,6 +214,15 @@
           item.display = 'Y'
         }
         // ajax
+        this.axios(api.newsList.updateForDisplay({id: item.id, display: item.display})).then((res) => {
+          let data = res.data
+          console.log(data)
+          if (data.code === '200') {
+            util.toast.fade(this.toast, '修改成功！', 'appreciate')
+          } else {
+            util.req.changeError(this.toast)
+          }
+        })
       },
       deleteItem(index) {
         let arr = []

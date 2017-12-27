@@ -178,6 +178,9 @@ let api = {
     update(data) {
       return updateFun(productListUrl, data)
     },
+    updateForDisplay(data) {
+      return updateForDisplayFun(productListUrl, data)
+    },
     delete(id) {
       return deleteFun(productListUrl, id)
     }
@@ -246,6 +249,9 @@ let api = {
     },
     update(data) {
       return updateFun(aboutusUrl, data)
+    },
+    updateForDisplay(data) {
+      return updateForDisplayFun(aboutusUrl, data)
     }
   },
   // aboutusBannerUrl
@@ -270,6 +276,9 @@ let api = {
     },
     update(data) {
       return updateFun(experienceListUrl, data)
+    },
+    updateForDisplay(data) {
+      return updateForDisplayFun(experienceListUrl, data)
     },
     delete(id) {
       return deleteFun(experienceListUrl, id)
@@ -378,6 +387,9 @@ let api = {
     },
     update(data) {
       return updateFun(newsListUrl, data)
+    },
+    updateForDisplay(data) {
+      return updateForDisplayFun(newsListUrl, data)
     },
     delete(id) {
       return deleteFun(newsListUrl, id)
