@@ -1,11 +1,11 @@
 <template>
-  <div class="info-list">
+  <div class="home-banner">
     <div class="f-clearfix">
       <button class="f-right button" @click="deleteAll">
-        <span class="icon icon-delete"></span>一键删除
+        <span class="icon icon-delete"></span>Delete All
       </button>
-      <router-link to="/admin/aboutus/add" class="f-right button list-btn-add">
-        <span class="icon icon-round_add"></span>添加
+      <router-link to="/admin/home/banneradden" class="f-right button list-btn-add">
+        <span class="icon icon-round_add"></span>Add
       </router-link >
     </div>
     <div class="list-table-wrap">
@@ -17,17 +17,17 @@
           <tr>
             <!-- selectAll -->
             <th
-              width="120"
+              width="90"
               @click="toggleSelectAll"
               class="pointer"
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="120">排序</th>
-            <th>名称</th>
-            <th width="180">显示</th>
-            <th width="220">修改时间</th>
-            <th width="200">操作</th>
+            <th width="90">Order</th>
+            <th>Picture</th>
+            <th width="120">Display</th>
+            <th width="180">Edit Time</th>
+            <th width="160">Operate</th>
           </tr>
         </thead>
         <tbody>
@@ -43,7 +43,7 @@
             <td class="order">
               {{item.sort}}
             </td>
-            <td>{{item.title}}</td>
+            <td><img :src="item.img" alt=""></td>
             <!-- show -->
             <td
               class="pointer"
@@ -54,9 +54,9 @@
             </td>
             <td>{{item.modifytime}}</td>
             <td class="link">
-              <router-link :to="'/admin/aboutus/edit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/home/bannerediten/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
+              <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
             </td>
           </tr>
         </tbody>
@@ -80,11 +80,10 @@
 </template>
 
 <script>
-  import search from 'components/search/search'
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
   import util from 'components/tools/util'
-  import api from 'components/tools/api'
+  import api from 'components/tools/api-en'
 
   export default {
     data() {
@@ -117,8 +116,8 @@
       this.getItems()
     },
     methods: {
-      getItems(byWhat) {
-        this.axios(api.aboutus.query()).then((res) => {
+      getItems() {
+        this.axios(api.banner.query()).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
@@ -185,7 +184,7 @@
         let _this = this
         let deleteIds = this.deleteIds
         this.pop.show = false
-        this.axios(api.aboutus.delete(deleteIds)).then((res) => {
+        this.axios(api.banner.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {
@@ -202,7 +201,6 @@
       }
     },
     components: {
-      search,
       pop,
       toast
     }
@@ -210,7 +208,7 @@
 </script>
 
 <style>
-.info-list {
+.home-banner {
 
 }
 </style>

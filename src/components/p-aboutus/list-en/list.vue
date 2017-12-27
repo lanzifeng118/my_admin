@@ -118,22 +118,11 @@
     },
     methods: {
       getItems(byWhat) {
-        let _this = this
-        let obj = null
-        let apiList = api.aboutus
-        switch (byWhat) {
-          case 'bySearch':
-            obj = apiList.queryBySearch(this.searchText, this.classifySelect)
-            break
-          default:
-            obj = apiList.query()
-        }
-        this.axios(obj).then((res) => {
+        this.axios(api.aboutus.query()).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
-            _this.items = _this.handleData(data.data)
-            console.log(_this.items)
+            this.items = this.handleData(data.data)
           } else {
             util.req.queryError(this.toast)
           }
@@ -146,9 +135,6 @@
           dataH.push(v)
         })
         return dataH
-      },
-      searchSubmit() {
-        this.getItems('bySearch')
       },
       toggleSelectAll() {
         this.thSelect = !this.thSelect

@@ -40,17 +40,6 @@
           <td>{{item.worktime}}</td>
         </tr>
         <tr>
-          <td>广告图<span class="separate"></span></td>
-          <td>
-            <ul class="basic-info-banner-ul f-clearfix">
-              <li class="basic-info-banner-li" v-for="banner in item.banner">
-                <img :src="banner.img" alt="">
-                <a :href="banner.link" v-if="banner.link" target="_blank">{{banner.link}}</a>
-              </li>
-            </ul>
-          </td>
-        </tr>
-        <tr>
           <td>简介<span class="separate"></span></td>
           <td v-html="item.brief" class="basic-info-breif"></td>
         </tr>

@@ -1,7 +1,7 @@
 <template>
 <div class="basic-info-edit">
   <h2 class="edit-h2">Edit Basic Information</h2>
-  <router-link to="/admin/home" class="edit-close-btn" >
+  <router-link to="/admin/home/en" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
   <div class="edit-table-wrap">
@@ -51,35 +51,6 @@
         <tr>
           <td>Work Time</td>
           <td><input type="text" v-model="basicInfo.worktime"></td>
-        </tr>
-        <!-- ad -->
-        <tr>
-          <td>Ad</td>
-          <td>
-            <!-- add ad -->
-            <label for="addAd" class="button button-second">Add Picture</label>
-            <input type="file" id="addAd" accept="image/png, image/jpeg, image/gif, image/jpg"
-            @change="addAd">
-            <ul class="basic-info-edit-banner-ul f-clearfix">
-              <li class="basic-info-edit-banner-li" v-for="(banner, index) in basicInfo.banner">
-                <div class="basic-info-edit-banner-img">
-                  <img :src="banner.img">
-                  <!-- changeAd -->
-                  <label :for="'ad' + index">Choose Picture</label>
-                  <input type="file" :id="'ad' + index" accept="image/png, image/jpeg, image/gif, image/jpg"
-                  @change="changeAd(index, $event)">
-                </div>
-                <div class="basic-info-edit-banner-input">
-                  <span>Link</span><input type="text" v-model="banner.link" placeholder="">
-                </div>
-                <div class="basic-info-edit-banner-input">
-                  <span>Order</span><input type="text" v-model="banner.sort" placeholder="">
-                </div>
-                <!-- delete ad -->
-                <span class="icon-round_close_fill" @click="deleteAd(index)"></span>
-              </li>
-            </ul>
-          </td>
         </tr>
         <tr>
           <td>Profile</td>
@@ -136,11 +107,10 @@ export default {
     }
   },
   created() {
-    let _this = this
-    _this.axios(api.basicInfo.query()).then((res) => {
+    this.axios(api.basicInfo.query()).then((res) => {
       let data = res.data
       if (data.code === '200') {
-        _this.basicInfo = data.data
+        this.basicInfo = data.data
       } else {
         util.req.queryError(this.toast)
       }
@@ -148,31 +118,14 @@ export default {
   },
   methods: {
     chooseLogo(e) {
-      let _this = this
       this.file = e.target.files[0]
       util.myFileReader(this.file, (result) => {
-        _this.basicInfo.logo = result
+        this.basicInfo.logo = result
       })
     },
     deleteLogo() {
       this.basicInfo.logo = ''
       this.file = null
-    },
-    // ad
-    addAd(e) {
-      let _this = this
-      this.uploadFile(e.target.files[0], (url) => {
-        _this.basicInfo.banner.push({img: url, link: '', sort: '', lang: 'cn'})
-      })
-    },
-    changeAd(index, e) {
-      let _this = this
-      this.uploadFile(e.target.files[0], (url) => {
-        _this.basicInfo.banner[index].img = url
-      })
-    },
-    deleteAd(index) {
-      this.basicInfo.banner.splice(index, 1)
     },
     submit() {
       // 如果上传了图片
@@ -180,41 +133,37 @@ export default {
       this.sendLogo()
     },
     sendLogo() {
-      let _this = this
       if (this.file) {
-        _this.uploadFile(_this.file, (url) => {
-          _this.basicInfo.logo = url
-          _this.sendBasicInfo()
+        this.uploadFile(this.file, (url) => {
+          this.basicInfo.logo = url
+          this.sendBasicInfo()
         })
       } else {
-        _this.sendBasicInfo()
+        this.sendBasicInfo()
       }
     },
     sendBasicInfo() {
-      let _this = this
       this.axios(api.basicInfo.update(this.basicInfo)).then((response) => {
         let data = response.data
         if (data.code === '200') {
-          _this.showSuccess()
+          this.showSuccess()
         } else {
-          _this.showError()
+          this.showError()
         }
       })
     },
     uploadFile(file, callback) {
-      let _this = this
       util.uploadFile(this, file, callback, () => {
-        _this.showError()
+        this.showError()
       })
     },
     showError() {
       util.req.changeError(this.toast)
     },
     showSuccess() {
-      let _this = this
       util.toast.show(this.toast, '提交成功！', 'appreciate')
       setTimeout(() => {
-        _this.$router.push('/admin/home/en')
+        this.$router.push('/admin/home/en')
       }, 700)
     }
   },

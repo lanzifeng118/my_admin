@@ -1,7 +1,7 @@
 <template>
 <div class="basic-info">
   <h2 class="basic-info-welcome">Hello，{{user.username}}！</h2>
-  <router-link to="/admin/home/edit/en" class="basic-info-btn button" >
+  <router-link to="/admin/home/editen" class="basic-info-btn button" >
     <span class="icon icon-edit"></span>Edit
   </router-link>
   <div class="display-table-wrap">
@@ -38,17 +38,6 @@
         <tr>
           <td>Work Time<span class="separate"></span></td>
           <td>{{item.worktime}}</td>
-        </tr>
-        <tr>
-          <td>Ad<span class="separate"></span></td>
-          <td>
-            <ul class="basic-info-banner-ul f-clearfix">
-              <li class="basic-info-banner-li" v-for="banner in item.banner">
-                <img :src="banner.img" alt="">
-                <a :href="banner.link" v-if="banner.link" target="_blank">{{banner.link}}</a>
-              </li>
-            </ul>
-          </td>
         </tr>
         <tr>
           <td>Breif<span class="separate"></span></td>

@@ -17,7 +17,9 @@ export default {
       contentDetailMinHeigth,
       tabData: [
         {text: '基础信息', href: '/admin/home', icon: 'search_list'},
-        {text: 'Basic Information', href: '/admin/home/en', icon: 'search_list'}
+        {text: '广告图', href: '/admin/home/banner', icon: 'pic'},
+        {text: 'Basic Information', href: '/admin/home/en', icon: 'search_list'},
+        {text: 'Banner', href: '/admin/home/banneren', icon: 'pic'}
       ]
     }
   },

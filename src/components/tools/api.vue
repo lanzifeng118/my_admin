@@ -2,6 +2,7 @@
 const LANG = 'cn'
 let userUrl = '/api/admin/users'
 let basicInfoUrl = '/api/admin/basicinfo'
+let bannerUrl = '/api/admin/banner'
 let productListUrl = '/api/admin/product/list'
 let productClassifyUrl = '/api/admin/product/classify'
 let productBannerUrl = '/api/admin/product/banner'
@@ -128,6 +129,20 @@ let api = {
     },
     update(data) {
       return updateFun(basicInfoUrl, data)
+    }
+  },
+  banner: {
+    query() {
+      return queryFun(bannerUrl)
+    },
+    insert(data) {
+      return insertFun(bannerUrl, data)
+    },
+    update(data) {
+      return updateFun(bannerUrl, data)
+    },
+    delete(id) {
+      return deleteFun(bannerUrl, id)
     }
   },
   // product

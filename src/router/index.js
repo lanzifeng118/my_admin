@@ -4,6 +4,10 @@ import Login from 'components/p-login/login'
 import ErrorPage from 'components/p-error/error'
 import Admin from 'components/p-admin/admin'
 import Home from 'components/p-home/home'
+import HomeBanner from 'components/p-home/banner/banner'
+import HomeBannerEn from 'components/p-home/banner-en/banner'
+import HomeBannerEdit from 'components/p-home/banner-edit/banner-edit'
+import HomeBannerEditEn from 'components/p-home/banner-edit-en/banner-edit'
 import BasicInfo from 'components/p-home/basicInfo/basicInfo'
 import BasicInfoEn from 'components/p-home/basicInfo-en/basicInfo-en'
 import BasicInfoEdit from 'components/p-home/basicInfoEdit/basicInfoEdit'
@@ -129,9 +133,15 @@ export default new Router({
             // 中文
             {path: '/', component: BasicInfo, name: 'homeList'},
             {path: 'edit', component: BasicInfoEdit},
+            {path: 'banner', component: HomeBanner},
+            {path: 'banneradd', component: HomeBannerEdit},
+            {path: 'banneredit/:id', component: HomeBannerEdit},
             // 英文
             {path: 'en', component: BasicInfoEn},
-            {path: 'edit/en', component: BasicInfoEnEdit}
+            {path: 'editen', component: BasicInfoEnEdit},
+            {path: 'banneren', component: HomeBannerEn},
+            {path: 'banneradden', component: HomeBannerEditEn},
+            {path: 'bannerediten/:id', component: HomeBannerEditEn}
           ]
         },
         {
