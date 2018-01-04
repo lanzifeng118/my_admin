@@ -266,8 +266,8 @@ let api = {
   },
   // experience
   experienceList: {
-    query() {
-      return queryFun(experienceListUrl)
+    query(pageData) {
+      return queryFun(experienceListUrl, pageData)
     },
     queryById(id) {
       return queryByIdFun(experienceListUrl, id)

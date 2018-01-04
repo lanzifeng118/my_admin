@@ -17,17 +17,18 @@
           <tr>
             <!-- selectAll -->
             <th
-              width="120"
+              width="100"
               @click="toggleSelectAll"
               class="pointer"
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="150">Order</th>
+            <th width="80">Order</th>
             <th>Logo</th>
-            <th width="150">Display</th>
+            <th width="200">Brand</th>
+            <th width="200">Classify</th>
             <th width="200">Edit Time</th>
-            <th width="150">Operate</th>
+            <th width="120">Operate</th>
           </tr>
         </thead>
         <tbody>
@@ -46,13 +47,8 @@
             <!-- logo -->
             <td><img :src="item.img"></td>
             <!-- show -->
-            <td
-              class="pointer"
-              :class="[item.display === 'Y' ? 'show' : 'not-show']"
-              @click="toggleDisplay(index)"
-            >
-              <span class="icon-check"></span>
-            </td>
+            <td>{{item.brand}}</td>
+            <td>{{item.classify}}</td>
             <td>{{item.modifytime}}</td>
             <td class="link">
               <router-link :to="'/admin/experience/editen/' + item.id">Edit</router-link>
@@ -63,6 +59,13 @@
         </tbody>
       </table>
     </div>
+    <paging
+      :paging="paging"
+      @pagingNextClick="pagingNextClick"
+      @pagingPreClick="pagingPreClick"
+      @pagingChange="pagingChange"
+    >
+    </paging>
     <pop
       type="warning"
       :text="pop.text"
@@ -83,6 +86,7 @@
 <script>
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
+  import paging from 'components/c-paging/paging'
   import util from 'components/tools/util'
   import api from 'components/tools/api-en'
 
@@ -91,9 +95,9 @@
       return {
         // items
         items: [],
-        // classify
-        classifySelect: '',
-        classify: [],
+        // brand
+        brandSelect: '',
+        brand: [],
 
         deleteIds: [],
         searchText: '',
@@ -110,19 +114,43 @@
           text: '',
           show: false
         },
-        thSelect: false
+        thSelect: false,
+        // paging
+        paging: {
+          size: 10,
+          no: 0,
+          list: []
+        }
       }
     },
     created() {
       this.getItems()
+      this.getBrand()
     },
     methods: {
       getItems() {
-        this.axios(api.experienceList.query()).then((res) => {
+        let pageData = {
+          page_size: this.paging.size,
+          page_no: this.paging.no,
+          brand: this.brandSelect,
+          name: this.searchText
+        }
+        this.axios(api.experienceList.query(pageData)).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
             this.items = this.handleData(data.data.list)
+            this.paging.list = new Array(Math.ceil(data.data.total / this.paging.size))
+          } else {
+            util.req.queryError(this.toast)
+          }
+        })
+      },
+      getBrand() {
+        this.axios(api.experienceBrand.query()).then((res) => {
+          let data = res.data
+          if (data.code === '200') {
+            this.brand = data.data.list
           } else {
             util.req.queryError(this.toast)
           }
@@ -135,7 +163,7 @@
         return data
       },
       changeSelect() {
-        this.getItems('bySearch')
+        this.getItems()
         // ajax
       },
       toggleSelectAll() {
@@ -171,7 +199,7 @@
         let item = this.items[index]
         arr.push(item.id)
         this.deleteIds = arr
-        this.pop.text = '确定删除[' + item.name +']'
+        this.pop.text = '确定删除该项目'
         this.pop.show = true
       },
       deleteAll() {
@@ -209,11 +237,24 @@
             util.toast.fade(this.toast, '删除成功', 'check')
           }
         })
+      },
+      pagingPreClick() {
+        this.paging.no --
+        this.getItems()
+      },
+      pagingNextClick() {
+        this.paging.no ++
+        this.getItems()
+      },
+      pagingChange(index) {
+        this.paging.no = index
+        this.getItems()
       }
     },
     components: {
       pop,
-      toast
+      toast,
+      paging
     }
   }
 </script>

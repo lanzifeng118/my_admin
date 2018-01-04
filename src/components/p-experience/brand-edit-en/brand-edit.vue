@@ -44,7 +44,7 @@ export default {
       typeAdd: true,
       item: {
         name: '',
-        sort: ''
+        sort: '1'
       },
       // toastA
       toast: {

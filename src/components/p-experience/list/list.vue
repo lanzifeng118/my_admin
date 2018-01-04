@@ -3,14 +3,14 @@
     <div class="f-clearfix">
       <!-- 品牌 -->
       <div class="f-left">
-        <select v-model="classifySelect" @change="changeSelect">
+        <select v-model="brandSelect" @change="changeSelect">
           <option disabled value="">选择品牌</option>
           <option value="">所有品牌</option>
           <option
-            v-for="classifyItem in classify"
-            :value="classifyItem.name"
+            v-for="brandItem in brand"
+            :value="brandItem.name"
           >
-            {{classifyItem.name}}
+            {{brandItem.name}}
           </option>
         </select>
       </div>
@@ -72,6 +72,13 @@
         </tbody>
       </table>
     </div>
+    <paging
+      :paging="paging"
+      @pagingNextClick="pagingNextClick"
+      @pagingPreClick="pagingPreClick"
+      @pagingChange="pagingChange"
+    >
+    </paging>
     <pop
       type="warning"
       :text="pop.text"
@@ -92,6 +99,7 @@
 <script>
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
+  import paging from 'components/c-paging/paging'
   import util from 'components/tools/util'
   import api from 'components/tools/api'
 
@@ -100,9 +108,9 @@
       return {
         // items
         items: [],
-        // classify
-        classifySelect: '',
-        classify: [],
+        // brand
+        brandSelect: '',
+        brand: [],
 
         deleteIds: [],
         searchText: '',
@@ -119,19 +127,43 @@
           text: '',
           show: false
         },
-        thSelect: false
+        thSelect: false,
+        // paging
+        paging: {
+          size: 10,
+          no: 0,
+          list: []
+        }
       }
     },
     created() {
       this.getItems()
+      this.getBrand()
     },
     methods: {
       getItems() {
-        this.axios(api.experienceList.query()).then((res) => {
+        let pageData = {
+          page_size: this.paging.size,
+          page_no: this.paging.no,
+          brand: this.brandSelect,
+          name: this.searchText
+        }
+        this.axios(api.experienceList.query(pageData)).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
             this.items = this.handleData(data.data.list)
+            this.paging.list = new Array(Math.ceil(data.data.total / this.paging.size))
+          } else {
+            util.req.queryError(this.toast)
+          }
+        })
+      },
+      getBrand() {
+        this.axios(api.experienceBrand.query()).then((res) => {
+          let data = res.data
+          if (data.code === '200') {
+            this.brand = data.data.list
           } else {
             util.req.queryError(this.toast)
           }
@@ -144,7 +176,7 @@
         return data
       },
       changeSelect() {
-        this.getItems('bySearch')
+        this.getItems()
         // ajax
       },
       toggleSelectAll() {
@@ -180,7 +212,7 @@
         let item = this.items[index]
         arr.push(item.id)
         this.deleteIds = arr
-        this.pop.text = '确定删除[' + item.name +']'
+        this.pop.text = '确定删除该项目'
         this.pop.show = true
       },
       deleteAll() {
@@ -218,11 +250,24 @@
             util.toast.fade(this.toast, '删除成功', 'check')
           }
         })
+      },
+      pagingPreClick() {
+        this.paging.no --
+        this.getItems()
+      },
+      pagingNextClick() {
+        this.paging.no ++
+        this.getItems()
+      },
+      pagingChange(index) {
+        this.paging.no = index
+        this.getItems()
       }
     },
     components: {
       pop,
-      toast
+      toast,
+      paging
     }
   }
 </script>

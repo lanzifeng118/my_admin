@@ -75,7 +75,7 @@ export default {
         img: '',
         brand: '',
         classify: '',
-        sort: ''
+        sort: '1'
       },
       // classify
       classify: [],
@@ -137,8 +137,9 @@ export default {
     getClassiy() {
       this.axios(api.experienceClassify.query()).then((res) => {
         let data = res.data
+        console.log(res.data)
         if (data.code === '200') {
-          this.classBify = data.data.list
+          this.classify = data.data.list
         }
       })
     },
