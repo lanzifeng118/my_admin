@@ -16,10 +16,12 @@
       return {
         contentDetailMinHeigth,
         tabData: [
-          {text: '项目列表', href: '/admin/experience/list', icon: 'search_list'},
+          {text: 'Logo列表', href: '/admin/experience/list', icon: 'search_list'},
+          {text: '品牌列表', href: '/admin/experience/brand', icon: 'evaluate'},
           {text: '分类列表', href: '/admin/experience/classify', icon: 'classify'},
           {text: '广告图', href: '/admin/experience/banner', icon: 'pic'},
-          {text: 'Experience List', href: '/admin/experience/listen', icon: 'search_list'},
+          {text: 'Logo List', href: '/admin/experience/listen', icon: 'search_list'},
+          {text: 'Brand List', href: '/admin/experience/branden', icon: 'evaluate'},
           {text: 'Classify', href: '/admin/experience/classifyen', icon: 'classify'},
           {text: 'Banner', href: '/admin/experience/banneren', icon: 'pic'}
         ]

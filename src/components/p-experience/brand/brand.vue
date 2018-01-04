@@ -1,7 +1,7 @@
 <template>
-  <div class="experience-classify">
+  <div class="experience-brand">
     <div class="f-clearfix">
-      <router-link to="/admin/experience/classifyadd" class="f-right button list-btn-add">
+      <router-link to="/admin/experience/brandadd" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link >
     </div>
@@ -12,13 +12,17 @@
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <th>分类名称</th>
-            <th width="600">修改时间</th>
+            <th width="150">排序</th>
+            <th>品牌名称</th>
+            <th width="400">修改时间</th>
             <th width="180">操作</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in items">
+            <td>
+              {{item.sort}}
+            </td>
             <!-- name -->
             <td>
               {{item.name}}
@@ -28,7 +32,7 @@
               {{item.modifytime}}
             </td>
             <td class="link">
-              <router-link :to="'/admin/experience/classifyedit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/experience/brandedit/' + item.id">编辑</router-link>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
@@ -82,12 +86,13 @@
     },
     methods: {
       getItems() {
-        this.axios(api.experienceClassify.query()).then((res) => {
+        let _this = this
+        this.axios(api.experienceBrand.query()).then((res) => {
           let data = res.data
           if (data.code === '200') {
             data.data.list.forEach((v) => {
               v.select = false
-              this.items.push(v)
+              _this.items.push(v)
             })
             console.log(this.items)
           } else {
@@ -104,15 +109,16 @@
         this.pop.show = true
       },
       confirmPop() {
+        let _this = this
         let deleteIds = this.deleteIds
         this.pop.show = false
-        this.axios(api.experienceClassify.delete(deleteIds)).then((res) => {
+        this.axios(api.experienceBrand.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {
-              for (let i = 0; i <= this.items.length - 1; i++) {
-                if (this.items[i].id === id) {
-                  this.items.splice(i, 1)
+              for (let i = 0; i <= _this.items.length - 1; i++) {
+                if (_this.items[i].id === id) {
+                  _this.items.splice(i, 1)
                   break
                 }
               }

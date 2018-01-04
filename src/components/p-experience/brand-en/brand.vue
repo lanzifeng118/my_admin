@@ -1,8 +1,8 @@
 <template>
-  <div class="experience-classify">
+  <div class="experience-brand">
     <div class="f-clearfix">
-      <router-link to="/admin/experience/classifyadd" class="f-right button list-btn-add">
-        <span class="icon icon-round_add"></span>添加
+      <router-link to="/admin/experience/brandadden" class="f-right button list-btn-add">
+        <span class="icon icon-round_add"></span>Add
       </router-link >
     </div>
     <div class="list-table-wrap">
@@ -12,13 +12,17 @@
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <th>分类名称</th>
-            <th width="600">修改时间</th>
-            <th width="180">操作</th>
+            <th width="150">Order</th>
+            <th>Name</th>
+            <th width="400">Edit Time</th>
+            <th width="180">Operate</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in items">
+            <td>
+              {{item.sort}}
+            </td>
             <!-- name -->
             <td>
               {{item.name}}
@@ -28,9 +32,9 @@
               {{item.modifytime}}
             </td>
             <td class="link">
-              <router-link :to="'/admin/experience/classifyedit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/experience/brandediten/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
+              <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
             </td>
           </tr>
         </tbody>
@@ -57,7 +61,7 @@
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
   import util from 'components/tools/util'
-  import api from 'components/tools/api'
+  import api from 'components/tools/api-en'
 
   export default {
     data() {
@@ -82,7 +86,7 @@
     },
     methods: {
       getItems() {
-        this.axios(api.experienceClassify.query()).then((res) => {
+        this.axios(api.experienceBrand.query()).then((res) => {
           let data = res.data
           if (data.code === '200') {
             data.data.list.forEach((v) => {
@@ -106,7 +110,7 @@
       confirmPop() {
         let deleteIds = this.deleteIds
         this.pop.show = false
-        this.axios(api.experienceClassify.delete(deleteIds)).then((res) => {
+        this.axios(api.experienceBrand.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {

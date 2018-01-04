@@ -39,17 +39,8 @@ export default {
     return {
       typeAdd: true,
       item: {
-        logo: '',
-        name: '',
-        sort: '',
-        img: '',
-        banner_img: '',
-        banner_ling: ''
+        name: ''
       },
-      // file
-      fileLogo: null,
-      fileImg: null,
-      fileBanner: null,
       // toastA
       toast: {
         show: false,
@@ -68,20 +59,20 @@ export default {
   },
   methods: {
     getItem() {
+      console.log(this.$route.path)
       if (this.$route.path === '/admin/experience/classifyadd') {
         return
       }
       this.typeAdd = false
-      let _this = this
       let id = this.$route.params.id
       this.axios(api.experienceClassify.queryById(id)).then((res) => {
         let data = res.data
         console.log(data)
         if (data.code === '200') {
           if (data.data) {
-            _this.item = data.data
+            this.item = data.data
           } else {
-            util.toast.show(_this.toast, '此分类不存在', 'close')
+            util.toast.show(this.toast, '此分类不存在', 'close')
             this.goBack()
           }
         }
@@ -96,25 +87,24 @@ export default {
       this.sendData()
     },
     sendData() {
-      let _this = this
       let obj = null
       if (this.typeAdd) {
-        obj = api.experienceClassify.insert(_this.item)
+        obj = api.experienceClassify.insert(this.item)
       } else {
-        obj = api.experienceClassify.update(_this.item)
+        obj = api.experienceClassify.update(this.item)
       }
-      _this.axios(obj).then((res) => {
+      this.axios(obj).then((res) => {
         let data = res.data
         if (data.code === '200') {
-          _this.showSuccess()
+          this.showSuccess()
         } else if (data.code === '400') {
           util.toast.fade(this.toast, '分类名称已存在', 'close')
         } else {
-          util.req.changeError(_this.toast)
+          util.req.changeError(this.toast)
         }
       }).catch((err) => {
         if (err) {
-          util.req.changeError(_this.toast)
+          util.req.changeError(this.toast)
         }
       })
     },
@@ -134,27 +124,9 @@ export default {
       this.goBack()
     },
     goBack() {
-      let _this = this
       setTimeout(() => {
-        _this.$router.push('/admin/experience/classify')
+        this.$router.push('/admin/experience/classify')
       }, 700)
-    },
-    uploadFile(file, callback) {
-      let _this = this
-      util.uploadFile(this, file, callback, () => {
-        util.req.changeError(_this.toast)
-      })
-    },
-    sendPic(file, key, callback) {
-      let _this = this
-      if (file) {
-        this.uploadFile(file, (url) => {
-          _this.item[key] = url
-          callback()
-        })
-      } else {
-        callback()
-      }
     }
   },
   components: {
@@ -164,7 +136,4 @@ export default {
 </script>
 
 <style>
-.experience-classify-edit-link {
-  width: 500px;
-}
 </style>

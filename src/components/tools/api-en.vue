@@ -10,6 +10,7 @@ let productVideoUrl = '/api/admin/video'
 let aboutusUrl = '/api/admin/aboutus'
 let aboutusBannerUrl = '/api/admin/aboutus/banner'
 let experienceListUrl = '/api/admin/experience/list'
+let experienceBrandUrl = '/api/admin/experience/brand'
 let experienceClassifyUrl = '/api/admin/experience/classify'
 let experienceBannerUrl = '/api/admin/experience/banner'
 let friendlinkUrl = '/api/admin/friendlink'
@@ -249,6 +250,9 @@ let api = {
     },
     update(data) {
       return updateFun(aboutusUrl, data)
+    },
+    updateForDisplay(data) {
+      return updateForDisplayFun(aboutusUrl, data)
     }
   },
   // aboutusBannerUrl
@@ -279,6 +283,24 @@ let api = {
     },
     delete(id) {
       return deleteFun(experienceListUrl, id)
+    }
+  },
+  // experienceBrand
+  experienceBrand: {
+    query() {
+      return queryFun(experienceBrandUrl)
+    },
+    queryById(id) {
+      return queryByIdFun(experienceBrandUrl, id)
+    },
+    delete(id) {
+      return deleteFun(experienceBrandUrl, id)
+    },
+    insert(data) {
+      return insertFun(experienceBrandUrl, data)
+    },
+    update(data) {
+      return updateFun(experienceBrandUrl, data)
     }
   },
   // experienceClassify

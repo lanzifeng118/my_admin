@@ -1,6 +1,19 @@
 <template>
   <div class="experience-list">
     <div class="f-clearfix">
+      <!-- 品牌 -->
+      <div class="f-left">
+        <select v-model="classifySelect" @change="changeSelect">
+          <option disabled value="">选择品牌</option>
+          <option value="">所有品牌</option>
+          <option
+            v-for="classifyItem in classify"
+            :value="classifyItem.name"
+          >
+            {{classifyItem.name}}
+          </option>
+        </select>
+      </div>
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span>一键删除
       </button>
@@ -17,17 +30,18 @@
           <tr>
             <!-- selectAll -->
             <th
-              width="120"
+              width="100"
               @click="toggleSelectAll"
               class="pointer"
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="150">排序</th>
-            <th>名称</th>
-            <th width="150">显示</th>
+            <th width="80">排序</th>
+            <th>Logo图</th>
+            <th width="200">品牌</th>
+            <th width="200">分类</th>
             <th width="200">修改时间</th>
-            <th width="150">操作</th>
+            <th width="120">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -43,16 +57,11 @@
             <td class="order">
               {{item.sort}}
             </td>
-            <!-- name -->
-            <td>{{item.name}}</td>
+            <!-- logo -->
+            <td><img :src="item.img"></td>
             <!-- show -->
-            <td
-              class="pointer"
-              :class="[item.display === 'Y' ? 'show' : 'not-show']"
-              @click="toggleDisplay(index)"
-            >
-              <span class="icon-check"></span>
-            </td>
+            <td>{{item.brand}}</td>
+            <td>{{item.classify}}</td>
             <td>{{item.modifytime}}</td>
             <td class="link">
               <router-link :to="'/admin/experience/edit/' + item.id">编辑</router-link>
@@ -118,12 +127,11 @@
     },
     methods: {
       getItems() {
-        let _this = this
         this.axios(api.experienceList.query()).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
-            _this.items = _this.handleData(data.data.list)
+            this.items = this.handleData(data.data.list)
           } else {
             util.req.queryError(this.toast)
           }
@@ -194,16 +202,15 @@
         this.pop.show = false
       },
       confirmPop() {
-        let _this = this
         let deleteIds = this.deleteIds
         this.pop.show = false
         this.axios(api.experienceList.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {
-              for (let i = 0; i <= _this.items.length - 1; i++) {
-                if (_this.items[i].id === id) {
-                  _this.items.splice(i, 1)
+              for (let i = 0; i <= this.items.length - 1; i++) {
+                if (this.items[i].id === id) {
+                  this.items.splice(i, 1)
                   break
                 }
               }

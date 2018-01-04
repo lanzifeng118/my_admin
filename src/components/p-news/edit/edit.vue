@@ -179,10 +179,9 @@ export default {
       })
     },
     chooseImg(e) {
-      let _this = this
       this.file = e.target.files[0]
       util.myFileReader(this.file, (result) => {
-        _this.item.img = result
+        this.item.img = result
       })
     },
     deleteImg() {
@@ -204,9 +203,8 @@ export default {
       this.sendImg()
     },
     sendImg() {
-      let _this = this
       this.sendPic(this.file, 'img', () => {
-        _this.sendData()
+        this.sendData()
       })
     },
     sendData() {

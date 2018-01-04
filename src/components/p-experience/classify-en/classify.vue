@@ -12,7 +12,7 @@
       <table v-if="items.length > 0">
         <thead>
           <tr>
-            <th>Name</th>
+            <th>Classify Name</th>
             <th width="600">Edit Time</th>
             <th width="180">Operate</th>
           </tr>
@@ -82,13 +82,12 @@
     },
     methods: {
       getItems() {
-        let _this = this
         this.axios(api.experienceClassify.query()).then((res) => {
           let data = res.data
           if (data.code === '200') {
             data.data.list.forEach((v) => {
               v.select = false
-              _this.items.push(v)
+              this.items.push(v)
             })
             console.log(this.items)
           } else {
@@ -105,16 +104,15 @@
         this.pop.show = true
       },
       confirmPop() {
-        let _this = this
         let deleteIds = this.deleteIds
         this.pop.show = false
         this.axios(api.experienceClassify.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {
-              for (let i = 0; i <= _this.items.length - 1; i++) {
-                if (_this.items[i].id === id) {
-                  _this.items.splice(i, 1)
+              for (let i = 0; i <= this.items.length - 1; i++) {
+                if (this.items[i].id === id) {
+                  this.items.splice(i, 1)
                   break
                 }
               }

@@ -1,8 +1,8 @@
 <template>
-<div class="edit experience-classify-edit">
-  <h2 class="edit-h2" v-if="!typeAdd">Add Classify</h2>
-  <h2 class="edit-h2" v-if="typeAdd">Edit Classify</h2>
-  <router-link to="/admin/experience/classifyen" class="edit-close-btn" >
+<div class="edit experience-brand-edit">
+  <h2 class="edit-h2" v-if="!typeAdd">Add Brand</h2>
+  <h2 class="edit-h2" v-if="typeAdd">Edit Brand</h2>
+  <router-link to="/admin/experience/branden" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
   <div class="edit-table-wrap">
@@ -12,6 +12,10 @@
         <tr>
           <td width="100"><span class="icon-nessisary"></span>Name</td>
           <td><input type="text" v-model.trim="item.name"></td>
+        </tr>
+        <tr>
+          <td width="100">Order</td>
+          <td><input type="text" v-model.trim="item.sort"></td>
         </tr>
         <tr>
           <td></td>
@@ -39,7 +43,8 @@ export default {
     return {
       typeAdd: true,
       item: {
-        name: ''
+        name: '',
+        sort: ''
       },
       // toastA
       toast: {
@@ -59,19 +64,19 @@ export default {
   },
   methods: {
     getItem() {
-      if (this.$route.path === '/admin/experience/classifyadden') {
+      if (this.$route.path === '/admin/experience/brandadden') {
         return
       }
       this.typeAdd = false
       let id = this.$route.params.id
-      this.axios(api.experienceClassify.queryById(id)).then((res) => {
+      this.axios(api.experienceBrand.queryById(id)).then((res) => {
         let data = res.data
         console.log(data)
         if (data.code === '200') {
           if (data.data) {
             this.item = data.data
           } else {
-            util.toast.show(this.toast, '此分类不存在', 'close')
+            util.toast.show(this.toast, '此品牌不存在', 'close')
             this.goBack()
           }
         }
@@ -88,16 +93,16 @@ export default {
     sendData() {
       let obj = null
       if (this.typeAdd) {
-        obj = api.experienceClassify.insert(this.item)
+        obj = api.experienceBrand.insert(this.item)
       } else {
-        obj = api.experienceClassify.update(this.item)
+        obj = api.experienceBrand.update(this.item)
       }
       this.axios(obj).then((res) => {
         let data = res.data
         if (data.code === '200') {
           this.showSuccess()
         } else if (data.code === '400') {
-          util.toast.fade(this.toast, '分类名称已存在', 'close')
+          util.toast.fade(this.toast, '品牌名称已存在', 'close')
         } else {
           util.req.changeError(this.toast)
         }
@@ -109,7 +114,7 @@ export default {
     },
     verify() {
       if (!this.item.name) {
-        util.toast.fade(this.toast, '分类名称不能为空')
+        util.toast.fade(this.toast, '品牌名称不能为空')
         return false
       }
       if (this.item.sort && !/^\d+$/.test(this.item.sort)) {
@@ -124,7 +129,7 @@ export default {
     },
     goBack() {
       setTimeout(() => {
-        this.$router.push('/admin/experience/classifyen')
+        this.$router.push('/admin/experience/branden')
       }, 700)
     }
   },
