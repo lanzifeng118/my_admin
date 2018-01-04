@@ -58,7 +58,7 @@
               {{item.sort}}
             </td>
             <!-- logo -->
-            <td><img :src="item.img"></td>
+            <td><img style="max-width: 130px;" :src="item.img"></td>
             <!-- show -->
             <td>{{item.brand}}</td>
             <td>{{item.classify}}</td>
