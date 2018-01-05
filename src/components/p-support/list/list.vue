@@ -1,6 +1,12 @@
 <template>
   <div class="support-list">
     <div class="f-clearfix">
+      <!-- 未回复 -->
+      <button class="f-left button" @click="queryToggle">
+        <span v-if="all">查看未回复</span>
+        <span v-if="!all">查看所有</span>
+      </button>
+
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span>一键删除
       </button>
@@ -22,8 +28,9 @@
             </th>
             <th>姓名</th>
             <th width="180">话题</th>
-            <th width="400">信息</th>
-            <th width="100">回复</th>
+            <th width="350">信息</th>
+            <th width="80">来源</th>
+            <th width="80">回复</th>
             <th width="160">时间</th>
             <th width="120">操作</th>
           </tr>
@@ -40,8 +47,11 @@
             <td>{{item.firstName}} {{item.lastName}}</td>
             <!-- classify -->
             <td>{{item.classify}}</td>
-            <!-- message -->
             <td class="message"><p>{{item.message}}</p></td>
+            <td class="message">
+              <span :class="[item.lang === 'cn' ? 'icon-chinese' : 'icon-english']"></span>
+            </td>
+            <!-- message -->
             <!-- reply -->
             <td
               class="pointer"
@@ -89,8 +99,9 @@
       return {
         // items
         items: [],
+        // notRelay
+        all: true,
         // classify
-        classifySelect: '',
         classify: [],
 
         deleteIds: [],
@@ -115,15 +126,27 @@
       this.getItems()
     },
     methods: {
-      getItems() {
-        let _this = this
+      queryToggle() {
+        if (this.all) {
+          this.getItems('N')
+        } else {
+          this.getItems()
+        }
+      },
+      getItems(reply) {
         let apiList = api.support
-        this.axios(apiList.query()).then((res) => {
+        this.axios(apiList.query(reply)).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
-            _this.items = _this.handleData(data.data)
-            console.log(_this.items)
+            this.items = this.handleData(data.data)
+            if (this.items.length > 0) {
+              if (reply === 'N') {
+                this.all = false
+              } else {
+                this.all = true
+              }
+            }
           } else {
             util.req.queryError(this.toast)
           }
@@ -149,7 +172,6 @@
       },
       toggleReply(index) {
         let item = this.items[index]
-        let _this = this
         if (item.reply === 'Y') {
           item.reply = 'N'
         } else {
@@ -159,13 +181,13 @@
         this.axios(api.support.update({id: item.id, reply: item.reply})).then((res) => {
           let data = res.data
           if (data.code === '200') {
-            _this.showSuccess()
+            this.showSuccess()
           } else {
-            util.req.changeError(_this.toast)
+            util.req.changeError(this.toast)
           }
         }).catch((err) => {
           if (err) {
-            util.req.changeError(_this.toast)
+            util.req.changeError(this.toast)
           }
         })
       },
@@ -196,16 +218,15 @@
         this.pop.show = false
       },
       confirmPop() {
-        let _this = this
         let deleteIds = this.deleteIds
         this.pop.show = false
         this.axios(api.support.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {
-              for (let i = 0; i <= _this.items.length - 1; i++) {
-                if (_this.items[i].id === id) {
-                  _this.items.splice(i, 1)
+              for (let i = 0; i <= this.items.length - 1; i++) {
+                if (this.items[i].id === id) {
+                  this.items.splice(i, 1)
                   break
                 }
               }

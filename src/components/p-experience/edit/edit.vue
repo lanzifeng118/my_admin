@@ -12,11 +12,11 @@
           <td width="100"><span class="icon-nessisary"></span>Logo图</td>
           <td>
             <edit-pic
-              boxWidth="180"
-              boxHeight="70"
+              boxWidth="200"
+              boxHeight="90"
               :img="item.img"
               id="inputImg"
-              note="（宽度113px，高度50px）"
+              note="（宽度185px，高度76px）"
               @choosePic="chooseImg"
               @deletePic="deleteImg"
             >

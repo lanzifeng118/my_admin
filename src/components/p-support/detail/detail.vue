@@ -28,6 +28,13 @@
             <td>信息<span class="separate"></span></td>
             <td class="message">{{item.message}}</td>
           </tr>
+          <!-- lang -->
+          <tr>
+            <td>来源<span class="separate"></span></td>
+            <td>
+              <span :class="[item.lang === 'cn' ? 'icon-chinese' : 'icon-english']"></span>
+            </td>
+          </tr>
           <!-- solutiion -->
           <tr>
             <td>称呼<span class="separate"></span></td>
