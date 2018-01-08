@@ -3,8 +3,8 @@
     <div class="f-clearfix">
       <!-- 未回复 -->
       <button class="f-left button" @click="queryToggle">
-        <span v-if="all">查看未回复</span>
-        <span v-if="!all">查看所有</span>
+        <span v-if="reply !== 'N'">查看未回复</span>
+        <span v-if="reply === 'N'">查看所有</span>
       </button>
 
       <button class="f-right button" @click="deleteAll">
@@ -70,6 +70,13 @@
         </tbody>
       </table>
     </div>
+    <paging
+      :paging="paging"
+      @pagingNextClick="pagingNextClick"
+      @pagingPreClick="pagingPreClick"
+      @pagingChange="pagingChange"
+    >
+    </paging>
     <pop
       type="warning"
       :text="pop.text"
@@ -89,6 +96,7 @@
 
 <script>
   import search from 'components/search/search'
+  import paging from 'components/c-paging/paging'
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
   import util from 'components/tools/util'
@@ -100,7 +108,7 @@
         // items
         items: [],
         // notRelay
-        all: true,
+        reply: '',
         // classify
         classify: [],
 
@@ -119,7 +127,13 @@
           text: '',
           show: false
         },
-        thSelect: false
+        thSelect: false,
+        // paging
+        paging: {
+          size: 15,
+          no: 0,
+          list: []
+        }
       }
     },
     created() {
@@ -127,26 +141,26 @@
     },
     methods: {
       queryToggle() {
-        if (this.all) {
-          this.getItems('N')
+        if (this.reply === 'N') {
+          this.reply = ''
         } else {
-          this.getItems()
+          this.reply = 'N'
         }
+        this.getItems()
       },
-      getItems(reply) {
+      getItems() {
+        let pageData = {
+          page_size: this.paging.size,
+          page_no: this.paging.no,
+          reply: this.reply
+        }
         let apiList = api.support
-        this.axios(apiList.query(reply)).then((res) => {
+        this.axios(apiList.query(pageData)).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
             this.items = this.handleData(data.data)
-            if (this.items.length > 0) {
-              if (reply === 'N') {
-                this.all = false
-              } else {
-                this.all = true
-              }
-            }
+            this.paging.list = new Array(Math.ceil(data.data.total / this.paging.size))
           } else {
             util.req.queryError(this.toast)
           }
@@ -196,7 +210,7 @@
         let item = this.items[index]
         arr.push(item.id)
         this.deleteIds = arr
-        this.pop.text = '确定删除[' + item.title +']'
+        this.pop.text = '确定删除[' + item.firstName +']'
         this.pop.show = true
       },
       deleteAll() {
@@ -237,12 +251,25 @@
       },
       showSuccess() {
         util.toast.fade(this.toast, '修改成功！', 'appreciate')
+      },
+      pagingPreClick() {
+        this.paging.no --
+        this.getItems()
+      },
+      pagingNextClick() {
+        this.paging.no ++
+        this.getItems()
+      },
+      pagingChange(index) {
+        this.paging.no = index
+        this.getItems()
       }
     },
     components: {
       search,
       pop,
-      toast
+      toast,
+      paging
     }
   }
 </script>

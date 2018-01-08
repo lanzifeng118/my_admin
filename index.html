@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="./static/reset.css">  <style type="text/css">
     #loading {
       position: fixed;
+      z-index: 99;
       transition: opacity .2s;
       opacity: 1;
       top: 0;
@@ -87,14 +88,18 @@
   </div>
   <div id="app"></div>
   <script type="text/javascript">
-    setTimeout(function() {
-      // var loading = document.getElementById('loading');
-      // loading.style.opacity = '0'
-      // setTimeout(function() {
-      //   loading.style.display = 'none'
-      // }, 200)
-    }, 1400)
+    var timer = setInterval(function() {
+      var app = document.getElementById('app');
+      if (app.childNodes.length > 0) {
+        var loading = document.getElementById('loading');
+        loading.style.opacity = '0'
+        setTimeout(function() {
+          loading.style.display = 'none'
+        }, 500)
+        clearInterval(timer)
+      }
+    }, 100)
   </script>
     <!-- built files will be auto injected -->
 </body>
-</html>
+</html>

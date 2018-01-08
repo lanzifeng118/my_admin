@@ -350,18 +350,8 @@ let api = {
   },
   // support
   support: {
-    query(reply) {
-      return {
-        method: 'post',
-        url: supportUrl,
-        data: {
-          method: 'query',
-          data: {
-            // lang: 'cn',
-            reply: reply || ''
-          }
-        }
-      }
+    query(pageData) {
+      return queryFun(supportUrl, pageData)
     },
     queryById(id) {
       return queryByIdFun(supportUrl, id)
