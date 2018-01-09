@@ -101,6 +101,10 @@ import ConfigList from 'components/p-config/list/list'
 import ConfigEdit from 'components/p-config/edit/edit'
 import ConfigPassword from 'components/p-config/password/password'
 
+// file
+import File from 'components/p-file/file'
+import FileList from 'components/p-file/list/list'
+
 Vue.use(Router)
 
 export default new Router({
@@ -402,6 +406,15 @@ export default new Router({
             {path: '/', component: ConfigList},
             {path: 'edit', component: ConfigEdit},
             {path: 'password', component: ConfigPassword}
+          ]
+        },
+        // file
+        {
+          path: 'file',
+          component: File,
+          children: [
+            // 中文
+            {path: '/', component: FileList}
           ]
         }
       ]

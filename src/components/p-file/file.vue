@@ -1,0 +1,32 @@
+<template>
+  <div class="file">
+    <tab :items="tabData"></tab>
+    <div class="content-detail" :style="{height: contentDetailMinHeigth + 'px'}">
+      <router-view></router-view>
+    </div>
+  </div>
+</template>
+
+<script>
+  import tab from 'components/c-tab/tab'
+  import { contentDetailMinHeigth } from 'components/tools/global'
+
+  export default {
+    data() {
+      return {
+        contentDetailMinHeigth,
+        tabData: [
+          {text: '文件列表', href: '/admin/file', icon: 'search_list'}
+        ]
+      }
+    },
+    components: {
+      tab
+    }
+  }
+</script>
+
+<style>
+  .file {
+  }
+</style>

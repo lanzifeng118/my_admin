@@ -55,6 +55,10 @@ export default {
         name: '友情链接',
         style: 'share'
       }, {
+        src: '/admin/file',
+        name: '文件管理',
+        style: 'share'
+      }, {
         src: '/admin/config',
         name: '系统设置',
         style: 'config'
