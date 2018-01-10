@@ -57,7 +57,7 @@ export default {
       }, {
         src: '/admin/file',
         name: '文件管理',
-        style: 'share'
+        style: 'folder'
       }, {
         src: '/admin/config',
         name: '系统设置',

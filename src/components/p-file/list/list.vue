@@ -12,7 +12,7 @@
     </div>
     <div class="list-table-wrap">
       <div v-if="items.length <= 0" class="list-table-wrap-none">
-        还没有相关信息，请添加
+        还没有相关信息
       </div>
       <table v-if="items.length > 0">
         <thead>
@@ -26,7 +26,7 @@
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
             <th>文件名</th>
-            <th width="300">文件</th>
+            <th width="300">文件预览</th>
             <th width="100">文件类型</th>
             <th width="100">文件大小</th>
             <th width="170">上传时间</th>
@@ -43,14 +43,24 @@
               <span :class="[item.select ? 'icon-square_check_fill' : 'icon-square']"></span>
             </td>
             <td>{{item.file_name}}</td>
+
+            <td>
+              <img v-if="item.file_type == 1" :src="item.file_url" style="max-width: 200px; max-height: 100px;">
+            </td>
+
             <!-- type -->
-            <td>{{item.file_type}}</td>
-            <td>{{item.file_type}}</td>
+            <td>
+              {{item.type}}
+              <span v-if="item.file_type == 1">图片</span>
+              <span v-if="item.file_type == 2">文档</span>
+              <span v-if="item.file_type == 3">多媒体</span>
+              <span v-if="item.file_type == 4">其他</span>
+            </td>
             <td class="file_size"><p>{{item.file_size}}</p></td>
             <!-- time -->
             <td>{{item.upload_time}}</td>
             <td class="link">
-              <a :href="item.file_url" :donwload="item.file_name">下载</a>
+              <a :href="item.file_url" :download="item.file_name">下载</a>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
@@ -178,33 +188,12 @@
         let item = this.items[index]
         item.select = !item.select
       },
-      toggleReply(index) {
-        let item = this.items[index]
-        if (item.reply === 'Y') {
-          item.reply = 'N'
-        } else {
-          item.reply = 'Y'
-        }
-        // ajax
-        this.axios(api.support.update({id: item.id, reply: item.reply})).then((res) => {
-          let data = res.data
-          if (data.code === '200') {
-            this.showSuccess()
-          } else {
-            util.req.changeError(this.toast)
-          }
-        }).catch((err) => {
-          if (err) {
-            util.req.changeError(this.toast)
-          }
-        })
-      },
       deleteItem(index) {
         let arr = []
         let item = this.items[index]
         arr.push(item.id)
         this.deleteIds = arr
-        this.pop.text = `确定永久删除${item.file_name}`
+        this.pop.text = `确定永久删除[${item.file_name}]`
         this.pop.show = true
       },
       deleteAll() {
@@ -228,7 +217,7 @@
       confirmPop() {
         let deleteIds = this.deleteIds
         this.pop.show = false
-        this.axios(api.support.delete(deleteIds)).then((res) => {
+        this.axios(api.fileList.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             deleteIds.forEach((id) => {
