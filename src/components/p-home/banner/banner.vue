@@ -9,9 +9,7 @@
       </router-link >
     </div>
     <div class="list-table-wrap">
-      <div v-if="items.length <= 0" class="list-table-wrap-none">
-        还没有相关信息，请添加
-      </div>
+      <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
         <thead>
           <tr>
@@ -90,6 +88,8 @@
       return {
         // items
         items: [],
+        msg: '加载中...',
+
         // classify
         classifySelect: '',
         classify: [],
@@ -121,15 +121,22 @@
           let data = res.data
           console.log(data)
           if (data.code === '200') {
-            this.items = this.handleData(data.data)
+            let list = data.data.list
+            if (list.length > 0) {
+              this.items = this.handleData(list)
+              this.msg = ''
+            } else {
+              this.msg = '还没有相关信息，请添加'
+            }
           } else {
+            this.msg = '出错了，请稍后再试'
             util.req.queryError(this.toast)
           }
         })
       },
-      handleData(data) {
+      handleData(list) {
         let dataH = []
-        data.list.forEach((v) => {
+        list.forEach((v) => {
           v.select = false
           dataH.push(v)
         })
