@@ -1,17 +1,21 @@
 <template>
 <div class="product-edit edit">
   <!-- cn -->
-  <h2 class="edit-h2" v-if="lang === 'cn' && !typeAdd">编辑产品</h2>
-  <h2 class="edit-h2" v-if="lang === 'cn' && typeAdd">添加产品</h2>
-  <router-link v-if="lang === 'cn'" to="/admin/product/list" class="edit-close-btn" >
-    <span class="icon-round_close_fill"></span>
-  </router-link>
+  <div v-if="lang === 'cn'">
+      <h2 class="edit-h2" v-if="!typeAdd">编辑产品</h2>
+      <h2 class="edit-h2" v-if="typeAdd">添加产品</h2>
+      <router-link to="/admin/product/list" class="edit-close-btn" >
+        <span class="icon-round_close_fill"></span>
+      </router-link>
+  </div>
   <!-- en -->
-  <h2 class="edit-h2" v-if="lang === 'en' && !typeAdd">Edit Product</h2>
-  <h2 class="edit-h2" v-if="lang === 'en' && typeAdd">Add Product</h2>
-  <router-link v-if="lang === 'en'" to="/admin/product/listen" class="edit-close-btn" >
-    <span class="icon-round_close_fill"></span>
-  </router-link>
+  <div v-if="lang === 'en'">
+    <h2 class="edit-h2" v-if="!typeAdd">Edit Product</h2>
+    <h2 class="edit-h2" v-if="typeAdd">Add Product</h2>
+    <router-link to="/admin/product/listen" class="edit-close-btn" >
+      <span class="icon-round_close_fill"></span>
+    </router-link>
+  </div>
   <div class="edit-table-wrap">
     <table>
       <tbody>
@@ -318,7 +322,7 @@ export default {
     },
     goBack() {
       setTimeout(() => {
-        let link = this.lang === 'en' ? '/admin/product/listen' : '/admin/product/list'
+        let link = this.lang === 'cn' ? '/admin/product/list' : '/admin/product/listen'
         this.$router.push(link)
       }, 700)
     },
