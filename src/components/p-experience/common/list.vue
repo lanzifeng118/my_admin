@@ -169,7 +169,7 @@
     },
     computed: {
       api() {
-        return this.lang === 'en' ? apiEn : api
+        return this.lang === 'cn' ? api : apiEn
       }
     },
     created() {
