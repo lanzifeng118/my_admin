@@ -12,9 +12,7 @@
       </button>
     </div>
     <div class="list-table-wrap">
-      <div v-if="items.length <= 0" class="list-table-wrap-none">
-        还没有相关信息，请添加
-      </div>
+      <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
         <thead>
           <tr>
@@ -71,6 +69,7 @@
       </table>
     </div>
     <paging
+      v-show="items.length > 0"
       :paging="paging"
       @pagingNextClick="pagingNextClick"
       @pagingPreClick="pagingPreClick"
@@ -107,6 +106,7 @@
       return {
         // items
         items: [],
+        msg: '加载中...',
         // notRelay
         reply: '',
         // classify
@@ -149,6 +149,8 @@
         this.getItems()
       },
       getItems() {
+        this.items = []
+        this.msg = '加载中...'
         let pageData = {
           page_size: this.paging.size,
           page_no: this.paging.no,
@@ -159,20 +161,25 @@
           let data = res.data
           console.log(data)
           if (data.code === '200') {
-            this.items = this.handleData(data.data)
-            this.paging.list = new Array(Math.ceil(data.data.total / this.paging.size))
+            let list = data.data.list
+            if (list.length > 0) {
+              this.msg = ''
+              this.items = this.handleData(list)
+              this.paging.list = new Array(Math.ceil(data.data.total / this.paging.size))
+            } else {
+              this.msg = '还没有相关信息'
+            }
           } else {
+            this.msg = '出错了，请稍后再试'
             util.req.queryError(this.toast)
           }
         })
       },
       handleData(data) {
-        let dataH = []
-        data.list.forEach((v) => {
+        data.forEach((v) => {
           v.select = false
-          dataH.push(v)
         })
-        return dataH
+        return data
       },
       toggleSelectAll() {
         this.thSelect = !this.thSelect
@@ -237,15 +244,9 @@
         this.axios(api.support.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
-            deleteIds.forEach((id) => {
-              for (let i = 0; i <= this.items.length - 1; i++) {
-                if (this.items[i].id === id) {
-                  this.items.splice(i, 1)
-                  break
-                }
-              }
-            })
             util.toast.fade(this.toast, '删除成功', 'check')
+            this.paging.no = 0
+            this.getItems()
           }
         })
       },

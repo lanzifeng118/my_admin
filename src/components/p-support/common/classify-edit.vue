@@ -1,17 +1,17 @@
 <template>
-<div class="edit experience-classify-edit">
+<div class="edit support-classify-edit">
   <!-- cn -->
   <div v-if="lang === 'cn'">
-    <h2 class="edit-h2" v-if="!typeAdd">编辑分类</h2>
-    <h2 class="edit-h2" v-if="typeAdd">添加分类</h2>
-    <router-link to="/admin/experience/classify" class="edit-close-btn" >
+    <h2 class="edit-h2" v-if="!typeAdd">编辑话题</h2>
+    <h2 class="edit-h2" v-if="typeAdd">添加话题</h2>
+    <router-link to="/admin/support/classify" class="edit-close-btn" >
       <span class="icon-round_close_fill"></span>
     </router-link>
   </div>
   <div v-if="lang === 'en'">
-    <h2 class="edit-h2" v-if="!typeAdd">Edit Classify</h2>
-    <h2 class="edit-h2" v-if="typeAdd">Add Classify</h2>
-    <router-link to="/admin/experience/classifyen" class="edit-close-btn" >
+    <h2 class="edit-h2" v-if="!typeAdd">Edit Topic</h2>
+    <h2 class="edit-h2" v-if="typeAdd">Add Topic</h2>
+    <router-link to="/admin/support/classifyen" class="edit-close-btn" >
       <span class="icon-round_close_fill"></span>
     </router-link>
   </div>
@@ -20,9 +20,15 @@
       <tbody>
         <!-- name -->
         <tr>
-          <td v-if="lang === 'cn'" width="100"><span class="icon-nessisary"></span>分类名称</td>
+          <td v-if="lang === 'cn'" width="100"><span class="icon-nessisary"></span>话题名称</td>
           <td v-if="lang === 'en'" width="100"><span class="icon-nessisary"></span>Name</td>
           <td><input type="text" v-model.trim="item.name"></td>
+        </tr>
+        <!-- sort -->
+        <tr>
+          <td v-if="lang === 'cn'">顺序</td>
+          <td v-if="lang === 'en'">Order</td>
+          <td><input type="text" v-model.trim="item.sort"></td>
         </tr>
         <tr>
           <td></td>
@@ -43,6 +49,7 @@
 
 <script>
 import toast from 'components/toast/toast'
+import editPic from 'components/c-edit-pic/edit-pic'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 import apiEn from 'components/tools/api-en'
@@ -58,7 +65,8 @@ export default {
     return {
       typeAdd: true,
       item: {
-        name: ''
+        name: '',
+        sort: '1'
       },
       // toast
       toast: {
@@ -83,22 +91,22 @@ export default {
   },
   methods: {
     getItem() {
-      let addLink = this.lang === 'cn' ? '/admin/experience/classifyadd' : '/admin/experience/classifyadden'
+      let addLink = this.lang === 'cn' ? '/admin/support/classifyadd' : '/admin/support/classifyadden'
       if (this.$route.path === addLink) {
         return
       }
       this.typeAdd = false
       let id = this.$route.params.id
-      this.axios(this.api.experienceClassify.queryById(id)).then((res) => {
+      this.axios(this.api.supportClassify.queryById(id)).then((res) => {
         let data = res.data
-        console.log(data)
         if (data.code === '200') {
           if (data.data) {
             this.item = data.data
           } else {
-            util.toast.show(this.toast, '此分类不存在', 'close')
+            util.toast.show(this.toast, '此话题不存在', 'close')
             this.goBack()
           }
+          console.log(data)
         }
       })
     },
@@ -113,16 +121,16 @@ export default {
     sendData() {
       let obj = null
       if (this.typeAdd) {
-        obj = this.api.experienceClassify.insert(this.item)
+        obj = this.api.supportClassify.insert(this.item)
       } else {
-        obj = this.api.experienceClassify.update(this.item)
+        obj = this.api.supportClassify.update(this.item)
       }
       this.axios(obj).then((res) => {
         let data = res.data
         if (data.code === '200') {
           this.showSuccess()
         } else if (data.code === '400') {
-          util.toast.fade(this.toast, '分类名称已存在', 'close')
+          util.toast.fade(this.toast, '话题名称已存在', 'close')
         } else {
           util.req.changeError(this.toast)
         }
@@ -134,7 +142,11 @@ export default {
     },
     verify() {
       if (!this.item.name) {
-        util.toast.fade(this.toast, '分类名称不能为空')
+        util.toast.fade(this.toast, '话题名称不能为空')
+        return false
+      }
+      if (this.item.sort && !/^\d+$/.test(this.item.sort)) {
+        util.toast.fade(this.toast, '顺序必须为数字')
         return false
       }
       return true
@@ -145,13 +157,14 @@ export default {
     },
     goBack() {
       setTimeout(() => {
-        let link = this.lang === 'cn' ? '/admin/experience/classify' : '/admin/experience/classifyen'
+        let link = this.lang === 'cn' ? '/admin/support/classify' : '/admin/support/classifyen'
         this.$router.push(link)
       }, 700)
     }
   },
   components: {
-    toast
+    toast,
+    editPic
   }
 }
 </script>
