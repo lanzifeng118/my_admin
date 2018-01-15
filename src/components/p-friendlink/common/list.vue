@@ -1,30 +1,15 @@
 <template>
-  <div class="experience-list">
+  <div class="friend-link-list">
     <div class="f-clearfix">
-      <!-- 品牌 -->
-      <div class="f-left">
-        <select v-model="brandSelect" @change="changeSelect">
-          <option v-if="lang === 'cn'" disabled>选择品牌</option>
-          <option v-if="lang === 'cn'" value="">所有品牌</option>
-          <option v-if="lang === 'en'" disabled>Choose Brand</option>
-          <option v-if="lang === 'en'" value="">All Brand</option>
-          <option
-            v-for="brandItem in brand"
-            :value="brandItem.name"
-          >
-            {{brandItem.name}}
-          </option>
-        </select>
-      </div>
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span><span v-if="lang === 'cn'">一键删除</span><span v-if="lang === 'en'">Delete All</span>
       </button>
-      <router-link v-if="lang === 'cn'" to="/admin/experience/add" class="f-right button list-btn-add">
+      <router-link v-if="lang === 'cn'" to="/admin/friendlink/add" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link>
-      <router-link v-if="lang === 'en'" to="/admin/experience/adden" class="f-right button list-btn-add">
+      <router-link v-if="lang === 'en'" to="/admin/friendlink/adden" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>Add
-      </router-link >
+      </router-link>
     </div>
     <div class="list-table-wrap">
       <div class="list-table-wrap-none">{{msg}}</div>
@@ -33,34 +18,32 @@
           <tr v-if="lang === 'cn'">
             <!-- selectAll -->
             <th
-              width="100"
+              width="120"
               @click="toggleSelectAll"
               class="pointer"
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="80">排序</th>
-            <th>Logo图</th>
-            <th width="200">品牌</th>
-            <th width="200">分类</th>
+            <th width="120">排序</th>
+            <th>名称</th>
+            <th width="350">链接</th>
             <th width="200">修改时间</th>
-            <th width="120">操作</th>
+            <th width="180">操作</th>
           </tr>
           <tr v-if="lang === 'en'">
             <!-- selectAll -->
             <th
-              width="100"
+              width="120"
               @click="toggleSelectAll"
               class="pointer"
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="80">Order</th>
-            <th>Logo</th>
-            <th width="200">Brand</th>
-            <th width="200">Classify</th>
+            <th width="120">Order</th>
+            <th>Name</th>
+            <th width="350">Link</th>
             <th width="200">Edit Time</th>
-            <th width="120">Operate</th>
+            <th width="180">Operate</th>
           </tr>
         </thead>
         <tbody>
@@ -76,19 +59,19 @@
             <td class="order">
               {{item.sort}}
             </td>
-            <!-- logo -->
-            <td><img style="max-width: 130px;" :src="item.img"></td>
-            <!-- show -->
-            <td>{{item.brand}}</td>
-            <td>{{item.classify}}</td>
+            <td>{{item.name}}</td>
+            <!-- link -->
+            <td>
+              {{item.link}}
+            </td>
             <td>{{item.modifytime}}</td>
             <td v-if="lang === 'cn'" class="link">
-              <router-link :to="'/admin/experience/edit/' + item.id">编辑</router-link>
+              <router-link :to="'/admin/friendlink/edit/' + item.id">编辑</router-link>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
             <td v-if="lang === 'en'" class="link">
-              <router-link :to="'/admin/experience/editen/' + item.id">Edit</router-link>
+              <router-link :to="'/admin/friendlink/editen/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
             </td>
@@ -96,14 +79,6 @@
         </tbody>
       </table>
     </div>
-    <paging
-      v-show="items.length > 0"
-      :paging="paging"
-      @pagingNextClick="pagingNextClick"
-      @pagingPreClick="pagingPreClick"
-      @pagingChange="pagingChange"
-    >
-    </paging>
     <pop
       type="warning"
       :text="pop.text"
@@ -122,9 +97,9 @@
 </template>
 
 <script>
+  import search from 'components/search/search'
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
-  import paging from 'components/c-paging/paging'
   import util from 'components/tools/util'
   import api from 'components/tools/api'
   import apiEn from 'components/tools/api-en'
@@ -141,12 +116,8 @@
         // items
         items: [],
         msg: '加载中...',
-        // brand
-        brandSelect: '',
-        brand: [],
 
         deleteIds: [],
-        searchText: '',
         // toast
         toast: {
           show: false,
@@ -158,13 +129,7 @@
           text: '',
           show: false
         },
-        thSelect: false,
-        // paging
-        paging: {
-          size: 10,
-          no: 0,
-          list: []
-        }
+        thSelect: false
       }
     },
     computed: {
@@ -174,19 +139,10 @@
     },
     created() {
       this.getItems()
-      this.getBrand()
     },
     methods: {
       getItems() {
-        this.items = []
-        this.msg = '加载中...'
-        let pageData = {
-          page_size: this.paging.size,
-          page_no: this.paging.no,
-          brand: this.brandSelect,
-          name: this.searchText
-        }
-        this.axios(this.api.experienceList.query(pageData)).then((res) => {
+        this.axios(this.api.friendlink.query()).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
@@ -194,7 +150,6 @@
             if (list.length > 0) {
               this.msg = ''
               this.items = this.handleData(list)
-              this.paging.list = new Array(Math.ceil(data.data.total / this.paging.size))
             } else {
               this.msg = '还没有相关信息，请添加'
             }
@@ -204,25 +159,11 @@
           }
         })
       },
-      getBrand() {
-        this.axios(this.api.experienceBrand.query()).then((res) => {
-          let data = res.data
-          if (data.code === '200') {
-            this.brand = data.data.list
-          } else {
-            util.req.queryError(this.toast)
-          }
-        })
-      },
       handleData(data) {
         data.forEach((v) => {
           v.select = false
         })
         return data
-      },
-      changeSelect() {
-        this.getItems()
-        // ajax
       },
       toggleSelectAll() {
         this.thSelect = !this.thSelect
@@ -242,22 +183,13 @@
           item.display = 'Y'
         }
         // ajax
-        this.axios(this.api.experienceList.updateForDisplay({id: item.id, display: item.display})).then((res) => {
-          let data = res.data
-          console.log(data)
-          if (data.code === '200') {
-            util.toast.fade(this.toast, '修改成功！', 'appreciate')
-          } else {
-            util.req.changeError(this.toast)
-          }
-        })
       },
       deleteItem(index) {
         let arr = []
         let item = this.items[index]
         arr.push(item.id)
         this.deleteIds = arr
-        this.pop.text = '确定删除该项目'
+        this.pop.text = '确定删除[' + item.name +']'
         this.pop.show = true
       },
       deleteAll() {
@@ -281,36 +213,29 @@
       confirmPop() {
         let deleteIds = this.deleteIds
         this.pop.show = false
-        this.axios(this.api.experienceList.delete(deleteIds)).then((res) => {
+        this.axios(this.api.friendlink.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
+            deleteIds.forEach((id) => {
+              for (let i = 0; i <= this.items.length - 1; i++) {
+                if (this.items[i].id === id) {
+                  this.items.splice(i, 1)
+                  break
+                }
+              }
+            })
             util.toast.fade(this.toast, '删除成功', 'check')
-            this.paging.no = 0
-            this.getItems()
           }
         })
-      },
-      pagingPreClick() {
-        this.paging.no --
-        this.getItems()
-      },
-      pagingNextClick() {
-        this.paging.no ++
-        this.getItems()
-      },
-      pagingChange(index) {
-        this.paging.no = index
-        this.getItems()
       }
     },
     components: {
+      search,
       pop,
-      toast,
-      paging
+      toast
     }
   }
 </script>
 
 <style>
-
 </style>
