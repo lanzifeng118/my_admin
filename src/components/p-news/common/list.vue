@@ -1,13 +1,13 @@
 <template>
-  <div class="product-list">
+  <div class="news-list">
     <div class="f-clearfix">
-      <!-- 品牌 -->
+      <!-- 分类 -->
       <div class="f-left">
         <select v-model="classifySelect" @change="changeSelect">
-          <option v-if="lang === 'cn'" disabled>选择品牌</option>
-          <option v-if="lang === 'cn'" value="">所有品牌</option>
-          <option v-if="lang === 'en'" disabled>Choose Brand</option>
-          <option v-if="lang === 'en'" value="">All Brand</option>
+          <option v-if="lang === 'cn'" disabled>选择分类</option>
+          <option v-if="lang === 'cn'" value="">所有分类</option>
+          <option v-if="lang === 'en'" disabled>Choose Classify</option>
+          <option v-if="lang === 'en'" value="">All Classify</option>
           <option
             v-for="classifyItem in classify"
             :value="classifyItem.name"
@@ -16,29 +16,25 @@
           </option>
         </select>
       </div>
-      <!-- search -->
-      <div class="search f-left">
-        <input class="search-input" v-model="searchText" placeholder="输入产品名称关键字">
-        <span class="search-icon icon-search" @click="searchSubmit"></span>
-      </div>
       <!-- 删除 -->
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span><span v-if="lang === 'cn'">一键删除</span><span v-if="lang === 'en'">Delete All</span>
       </button>
-      <router-link v-if="lang === 'cn'" to="/admin/product/add" class="f-right button list-btn-add">
+      <router-link v-if="lang === 'cn'" to="/admin/news/add" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link >
-      <router-link v-if="lang === 'en'" to="/admin/product/adden" class="f-right button list-btn-add">
+      <router-link v-if="lang === 'en'" to="/admin/news/adden" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>Add
       </router-link >
     </div>
     <div class="list-table-wrap">
-      <!-- msg -->
-      <div class="list-table-wrap-none">{{msg}}</div>
+      <div v-if="items.length <= 0" class="list-table-wrap-none">
+        还没有相关信息，请添加
+      </div>
       <table v-if="items.length > 0">
         <thead>
-          <!-- cn -->
           <tr v-if="lang === 'cn'">
+            <!-- selectAll -->
             <th
               width="80"
               @click="toggleSelectAll"
@@ -47,15 +43,15 @@
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
             <th width="60">排序</th>
-            <th>产品名称</th>
+            <th>标题</th>
             <th width="220">预览图</th>
             <th width="110">显示</th>
-            <th width="190">品牌</th>
+            <th width="190">分类</th>
             <th width="170">修改时间</th>
             <th width="140">操作</th>
           </tr>
-          <!-- en -->
           <tr v-if="lang === 'en'">
+            <!-- selectAll -->
             <th
               width="80"
               @click="toggleSelectAll"
@@ -64,10 +60,10 @@
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
             <th width="60">Order</th>
-            <th>Product Name</th>
-            <th width="220">Preview Picture</th>
+            <th>Title</th>
+            <th width="220">Preview Pic</th>
             <th width="110">Display</th>
-            <th width="190">Brand</th>
+            <th width="190">Classify</th>
             <th width="170">Edit Time</th>
             <th width="140">Operate</th>
           </tr>
@@ -88,7 +84,7 @@
             <!-- name -->
             <td>{{item.name}}</td>
             <!-- picture -->
-            <td class="product-list-img"><img v-if="item.img" :src="item.img" alt=""></td>
+            <td class="news-list-img"><img :src="item.img" alt=""></td>
             <!-- show -->
             <td
               class="pointer"
@@ -99,16 +95,16 @@
             </td>
             <!-- classify -->
             <td class="classify">
-              <p v-if="item.classify.trim()"><span>{{item.classify}}</span></p>
+              <p v-if="item.classify && item.classify.trim()"><span>{{item.classify}}</span></p>
             </td>
             <td>{{item.modifytime}}</td>
-            <td class="link" v-if="lang === 'cn'">
-              <router-link :to="'/admin/product/edit/' + item.id">编辑</router-link>
+            <td v-if="lang === 'cn'" class="link">
+              <router-link :to="'/admin/news/edit/' + item.id">编辑</router-link>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
             </td>
-            <td class="link" v-if="lang === 'en'">
-              <router-link :to="'/admin/product/editen/' + item.id">Edit</router-link>
+            <td v-if="lang === 'en'" class="link">
+              <router-link :to="'/admin/news/editen/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
               <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
             </td>
@@ -166,7 +162,9 @@
         classify: [],
 
         deleteIds: [],
-        searchText: '',
+
+        // order
+        orderValue: [],
         // toast
         toast: {
           show: false,
@@ -203,10 +201,9 @@
         let pageData = {
           page_size: this.paging.size,
           page_no: this.paging.no,
-          classify: this.classifySelect,
-          name: this.searchText
+          classify: this.classifySelect
         }
-        this.axios(this.api.productList.query(pageData)).then((res) => {
+        this.axios(this.api.newsList.query(pageData)).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
@@ -225,7 +222,7 @@
         })
       },
       getClassiy() {
-        this.axios(this.api.productClassify.query()).then((res) => {
+        this.axios(this.api.newsClassify.query()).then((res) => {
           let data = res.data
           if (data.code === '200') {
             this.classify = data.data.list
@@ -243,9 +240,6 @@
           v.select = false
         })
         return data
-      },
-      searchSubmit() {
-        this.getItems()
       },
       changeSelect() {
         this.getItems()
@@ -268,7 +262,7 @@
           item.display = 'Y'
         }
         // ajax
-        this.axios(this.api.productList.updateForDisplay({id: item.id, display: item.display})).then((res) => {
+        this.axios(this.api.newsList.updateForDisplay({id: item.id, display: item.display})).then((res) => {
           let data = res.data
           console.log(data)
           if (data.code === '200') {
@@ -307,7 +301,7 @@
       confirmPop() {
         let deleteIds = this.deleteIds
         this.pop.show = false
-        this.axios(this.api.productList.delete(deleteIds)).then((res) => {
+        this.axios(this.api.newsList.delete(deleteIds)).then((res) => {
           let data = res.data
           if (data.code === '200') {
             util.toast.fade(this.toast, '删除成功', 'check')
@@ -338,10 +332,7 @@
 </script>
 
 <style>
-.product-list .search {
-  margin-left: 10px;
-}
-.product-list-img img{
+.news-list-img img{
   max-width: 200px;
   max-height: 120px;
   line-height: 0;
