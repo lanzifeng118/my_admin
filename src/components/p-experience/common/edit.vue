@@ -34,6 +34,11 @@
           </td>
         </tr>
         <tr>
+          <td v-if="lang === 'cn'">顺序</td>
+          <td v-if="lang === 'en'">Order</td>
+          <td><input type="text" v-model="item.sort"></td>
+        </tr>
+        <tr>
           <td v-if="lang === 'cn'"><span class="icon-nessisary"></span>品牌</td>
           <td v-if="lang === 'en'"><span class="icon-nessisary"></span>Brand</td>
           <td>
@@ -55,10 +60,11 @@
             </select>
           </td>
         </tr>
+        <!-- 简要描述 -->
         <tr>
-          <td v-if="lang === 'cn'">顺序</td>
-          <td v-if="lang === 'en'">Order</td>
-          <td><input type="text" v-model="item.sort"></td>
+          <td v-if="lang === 'cn'" class="vertical-top">描述</td>
+          <td v-if="lang === 'en'" class="vertical-top">Breif</td>
+          <td><textarea rows="3" type="text" v-model="item.brief"></textarea></td>
         </tr>
         <tr>
           <td></td>
@@ -98,6 +104,7 @@ export default {
         img: '',
         brand: '',
         classify: '',
+        brief: '',
         sort: '1'
       },
       // classify
