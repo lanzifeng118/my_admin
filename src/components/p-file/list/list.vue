@@ -1,11 +1,16 @@
 <template>
   <div class="file-list">
     <div class="f-clearfix">
-      <!-- <button class="f-left button" @click="queryToggle">
-        <span v-if="reply !== 'N'">查看未回复</span>
-        <span v-if="reply === 'N'">查看所有</span>
-      </button> -->
-
+      <div class="f-left">
+        <select v-model="typeSelect" @change="changeSelect">
+          <option disabled>选择类型</option>
+          <option value="">所有类型</option>
+          <option value="1">图片</option>
+          <option value="2">文档</option>
+          <option value="3">多媒体</option>
+          <option value="4">其他</option>
+        </select>
+      </div>
       <button class="f-right button" @click="deleteAll">
         <span class="icon icon-delete"></span>一键删除
       </button>
@@ -42,8 +47,8 @@
             </td>
             <td>{{item.file_name}}</td>
 
-            <td>
-              <img v-if="item.file_type == 1" :src="item.file_url" style="max-width: 200px; max-height: 50px;">
+            <td style="line-height: 0;">
+              <img v-if="item.file_type == 1" :src="item.file_url" style="max-width: 200px; max-height: 40px;">
             </td>
 
             <!-- type -->
@@ -67,6 +72,7 @@
       </table>
     </div>
     <paging
+      v-show="items.length > 0"
       :paging="paging"
       @pagingNextClick="pagingNextClick"
       @pagingPreClick="pagingPreClick"
@@ -106,7 +112,7 @@
         msg: '加载中...',
         // notRelay
         reply: '',
-
+        typeSelect: '',
         deleteIds: [],
         // toast
         toast: {
@@ -145,7 +151,8 @@
         this.msg = '加载中...'
         let pageData = {
           page_size: this.paging.size,
-          page_no: this.paging.no
+          page_no: this.paging.no,
+          file_type: this.typeSelect
         }
         let apiList = api.fileList
         this.axios(apiList.query(pageData)).then((res) => {
@@ -165,6 +172,9 @@
             util.req.queryError(this.toast)
           }
         })
+      },
+      changeSelect() {
+        this.getItems()
       },
       handleData(data) {
         data.forEach((v) => {

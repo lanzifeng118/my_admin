@@ -343,7 +343,7 @@
 }
 .product-list-img img{
   max-width: 200px;
-  max-height: 120px;
+  max-height: 85px;
   line-height: 0;
 }
 </style>
