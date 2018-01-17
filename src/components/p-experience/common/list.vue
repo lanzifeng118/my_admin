@@ -33,34 +33,36 @@
           <tr v-if="lang === 'cn'">
             <!-- selectAll -->
             <th
-              width="100"
+              width="80"
               @click="toggleSelectAll"
               class="pointer"
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="80">排序</th>
+            <th width="70">排序</th>
             <th>Logo图</th>
-            <th width="200">品牌</th>
-            <th width="200">分类</th>
-            <th width="200">修改时间</th>
-            <th width="120">操作</th>
+            <th width="230">描述</th>
+            <th width="180">品牌</th>
+            <th width="160">分类</th>
+            <th width="160">修改时间</th>
+            <th width="115">操作</th>
           </tr>
           <tr v-if="lang === 'en'">
             <!-- selectAll -->
             <th
-              width="100"
+              width="80"
               @click="toggleSelectAll"
               class="pointer"
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="80">Order</th>
+            <th width="70">Order</th>
             <th>Logo</th>
-            <th width="200">Brand</th>
-            <th width="200">Classify</th>
-            <th width="200">Edit Time</th>
-            <th width="120">Operate</th>
+            <th width="230">Brief</th>
+            <th width="180">Brand</th>
+            <th width="160">Classify</th>
+            <th width="160">Edit Time</th>
+            <th width="115">Operate</th>
           </tr>
         </thead>
         <tbody>
@@ -77,8 +79,8 @@
               {{item.sort}}
             </td>
             <!-- logo -->
-            <td><img style="max-width: 130px;" :src="item.img"></td>
-            <!-- show -->
+            <td style="line-height: 0;"><img style="max-width: 130px; max-height: 45px;" :src="item.img"></td>
+            <td>{{item.brief}}</td>
             <td>{{item.brand}}</td>
             <td>{{item.classify}}</td>
             <td>{{item.modifytime}}</td>
