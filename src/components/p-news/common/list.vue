@@ -84,7 +84,7 @@
             <!-- name -->
             <td>{{item.name}}</td>
             <!-- picture -->
-            <td class="news-list-img"><img :src="item.img" alt=""></td>
+            <td class="news-list-img img"><img :src="item.img" alt=""></td>
             <!-- show -->
             <td
               class="pointer"

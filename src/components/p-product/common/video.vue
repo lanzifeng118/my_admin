@@ -68,7 +68,7 @@
           <!-- name -->
           <td>{{item.name}}</td>
           <!-- img -->
-          <td class="product-video-img">
+          <td class="img">
             <img :src="item.img" alt="">
           </td>
           <!-- classify -->
@@ -272,9 +272,6 @@ export default {
 </script>
 
 <style>
-td.product-video-img {
-  line-height: 0;
-}
 .product-video-img img{
   max-width: 260px;
   max-height: 180px;

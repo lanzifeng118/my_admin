@@ -79,7 +79,7 @@
               {{item.sort}}
             </td>
             <!-- logo -->
-            <td style="line-height: 0;"><img style="max-width: 130px; max-height: 45px;" :src="item.img"></td>
+            <td class="img"><img style="max-width: 130px; max-height: 45px;" :src="item.img"></td>
             <td>{{item.brief}}</td>
             <td>{{item.brand}}</td>
             <td>{{item.classify}}</td>

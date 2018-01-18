@@ -47,7 +47,7 @@
             </td>
             <td>{{item.file_name}}</td>
 
-            <td style="line-height: 0;">
+            <td class="img">
               <img v-if="item.file_type == 1" :src="item.file_url" style="max-width: 200px; max-height: 40px;">
             </td>
 

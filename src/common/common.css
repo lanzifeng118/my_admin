@@ -197,7 +197,7 @@ table {
   line-height: 1.5em;
 }
 .list-table-wrap td.img {
-  line-height: 1em;
+  line-height: 0;
 }
 .list-table-wrap td.order input {
   width: 100%;

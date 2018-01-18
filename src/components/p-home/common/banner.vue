@@ -66,7 +66,7 @@
             <td class="order">
               {{item.sort}}
             </td>
-            <td class="img"><img :src="item.img" style="max-width: 320px; max-height: 150px;"></td>
+            <td class="img"><img :src="item.img" style="max-width: 320px; max-height: 130px;"></td>
             <!-- show -->
             <td
               class="pointer"
