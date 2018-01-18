@@ -1,5 +1,5 @@
 <template>
-<div class="nav" :style="{height: navMinHeight + 'px'}">
+<div class="nav" :style="{height: height + 'px'}">
   <div class="nav-avatar">
     <img :src="avatar"/>
   </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { navMinHeight } from 'components/tools/global'
+import { winHeigth } from 'components/tools/global'
 
 export default {
   data() {
@@ -63,8 +63,7 @@ export default {
         name: '系统设置',
         style: 'config'
       }],
-      isActive: false,
-      navMinHeight
+      height: winHeigth - 80
     }
   },
   computed: {

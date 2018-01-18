@@ -1,7 +1,7 @@
 <template>
   <div class="experience">
     <tab :items="tabData"></tab>
-    <div class="content-detail" :style="{height: contentDetailMinHeigth + 'px'}">
+    <div class="content-detail" :style="{height: detailHeigth + 'px'}">
       <router-view></router-view>
     </div>
   </div>
@@ -9,12 +9,12 @@
 
 <script>
   import tab from 'components/c-tab/tab'
-  import { contentDetailMinHeigth } from 'components/tools/global'
+  import { detailHeigth } from 'components/tools/global'
 
   export default {
     data() {
       return {
-        contentDetailMinHeigth,
+        detailHeigth,
         tabData: [
           {text: 'Logo列表', href: '/admin/experience/list', icon: 'search_list'},
           {text: '品牌列表', href: '/admin/experience/brand', icon: 'evaluate'},

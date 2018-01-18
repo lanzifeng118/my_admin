@@ -148,7 +148,6 @@
         brand: [],
 
         deleteIds: [],
-        searchText: '',
         // toast
         toast: {
           show: false,
@@ -185,8 +184,7 @@
         let pageData = {
           page_size: this.paging.size,
           page_no: this.paging.no,
-          brand: this.brandSelect,
-          name: this.searchText
+          brand: this.brandSelect
         }
         this.axios(this.api.experienceList.query(pageData)).then((res) => {
           let data = res.data

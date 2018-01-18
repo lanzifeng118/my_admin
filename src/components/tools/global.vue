@@ -1,8 +1,7 @@
 <script>
 let winWidth = 0
 let winHeigth = 0
-let contentDetailMinHeigth = 0
-let navMinHeight = 0
+let detailHeigth = 0
 
 if (window.innerWidth) {
   winWidth = window.innerWidth
@@ -21,13 +20,11 @@ if (document.documentElement && document.documentElement.clientHeight && documen
   winWidth = document.documentElement.clientWidth
 }
 
-contentDetailMinHeigth = winHeigth - 145
-navMinHeight = winHeigth - 80
+detailHeigth = winHeigth - 145
 
 export default {
   winWidth,
   winHeigth,
-  contentDetailMinHeigth,
-  navMinHeight
+  detailHeigth
 }
 </script>

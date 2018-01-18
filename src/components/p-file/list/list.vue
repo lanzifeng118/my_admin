@@ -97,7 +97,6 @@
 </template>
 
 <script>
-  import search from 'components/search/search'
   import paging from 'components/c-paging/paging'
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
@@ -254,7 +253,6 @@
       }
     },
     components: {
-      search,
       pop,
       toast,
       paging

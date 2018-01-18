@@ -97,7 +97,6 @@
 </template>
 
 <script>
-  import search from 'components/search/search'
   import pop from 'components/pop/pop'
   import toast from 'components/toast/toast'
   import util from 'components/tools/util'
@@ -230,7 +229,6 @@
       }
     },
     components: {
-      search,
       pop,
       toast
     }

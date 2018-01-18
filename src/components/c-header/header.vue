@@ -34,10 +34,8 @@
           method: 'post',
           url: '/api/admin/logout'
         }).then((res) => {
-          let data = res.data
-          if (data.code === '200') {
-            let redirect = this.$route.path
-            this.$router.push({path: '/login', query: { redirect: redirect }})
+          if (res.data.code === '200') {
+            this.$router.push({path: '/login', query: { redirect: this.$route.path }})
           }
         })
       }
