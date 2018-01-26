@@ -116,14 +116,13 @@ export default {
     getItem() {
       this.axios(this.api.basicInfo.query()).then((res) => {
         let data = res.data
-        console.log(data)
         if (data.code === '200') {
           this.item = data.data
         } else {
           util.req.queryError(this.toast)
         }
-      }).catch((error) => {
-        if (error) {
+      }).catch((err) => {
+        if (err) {
           util.req.queryError(this.toast)
         }
       })

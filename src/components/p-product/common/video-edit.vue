@@ -268,7 +268,7 @@ export default {
     },
     goBack() {
       setTimeout(() => {
-        let link = this.lang === 'en' ? '/admin/product/video' : '/admin/product/videoen'
+        let link = this.lang === 'cn' ? '/admin/product/video' : '/admin/product/videoen'
         this.$router.push(link)
       }, 700)
     },
