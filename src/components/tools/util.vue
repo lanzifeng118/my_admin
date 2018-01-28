@@ -40,10 +40,22 @@ function uploadBigFile(file, percent, success, error) {
   }, false)
   // 文件上传成功或是失败
   xhr.onreadystatechange = function() {
+    /**
+     * 0: 请求未初始化
+     * 1: 服务器连接已建立
+     * 2: 请求已接收
+     * 3: 请求处理中
+     * 4: 请求已完成，且响应已就绪
+     * 当 readyState 等于 4 且status为 200 时,表示响应已就绪
+     */
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
         let data = JSON.parse(xhr.responseText)
         if (data.code === '200') {
+          let res = JSON.parse(xhr.responseText)
+          if (res.code !== '200') {
+            return error()
+          }
           let lastIndexOf = file.name.lastIndexOf('.')
           // size
           let size = file.size / 1024

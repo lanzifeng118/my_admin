@@ -200,6 +200,7 @@ export default {
           this.item.name = obj.name
         }
       }, () => {
+        this.cancleVideo()
         util.req.changeError(this.toast)
       })
     },
