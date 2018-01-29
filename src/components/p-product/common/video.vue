@@ -241,27 +241,27 @@ export default {
       this.pop.text = '确定删除所选项目'
       this.pop.show = true
     },
-      closePop() {
-        this.pop.show = false
-      },
-      confirmPop() {
-        let deleteIds = this.deleteIds
-        this.pop.show = false
-        this.axios(this.api.productVideo.delete(deleteIds)).then((res) => {
-          let data = res.data
-          if (data.code === '200') {
-            deleteIds.forEach((id) => {
-              for (let i = 0; i <= this.items.length - 1; i++) {
-                if (this.items[i].id === id) {
-                  this.items.splice(i, 1)
-                  break
-                }
+    closePop() {
+      this.pop.show = false
+    },
+    confirmPop() {
+      let deleteIds = this.deleteIds
+      this.pop.show = false
+      this.axios(this.api.productVideo.delete(deleteIds)).then((res) => {
+        let data = res.data
+        if (data.code === '200') {
+          deleteIds.forEach((id) => {
+            for (let i = 0; i <= this.items.length - 1; i++) {
+              if (this.items[i].id === id) {
+                this.items.splice(i, 1)
+                break
               }
-            })
-            util.toast.fade(this.toast, '删除成功', 'check')
-          }
-        })
-      }
+            }
+          })
+          util.toast.fade(this.toast, '删除成功', 'check')
+        }
+      })
+    }
   },
   components: {
     toast,
