@@ -72,7 +72,7 @@
       </table>
     </div>
     <paging
-      v-show="items.length > 0"
+      v-if="paging.total > 0"
       :paging="paging"
       @pagingNextClick="pagingNextClick"
       @pagingPreClick="pagingPreClick"
@@ -129,7 +129,7 @@
         paging: {
           size: 15,
           no: 0,
-          list: []
+          total: 0
         }
       }
     },
@@ -162,7 +162,7 @@
             if (list.length > 0) {
               this.msg = ''
               this.items = this.handleData(list)
-              this.paging.list = new Array(Math.ceil(data.data.total / this.paging.size))
+              this.paging.total = data.data.total
             } else {
               this.msg = '还没有相关信息，请添加'
             }

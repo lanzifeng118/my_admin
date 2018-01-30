@@ -1,19 +1,15 @@
 <template>
-<div class="admin">
-  <v-header></v-header>
-  <div class="content f-clearfix">
-    <v-nav></v-nav>
-    <div class="content-right">
-      <router-view></router-view>
+  <div class="admin">
+    <v-header></v-header>
+    <div class="content f-clearfix">
+      <v-nav></v-nav>
+      <div class="content-right">
+        <router-view></router-view>
+      </div>
     </div>
+    <toast v-show="toast.show" :text="toast.text" :icon="toast.icon">
+    </toast>
   </div>
-  <toast
-    v-show="toast.show"
-    :text="toast.text"
-    :icon="toast.icon"
-  >
-  </toast>
-</div>
 </template>
 
 <script>
@@ -39,18 +35,20 @@ export default {
   },
   methods: {
     getItems() {
-      this.axios(api.user.query()).then((res) => {
-        let data = res.data
-        if (data.code === '200') {
-          this.$store.state.user = data.data
-        } else {
-          util.req.queryError(this.toast)
-        }
-      }).catch((err) => {
-        if (err) {
-          util.req.queryError(this.toast)
-        }
-      })
+      this.axios(api.user.query())
+        .then(res => {
+          let data = res.data
+          if (data.code === '200') {
+            this.$store.state.user = data.data
+          } else {
+            util.req.queryError(this.toast)
+          }
+        })
+        .catch(err => {
+          if (err) {
+            util.req.queryError(this.toast)
+          }
+        })
     }
   },
   components: {
@@ -62,7 +60,6 @@ export default {
 </script>
 
 <style>
-
 .content {
   width: 1400px;
   margin: 0 auto;

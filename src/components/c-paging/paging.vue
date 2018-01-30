@@ -1,23 +1,14 @@
 <template>
   <div class="paging">
-    <ul class="paging-ul noselect" v-if="paging.list.length > 0">
-      <li
-        :class="{grey: paging.no === 0}"
-        @click="pagingPreClick"
-      >
+    <ul class="paging-ul noselect">
+      <li :class="{grey: paging.no === 0}" @click="pagingPreClick">
         <span class="icon-back"></span>
       </li>
-      <li
-        v-for="(item, index) in paging.list"
-        :class="{active: index === paging.no}"
-        @click="pagingChange(index)"
-      >
-        {{index + 1}}
+      <li v-for="(item, i) in items" :class="{active: item === paging.no, grey: item < 0}" @click="pagingChange(item)">
+        <span v-if="item >= 0">{{item + 1}}</span>
+        <span v-if="item < 0">...</span>
       </li>
-      <li
-        :class="{grey: paging.no ===  paging.list.length - 1}"
-        @click="pagingNextClick"
-      >
+      <li :class="{grey: paging.no ===  length - 1}" @click="pagingNextClick">
         <span class="icon-right"></span>
       </li>
     </ul>
@@ -28,9 +19,47 @@
 export default {
   props: ['paging'],
   data() {
-    return {
+    return {}
+  },
+  computed: {
+    length() {
+      let paging = this.paging
+      return Math.ceil(paging.total / paging.size)
+    },
+    items() {
+      let items = []
+      let paging = this.paging
+      let length = this.length
+      if (length <= 10) {
+        for (let i = 0; i < length; i++) {
+          items.push(i)
+        }
+      } else {
+        if (paging.no < 5) {
+          for (let i = 0; i < 8; i++) {
+            items.push(i)
+          }
+          let lastArr = [-1, length - 2, length - 1]
+          items = items.concat(lastArr)
+        } else if (paging.no < length - 6) {
+          items = [0, -1]
+          for (let i = paging.no - 3; i <= paging.no + 3; i++) {
+            items.push(i)
+          }
+          let lastArr = [-1, length - 2, length - 1]
+          items = items.concat(lastArr)
+        } else {
+          items = [0, -1]
+
+          for (let i = length - 9; i < length; i++) {
+            items.push(i)
+          }
+        }
+      }
+      return items
     }
   },
+  created() {},
   methods: {
     pagingPreClick() {
       if (this.paging.no === 0) {
@@ -39,19 +68,21 @@ export default {
       this.$emit('pagingPreClick')
     },
     pagingNextClick() {
-      if (this.paging.no === this.paging.list.length - 1) {
+      if (this.paging.no === this.length - 1) {
         return
       }
       this.$emit('pagingNextClick')
     },
     pagingChange(index) {
+      if (index < 0) {
+        return
+      }
       if (this.paging.no === index) {
         return
       }
       this.$emit('pagingChange', index)
     }
   }
-
 }
 </script>
 
@@ -64,6 +95,7 @@ export default {
   text-align: center;
 }
 .paging-ul li {
+  border-radius: 2px;
   display: inline-block;
   border: 1px solid #efefef;
   width: 28px;
