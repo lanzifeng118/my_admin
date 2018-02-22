@@ -66,6 +66,12 @@ html, body {
 .icon-nessisary {
   color: #c00;
 }
+.icon-english {
+  color: #06efd9;
+}
+.icon-chinese {
+  color: #51ef40;
+}
 a {
   color: #333;
   transition: all 0.2s;

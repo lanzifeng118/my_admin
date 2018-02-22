@@ -20,6 +20,7 @@ let supportClassifyUrl = '/api/admin/support/classify'
 let newsListUrl = '/api/admin/news/list'
 let newsClassifyUrl = '/api/admin/news/classify'
 let newsBannerUrl = '/api/admin/news/banner'
+let fileListUrl = '/api/admin/file/manager'
 
 let queryFun = (url, pageData) => {
   let data = {
@@ -46,6 +47,7 @@ let queryByIdFun = (url, id) => {
     data: {
       method: 'queryById',
       data: {
+        lang: LANG,
         id: id
       }
     }
@@ -350,8 +352,8 @@ let api = {
   },
   // support
   support: {
-    query() {
-      return queryFun(supportUrl)
+    query(pageData) {
+      return queryFun(supportUrl, pageData)
     },
     queryById(id) {
       return queryByIdFun(supportUrl, id)
@@ -439,6 +441,14 @@ let api = {
     },
     update(data) {
       return updateFun(newsBannerUrl, data)
+    }
+  },
+  fileList: {
+    query(pageData) {
+      return queryFun(fileListUrl, pageData)
+    },
+    delete(id) {
+      return deleteFun(fileListUrl, id)
     }
   }
 }

@@ -115,23 +115,22 @@ export default {
   },
   methods: {
     getItem() {
-      let _this = this
       let id = this.$route.params.id
       this.axios(api.support.queryById(id)).then((res) => {
         let data = res.data
         console.log(data)
         if (data.code === '200') {
           if (data.data) {
-            _this.item = data.data
+            this.item = data.data
           } else {
-            util.toast.show(_this.toast, '此服务支持不存在', 'close')
+            util.toast.show(this.toast, '此服务支持不存在', 'close')
             this.goBack()
           }
         }
       }).catch((err) => {
         if (err) {
           console.log(err)
-          _this.queryErrorGoBack()
+          this.queryErrorGoBack()
         }
       })
     },
@@ -142,33 +141,31 @@ export default {
         this.item.reply = 'Y'
       }
       // ajax
-      let _this = this
       this.axios(api.support.update({id: this.item.id, reply: this.item.reply})).then((res) => {
         let data = res.data
         if (data.code === '200') {
-          _this.showSuccess()
+          this.showSuccess()
         } else {
-          util.req.changeError(_this.toast)
+          util.req.changeError(this.toast)
         }
       }).catch((err) => {
         if (err) {
-          util.req.changeError(_this.toast)
+          util.req.changeError(this.toast)
         }
       })
     },
     sendData() {
-      let _this = this
       let obj = api.support.update(this.item)
       this.axios(obj).then((res) => {
         let data = res.data
         if (data.code === '200') {
-          _this.showSuccess()
+          this.showSuccess()
         } else {
-          util.req.changeError(_this.toast)
+          util.req.changeError(this.toast)
         }
       }).catch((err) => {
         if (err) {
-          util.req.changeError(_this.toast)
+          util.req.changeError(this.toast)
         }
       })
     },
@@ -180,9 +177,8 @@ export default {
       this.goBack()
     },
     goBack() {
-      let _this = this
       setTimeout(() => {
-        _this.$router.push('/admin/support')
+        this.$router.push('/admin/support')
       }, 700)
     },
     queryErrorGoBack() {
