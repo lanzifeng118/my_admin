@@ -33,6 +33,12 @@ module.exports = {
         pathRewrite: {
           '^/api/admin': ''
         }
+      },
+      '/admin/upload': {
+        target: 'http://www.lanzifeng.com/admin/upload',
+        pathRewrite: {
+          '^/admin/upload': ''
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
