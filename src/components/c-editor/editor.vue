@@ -24,6 +24,7 @@
             <option value="3">标题3</option>
             <option value="4">标题4</option>
             <option value="5">标题5</option>
+            <option value="6">标题6</option>
             <option selected="selected">段落</option>
           </select>
           <select class="ql-size">
@@ -236,7 +237,10 @@ export default {
   margin: 10px 0;
   font-size: 12px;
 }
-
+.editor .quill-editor h6 {
+  font-size: 14px;
+  line-height: 1.5em;
+}
 .editor .quill-editor p {
   line-height: 1.5em;
   margin-bottom: 10px;
