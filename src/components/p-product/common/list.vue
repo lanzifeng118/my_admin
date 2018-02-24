@@ -15,7 +15,7 @@
       </div>
       <!-- search -->
       <div class="search f-left">
-        <input class="search-input" v-model="searchText" placeholder="输入产品名称关键字">
+        <input type="text" class="search-input" v-model.trim="searchText" placeholder="输入产品名称关键字">
         <span class="search-icon icon-search" @click="searchSubmit"></span>
       </div>
       <!-- 删除 -->

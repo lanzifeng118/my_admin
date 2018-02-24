@@ -36,7 +36,7 @@
         <tr>
           <td v-if="lang === 'cn'">顺序</td>
           <td v-if="lang === 'en'">Order</td>
-          <td><input type="text" v-model="item.sort"></td>
+          <td><input type="text" v-model.trim="item.sort"></td>
         </tr>
         <tr>
           <td v-if="lang === 'cn'"><span class="icon-nessisary"></span>品牌</td>
@@ -64,7 +64,7 @@
         <tr>
           <td v-if="lang === 'cn'" class="vertical-top">描述</td>
           <td v-if="lang === 'en'" class="vertical-top">Breif</td>
-          <td><textarea rows="3" type="text" v-model="item.brief"></textarea></td>
+          <td><textarea rows="3" type="text" v-model.trim="item.brief"></textarea></td>
         </tr>
         <tr>
           <td></td>

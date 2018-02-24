@@ -23,7 +23,7 @@
         <tr>
           <td v-if="lang === 'cn'" width="100"><span class="icon-nessisary"></span>新闻标题</td>
           <td v-if="lang === 'en'" width="100"><span class="icon-nessisary"></span>Title</td>
-          <td><input type="text" v-model="item.name"></td>
+          <td><input type="text" v-model.trim="item.name"></td>
         </tr>
         <!-- logo -->
         <tr>
@@ -59,7 +59,7 @@
         <tr>
           <td v-if="lang === 'cn'">顺序</td>
           <td v-if="lang === 'en'">Order</td>
-          <td><input type="text" v-model="item.sort"></td>
+          <td><input type="text" v-model.trim="item.sort"></td>
         </tr>
         <!-- 分类 -->
         <tr>
@@ -77,7 +77,7 @@
         <tr>
           <td v-if="lang === 'cn'" class="vertical-top">简要描述</td>
           <td v-if="lang === 'en'" class="vertical-top">Breif</td>
-          <td><textarea rows="3" type="text" v-model="item.brief"></textarea></td>
+          <td><textarea rows="3" type="text" v-model.trim="item.brief"></textarea></td>
         </tr>
         <!-- 详细介绍 -->
         <tr>

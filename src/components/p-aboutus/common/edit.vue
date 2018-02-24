@@ -23,13 +23,13 @@
           <tr>
             <td v-if="lang === 'cn'" width="90">标题</td>
             <td v-if="lang === 'en'" width="90">Title</td>
-            <td><input type="text" v-model="item.title"></td>
+            <td><input type="text" v-model.trim="item.title"></td>
           </tr>
           <!-- 顺序 -->
           <tr>
             <td v-if="lang === 'cn'">顺序</td>
             <td v-if="lang === 'en'">Order</td>
-            <td><input type="text" v-model="item.sort"></td>
+            <td><input type="text" v-model.trim="item.sort"></td>
           </tr>
           <!-- 显示 -->
           <tr>
@@ -46,7 +46,7 @@
           <tr>
             <td v-if="lang === 'cn'" class="vertical-top">摘要</td>
             <td v-if="lang === 'en'" class="vertical-top">Breif</td>
-            <td><textarea name="name" rows="3" cols="100" v-model="item.brief"></textarea></td>
+            <td><textarea name="name" rows="3" cols="100" v-model.trim="item.brief"></textarea></td>
           </tr>
           <tr>
             <td v-if="lang === 'cn'">内容</td>

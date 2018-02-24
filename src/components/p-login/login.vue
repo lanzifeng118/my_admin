@@ -5,7 +5,7 @@
       <div class="login-form">
         <div class="login-username">
           <span class="icon-people"></span>
-          <input type="text" placeholder="请输入用户名" v-model="user.username" @keyup="checkUsername()">
+          <input type="text" placeholder="请输入用户名" v-model.trim="user.username" @keyup="checkUsername()">
           <i class="login-warn" v-show="usernameWarn">请输入用户名</i>
         </div>
         <div class="login-password">
