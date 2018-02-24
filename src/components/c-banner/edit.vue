@@ -10,7 +10,7 @@
         <!-- img -->
         <tr>
           <td width="90">{{LinkText}}</td>
-          <td><input type="text" v-model="item.link" style="width: 500px"></td>
+          <td><input type="text" v-model.trim="item.link" style="width: 500px"></td>
         </tr>
         <tr>
           <td class="vertical-top">{{BannerText}}<span class="separate"></span></td>

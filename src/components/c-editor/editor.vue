@@ -19,13 +19,19 @@
         </span>
         <span class="ql-formats">
           <select class="ql-header">
-            <option value="1"></option>
-            <option value="2"></option>
-            <option value="3"></option>
-            <option value="4"></option>
-            <option value="5"></option>
-            <option value="6"></option>
-            <option selected="selected"></option>
+            <option value="1">标题1</option>
+            <option value="2">标题2</option>
+            <option value="3">标题3</option>
+            <option value="4">标题4</option>
+            <option value="5">标题5</option>
+            <option value="6">标题6</option>
+            <option selected="selected">段落</option>
+          </select>
+          <select class="ql-size">
+            <option value="small">0.75倍</option>
+            <option selected>1.0倍</option>
+            <option value="large">1.2倍</option>
+            <option value="huge">1.5倍</option>
           </select>
         </span>
         <span class="ql-formats">
@@ -194,37 +200,84 @@ export default {
 }
 </script>
 <style>
-.editor .quill-editor  h1 {
+.editor .quill-editor {
+  line-height: 1.5em;
+}
+.editor .ql-container {
   font-size: 14px;
+}
+.editor .quill-editor  h1 {
+  font-size: 16px;
+  line-height: 1.5em;
   color: #0d93b8;
   font-weight: bold;
   margin: 15px 0;
 }
-.editor .quill-editor h2 {
-  font-size: 15px;
+.editor .quill-editor h2, 
+.editor .quill-editor h3,
+.editor .quill-editor h4 {
+  font-size: 14px;
+  line-height: 1.5em;    
   padding-left: 10px;
   border-left: 2px solid #0d93b8;
   margin: 15px 0;
 }
+.editor .quill-editor h3 {
+  border-color: #ffc107;
+}
+.editor .quill-editor h4 {
+  border-color: #ff5722;
+}
+.editor .quill-editor h5 {
+  padding: 5px 10px;
+  line-height: 1.5em;
+  color: #999;
+  border-left: 2px solid #ebebeb;
+  background-color: #f9f9f9;
+  margin: 10px 0;
+  font-size: 12px;
+}
+.editor .quill-editor h6 {
+  font-size: 14px;
+  line-height: 1.5em;
+}
 .editor .quill-editor p {
+  line-height: 1.5em;
   margin-bottom: 10px;
 }
-.editor .quill-editor ul {
+.editor .quill-editor ul,
+.editor .quill-editor ol {
+  padding-left: 0;
   margin: 10px 0 10px 15px;
 }
 .editor .quill-editor li {
+  line-height: 1.5em;
   position: relative;
   display: block;
-  padding: 0 0 5px 12px;
-  line-height: 1.5em;
+  padding: 0 0 0 15px;
+  margin-bottom: 5px;
 }
 .editor .quill-editor li::before {
   content: '';
+  margin-left: 0;
+  margin-right: 0;
   position: absolute;
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   background: #86b513;
   top: 7px;
   left: 0px;
+}
+.editor .quill-editor ol > li::before {
+  border-radius: 3px;
+}
+.editor .ql-editor .ql-size-large {
+  font-size: 1.2em;
+}
+.editor .ql-editor .ql-size-huge {
+  font-size: 1.5em;
+}
+.editor .ql-editor a {
+  color: #333;
 }
 </style>

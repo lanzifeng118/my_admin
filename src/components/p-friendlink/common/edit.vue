@@ -22,19 +22,19 @@
           <tr>
             <td v-if="lang === 'cn'" width="90"><span class="icon-nessisary"></span>名称</td>
             <td v-if="lang === 'en'" width="90"><span class="icon-nessisary"></span>Name</td>
-            <td><input type="text" v-model="item.name"></td>
+            <td><input type="text" v-model.trim="item.name"></td>
           </tr>
           <!-- 顺序 -->
           <tr>
             <td v-if="lang === 'cn'">顺序</td>
             <td v-if="lang === 'en'">Order</td>
-            <td><input type="text" v-model="item.sort"></td>
+            <td><input type="text" v-model.trim="item.sort"></td>
           </tr>
           <!-- 链接 -->
           <tr>
             <td v-if="lang === 'cn'" class="vertical-top"><span class="icon-nessisary"></span>链接</td>
             <td v-if="lang === 'en'" class="vertical-top"><span class="icon-nessisary"></span>Link</td>
-            <td><textarea type="text" v-model="item.link"></textarea></td>
+            <td><textarea type="text" v-model.trim="item.link"></textarea></td>
           </tr>
           <tr>
             <td></td>

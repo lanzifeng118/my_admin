@@ -17,12 +17,12 @@
         <tr>
           <td v-if="lang === 'cn'" width="100">公司名称</td>
           <td v-if="lang === 'en'" width="100">CO. Name</td>
-          <td><input type="text" v-model="basicInfo.name"></td>
+          <td><input type="text" v-model.trim="basicInfo.name"></td>
         </tr>
         <tr>
           <td v-if="lang === 'cn'">全称</td>
           <td v-if="lang === 'en'">Full Name</td>
-          <td><input style="width: 400px;" type="text" v-model="basicInfo.full_name"></td>
+          <td><input style="width: 400px;" type="text" v-model.trim="basicInfo.full_name"></td>
         </tr>
         <!-- logo -->
         <tr>
@@ -44,34 +44,34 @@
         <tr>
           <td v-if="lang === 'cn'" class="vertical-middle">地址</td>
           <td v-if="lang === 'en'" class="vertical-middle">Address</td>
-          <td><textarea type="text" rows="2" v-model="basicInfo.address"></textarea></td>
+          <td><textarea type="text" rows="2" v-model.trim="basicInfo.address"></textarea></td>
         </tr>
         <tr>
           <td v-if="lang === 'cn'">邮箱</td>
           <td v-if="lang === 'en'">Email</td>
-          <td><input type="text" v-model="basicInfo.email"></td>
+          <td><input type="text" v-model.trim="basicInfo.email"></td>
         </tr>
         <tr>
           <td v-if="lang === 'cn'">电话</td>
           <td v-if="lang === 'en'">Tel</td>
-          <td><input type="text" v-model="basicInfo.telephone"></td>
+          <td><input type="text" v-model.trim="basicInfo.telephone"></td>
         </tr>
         <tr>
           <td v-if="lang === 'cn'">联系人</td>
           <td v-if="lang === 'en'">Linkman</td>
-          <td><input type="text" v-model="basicInfo.linkman"></td>
+          <td><input type="text" v-model.trim="basicInfo.linkman"></td>
         </tr>
         <tr>
           <td v-if="lang === 'cn'">工作时间</td>
           <td v-if="lang === 'en'">Work Time</td>
-          <td><input type="text" v-model="basicInfo.worktime"></td>
+          <td><input type="text" v-model.trim="basicInfo.worktime"></td>
         </tr>
         <tr>
           <td v-if="lang === 'cn'">简介</td>
           <td v-if="lang === 'en'">Profile</td>
           <td>
             <quill-editor
-              v-model="basicInfo.brief"
+              v-model.trim="basicInfo.brief"
               :options="editorOption"
               >
             </quill-editor>

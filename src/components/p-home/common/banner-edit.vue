@@ -40,13 +40,13 @@
           <tr>
             <td v-if="lang === 'cn'">链接</td>
             <td v-if="lang === 'en'">Link</td>
-            <td><input class="long" type="text" v-model="item.link"></td>
+            <td><input class="long" type="text" v-model.trim="item.link"></td>
           </tr>
           <!-- 顺序 -->
           <tr>
             <td v-if="lang === 'cn'">顺序</td>
             <td v-if="lang === 'en'">Order</td>
-            <td><input type="text" v-model="item.sort"></td>
+            <td><input type="text" v-model.trim="item.sort"></td>
           </tr>
           <!-- 显示 -->
           <tr>

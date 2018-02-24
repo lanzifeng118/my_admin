@@ -10,9 +10,6 @@ var path = require('path')
 var express = require('express')
 // 自定义模拟数据
 var apiRoutes = express.Router(); //创建一个路由实例
-var appData = require('../data.json')
-var infoList = appData.infoList;
-var infoDisplay = appData.infoDisplay;
 
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
@@ -88,51 +85,6 @@ devMiddleware.waitUntilValid(() => {
 })
 
 var server = app.listen(port)
-var appHypo = require('../../backend/app.js');
-app.use('/', appHypo);
-
-// apiRoutes.post('/admin/basicinfo', function(req, res){ //获取数据
-//   res.json({
-//     code: '200',
-//     data: appData.basicInfo
-//   })
-// })
-//
-// apiRoutes.post('/admin/user', function(req, res){ //获取数据
-//   res.json({
-//     code: '200',
-//     data: appData.user
-//   })
-// })
-//
-// apiRoutes.post('/admin/infoDisplay', function(req, res){ //获取数据
-//   var id = 'id_' + req.query.id
-//   res.json({
-//     errno: 0,
-//     data: infoDisplay[id]
-//   })
-// })
-//
-// apiRoutes.post('/admin/aboutus', function(req, res){
-//   res.json({
-//     code: '200',
-//     data: infoList
-//   })
-// })
-// apiRoutes.post('/admin/productList', function(req, res){
-//   res.json({
-//     code: '200',
-//     data: appData.productList
-//   })
-// })
-// apiRoutes.post('/admin/experienceList', function(req, res){
-//   res.json({
-//     code: '200',
-//     data: appData.experienceList
-//   })
-// })
-//
-// app.use('/api',apiRoutes)
 
 module.exports = {
   ready: readyPromise,

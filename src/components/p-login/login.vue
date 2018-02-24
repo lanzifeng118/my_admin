@@ -5,14 +5,12 @@
       <div class="login-form">
         <div class="login-username">
           <span class="icon-people"></span>
-          <input type="text" placeholder="请输入用户名"
-            v-model="user.username" @keyup="checkUsername()">
+          <input type="text" placeholder="请输入用户名" v-model.trim="user.username" @keyup="checkUsername()">
           <i class="login-warn" v-show="usernameWarn">请输入用户名</i>
         </div>
         <div class="login-password">
           <span class="icon-lock"></span>
-          <input type="password" placeholder="请输入用密码"
-            v-model="user.password" @keyup="checkPassword()">
+          <input type="password" placeholder="请输入用密码" v-model="user.password" @keyup="checkPassword()">
           <i class="login-warn" v-show="passwordWarn">请输入密码</i>
         </div>
         <div class="login-submit">
@@ -28,65 +26,66 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        user: {
-          username: '',
-          password: ''
-        },
-        usernameWarn: false,
-        passwordWarn: false,
-        login: {
-          text: '登录',
-          failure: false
-        }
+export default {
+  data() {
+    return {
+      user: {
+        username: '',
+        password: ''
+      },
+      usernameWarn: false,
+      passwordWarn: false,
+      login: {
+        text: '登录',
+        failure: false
+      }
+    }
+  },
+  mounted() {
+    window.addEventListener('keyup', this.enterSubmit)
+  },
+  destroyed() {
+    window.removeEventListener('keyup', this.enterSubmit)
+  },
+  methods: {
+    checkUsername() {
+      this.user.username = this.user.username.trim()
+      if (this.user.username !== '') {
+        this.usernameWarn = false
+        return true
+      }
+      return false
+    },
+    checkPassword() {
+      if (this.user.password !== '') {
+        this.passwordWarn = false
       }
     },
-    mounted() {
-      window.addEventListener('keyup', this.enterSubmit)
+    enterSubmit(e) {
+      if (e.keyCode === 13) {
+        this.submit()
+      }
     },
-    destroyed() {
-      window.removeEventListener('keyup', this.enterSubmit)
-    },
-    methods: {
-      checkUsername() {
-        this.user.username = this.user.username.trim()
-        if (this.user.username !== '') {
-          this.usernameWarn = false
-          return true
-        }
-        return false
-      },
-      checkPassword() {
-        if (this.user.password !== '') {
-          this.passwordWarn = false
-        }
-      },
-      enterSubmit(e) {
-        if (e.keyCode === 13) {
-          this.submit()
-        }
-      },
-      submit() {
-        let checkUsername = this.checkUsername()
-        if (!checkUsername) {
-          this.usernameWarn = true
-          return
-        }
-        if (this.user.password === '') {
-          this.passwordWarn = true
-          return
-        }
-        this.usernameWarn = false
-        this.passwordWarn = false
-        this.login.failure = false
-        this.login.text = '登录中...'
-        this.axios({
-          method: 'post',
-          url: '/api/admin/login',
-          data: this.user
-        }).then((res) => {
+    submit() {
+      let checkUsername = this.checkUsername()
+      if (!checkUsername) {
+        this.usernameWarn = true
+        return
+      }
+      if (this.user.password === '') {
+        this.passwordWarn = true
+        return
+      }
+      this.usernameWarn = false
+      this.passwordWarn = false
+      this.login.failure = false
+      this.login.text = '登录中...'
+      this.axios({
+        method: 'post',
+        url: '/api/admin/login',
+        data: this.user
+      })
+        .then(res => {
           let data = res.data
           if (data.code === '200') {
             this.login.text = '登录成功！'
@@ -102,31 +101,31 @@
             this.login.text = '登录'
             this.login.failure = true
           }
-        }).catch((error) => {
+        })
+        .catch(error => {
           if (error) {
             this.$router.push('/error')
           }
         })
-      },
-      getRedirect() {
-        let search = window.location.href.split('?')[1]
-        let obj = {}
-        if (search) {
-          let searchArr = search.split('&')
-          searchArr.forEach((v, i) => {
-            let arr = v.split('=')
-            obj[arr[0]] = arr[1]
-          })
-        }
-        let redirect = obj.redirect
-        if (redirect) {
-          redirect = decodeURIComponent(redirect)
-        }
-        return redirect
+    },
+    getRedirect() {
+      let search = window.location.href.split('?')[1]
+      let obj = {}
+      if (search) {
+        let searchArr = search.split('&')
+        searchArr.forEach((v, i) => {
+          let arr = v.split('=')
+          obj[arr[0]] = arr[1]
+        })
       }
+      let redirect = obj.redirect
+      if (redirect) {
+        redirect = decodeURIComponent(redirect)
+      }
+      return redirect
     }
   }
-
+}
 </script>
 
 <style>
@@ -136,7 +135,8 @@
   width: 100%;
   left: 0;
   top: 0;
-  background: #cdf5ff url(../../common/images/login-bg.png) no-repeat center bottom;
+  background: #cdf5ff url(../../common/images/login-bg.png) no-repeat center
+    bottom;
   color: #3f9bdc;
 }
 .login-box {

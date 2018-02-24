@@ -22,7 +22,7 @@
       <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
         <thead>
-          <tr v-if="lang === 'cn'">
+          <tr>
             <!-- selectAll -->
             <th
               width="90"
@@ -31,26 +31,12 @@
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="90">排序</th>
-            <th>图片</th>
-            <th width="120">显示</th>
-            <th width="180">修改时间</th>
-            <th width="160">操作</th>
-          </tr>
-          <tr v-if="lang === 'en'">
-            <!-- selectAll -->
-            <th
-              width="90"
-              @click="toggleSelectAll"
-              class="pointer"
-            >
-              <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
-            </th>
-            <th width="90">Order</th>
-            <th>Picture</th>
-            <th width="120">Display</th>
-            <th width="180">Edit Time</th>
-            <th width="160">Operate</th>
+            <th width="90">{{text.order[lang]}}</th>
+            <th>{{text.picture[lang]}}</th>
+            <th width="260">{{text.link[lang]}}</th>
+            <th width="100">{{text.display[lang]}}</th>
+            <th width="180">{{text.editTime[lang]}}</th>
+            <th width="130">{{text.operate[lang]}}</th>
           </tr>
         </thead>
         <tbody>
@@ -67,6 +53,9 @@
               {{item.sort}}
             </td>
             <td class="img"><img :src="item.img" style="max-width: 320px; max-height: 130px;"></td>
+            <td>
+              <a class="home-banner-link" :href="item.link" target="_blank">{{item.link}}</a>
+            </td>
             <!-- show -->
             <td
               class="pointer"
@@ -139,7 +128,33 @@
           text: '',
           show: false
         },
-        thSelect: false
+        thSelect: false,
+        text: {
+          order: {
+            cn: '排序',
+            en: 'Order'
+          },
+          picture: {
+            cn: '图片',
+            en: 'Picture'
+          },
+          link: {
+            cn: '链接',
+            en: 'Link'
+          },
+          display: {
+            cn: '显示',
+            en: 'Display'
+          },
+          editTime: {
+            cn: '修改时间',
+            en: 'Edit Time'
+          },
+          operate: {
+            cn: '操作',
+            en: 'Operate'
+          }
+        }
       }
     },
     computed: {
@@ -260,5 +275,10 @@
 <style>
 .home-banner {
 
+}
+.home-banner-link {
+  display: block;
+  /* max-width: 100px; */
+  word-break: break-all;
 }
 </style>
