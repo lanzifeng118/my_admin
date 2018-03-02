@@ -1,34 +1,24 @@
 <template>
 <div class="product-edit edit">
-  <!-- cn -->
-  <div v-if="lang === 'cn'">
-      <h2 class="edit-h2" v-if="!typeAdd">编辑产品</h2>
-      <h2 class="edit-h2" v-if="typeAdd">添加产品</h2>
-      <router-link to="/admin/product/list" class="edit-close-btn" >
-        <span class="icon-round_close_fill"></span>
-      </router-link>
-  </div>
-  <!-- en -->
-  <div v-if="lang === 'en'">
-    <h2 class="edit-h2" v-if="!typeAdd">Edit Product</h2>
-    <h2 class="edit-h2" v-if="typeAdd">Add Product</h2>
-    <router-link to="/admin/product/listen" class="edit-close-btn" >
+    <h2 class="edit-h2" v-if="!typeAdd">{{lang === 'cn' ? '编辑产品' : 'Edit Product'}}</h2>
+    <h2 class="edit-h2" v-else>{{lang === 'cn' ? '添加产品' : 'Add Product'}}</h2>
+    <router-link v-if="lang === 'cn'" to="/admin/product/list" class="edit-close-btn" >
       <span class="icon-round_close_fill"></span>
     </router-link>
-  </div>
+    <router-link v-else to="/admin/product/listen" class="edit-close-btn" >
+      <span class="icon-round_close_fill"></span>
+    </router-link>
   <div class="edit-table-wrap">
     <table>
       <tbody>
         <!-- 产品名称 -->
         <tr>
-          <td width="100" v-if="lang === 'cn'"><span class="icon-nessisary"></span>产品名称</td>
-          <td width="100" v-if="lang === 'en'"><span class="icon-nessisary"></span>Name</td>
+          <td width="100"><span class="icon-nessisary"></span>{{lang === 'cn' ? '产品名称' : 'Name'}}</td>
           <td><input type="text" v-model.trim="item.name"></td>
         </tr>
         <!-- logo -->
         <tr>
-          <td v-if="lang === 'cn'" class="vertical-top">预览图</td>
-          <td v-if="lang === 'en'" class="vertical-top">Preview Pic</td>
+          <td class="vertical-top">{{lang === 'cn' ? '预览图' : 'Preview Pic'}}</td>
           <td>
             <edit-pic
               boxWidth="240"
@@ -44,8 +34,7 @@
         </tr>
         <!-- 显示 -->
         <tr>
-          <td v-if="lang === 'cn'" class="vertical-middle">显示</td>
-          <td v-if="lang === 'en'" class="vertical-middle">Display</td>
+          <td class="vertical-middle">{{lang === 'cn' ? '显示' : 'Display'}}</td>
           <td class="show">
             <span
               :class="[item.display === 'Y' ? 'icon-square_check_fill' : 'icon-square']"
@@ -56,29 +45,25 @@
         </tr>
         <!-- 顺序 -->
         <tr>
-          <td v-if="lang === 'cn'">顺序</td>
-          <td v-if="lang === 'en'">Order</td>
+          <td>{{lang === 'cn' ? '顺序' : 'Order'}}</td>
           <td><input type="text" v-model.trim="item.sort"></td>
         </tr>
         <!-- 品牌 -->
         <tr>
-          <td v-if="lang === 'cn'">品牌</td>
-          <td v-if="lang === 'en'">Brand</td>
+          <td>{{lang === 'cn' ? '品牌' : 'Brand'}}</td>
           <td>
             <select v-model="item.classify">
-              <option v-if="lang === 'cn'" disabled value="">选择品牌</option>
-              <option v-if="lang === 'en'" disabled value="">Choose Brand</option>
+              <option disabled>{{lang === 'cn' ? '选择品牌' : 'Choose Brand'}}</option>
               <option v-for="classifyItem in classify">{{classifyItem.name}}</option>
             </select>
           </td>
         </tr>
         <!-- PDF -->
         <tr>
-          <td v-if="lang === 'cn'">资源</td>
-          <td v-if="lang === 'en'">Resource</td>
+          <td>{{lang === 'cn' ? '资源' : 'Resource'}}</td>
           <td class="pdf">
             <label for="inputResources" class="button button-second">
-              <span class=" icon icon-round_add"></span>添加文件
+              <span class=" icon icon-round_add"></span>{{lang === 'cn' ? '添加文件' : 'Add File'}}
             </label>
             <input type="file" id="inputResources" accept="application/pdf, application/msword, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" @change="chooseResources">
             <ul>
@@ -94,22 +79,19 @@
         </tr>
         <!-- 简要描述 -->
         <tr>
-          <td v-if="lang === 'cn'" class="vertical-top">简要描述</td>
-          <td v-if="lang === 'en'" class="vertical-top">Brief</td>
+          <td class="vertical-top">{{lang === 'cn' ? '简要描述' : 'Brief'}}</td>
           <td><textarea rows="3" type="text" v-model.trim="item.brief"></textarea></td>
         </tr>
         <!-- 详细介绍 -->
         <tr>
-          <td v-if="lang === 'cn'" class="vertical-top">详细介绍</td>
-          <td v-if="lang === 'en'" class="vertical-top">Detail</td>
+          <td class="vertical-top">{{lang === 'cn' ? '详细介绍' : 'Detail'}}</td>
           <td>
               <editor @input="editorChange" :value="item.detail"></editor>
           </td>
         </tr>
         <tr>
           <td></td>
-          <td v-if="lang === 'cn'"><button type="button" class="button" @click="submit">提交</button></td>
-          <td v-if="lang === 'en'"><button type="button" class="button" @click="submit">Submit</button></td>
+          <td><button type="button" class="button" @click="submit">{{lang === 'cn' ? '提交' : 'Submit'}}</button></td>
         </tr>
       </tbody>
     </table>

@@ -1,15 +1,12 @@
 <template>
 <div class="edit product-classify-edit">
-  <!-- cn -->
-  <h2 class="edit-h2" v-if="lang === 'cn' && !typeAdd">编辑品牌</h2>
-  <h2 class="edit-h2" v-if="lang === 'cn' && typeAdd">添加品牌</h2>
+  <h2 class="edit-h2" v-if="!typeAdd">{{lang === 'cn' ? '编辑品牌' : 'Edit Brand'}}</h2>
+  <h2 class="edit-h2" v-else>{{lang === 'cn' ? '添加品牌' : 'Add Brand'}}</h2>
+
   <router-link v-if="lang === 'cn'" to="/admin/product/classify" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
-  <!-- en -->
-  <h2 class="edit-h2" v-if="lang === 'en' && !typeAdd">Edit Brand</h2>
-  <h2 class="edit-h2" v-if="lang === 'en' && typeAdd">Add Brand</h2>
-  <router-link v-if="lang === 'en'" to="/admin/product/classifyen" class="edit-close-btn" >
+  <router-link v-else to="/admin/product/classifyen" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
 
@@ -18,20 +15,17 @@
       <tbody>
         <!-- name -->
         <tr>
-          <td v-if="lang === 'cn'" width="100"><span class="icon-nessisary"></span>品牌名称</td>
-          <td v-if="lang === 'en'" width="100"><span class="icon-nessisary"></span>Name</td>
+          <td width="100"><span class="icon-nessisary"></span>{{lang === 'cn' ? '品牌名称' : 'Name'}}</td>
           <td><input type="text" v-model.trim="item.name"></td>
         </tr>
         <!-- fullName -->
         <tr>
-          <td v-if="lang === 'cn'"><span class="icon-nessisary"></span>品牌全称</td>
-          <td v-if="lang === 'en'"><span class="icon-nessisary"></span>Full Name</td>
+          <td><span class="icon-nessisary"></span>{{lang === 'cn' ? '品牌全称' : 'Full Name'}}</td>
           <td><input type="text" class="product-classify-edit-link" v-model.trim="item.full_name"></td>
         </tr>
         <!-- sort -->
         <tr>
-          <td v-if="lang === 'cn'">顺序</td>
-          <td v-if="lang === 'en'">Order</td>
+          <td>{{lang === 'cn' ? '顺序' : 'Order'}}</td>
           <td><input type="text" v-model.trim="item.sort"></td>
         </tr>
         <!-- logo -->
@@ -53,8 +47,7 @@
         </tr>
         <!-- img -->
         <tr>
-          <td v-if="lang === 'cn'" class="vertical-top">缩略图<span class="separate"></span></td>
-          <td v-if="lang === 'en'" class="vertical-top">Preview Pic<span class="separate"></span></td>
+          <td class="vertical-top">{{lang === 'cn' ? '缩略图' : 'Preview Pic'}}<span class="separate"></span></td>
           <td>
             <edit-pic
               boxWidth="294"
@@ -70,8 +63,7 @@
         </tr>
         <!-- banner_img -->
         <tr>
-          <td v-if="lang === 'cn'" class="vertical-top">广告图<span class="separate"></span></td>
-          <td v-if="lang === 'en'" class="vertical-top">Banner Pic<span class="separate"></span></td>
+          <td class="vertical-top">{{lang === 'cn' ? '广告图' : 'Banner Pic'}}<span class="separate"></span></td>
           <td>
             <edit-pic
               boxWidth="650"
@@ -87,16 +79,14 @@
         </tr>
         <!-- banner_link -->
         <tr>
-          <td v-if="lang === 'cn'">广告链接</td>
-          <td v-if="lang === 'en'">Banner Link</td>
+          <td>{{lang === 'cn' ? '广告链接' : 'Banner Link'}}</td>
           <td>
             <input class="product-classify-edit-link" type="text" v-model.trim="item.banner_link">
           </td>
         </tr>
         <tr>
           <td></td>
-          <td v-if="lang === 'cn'"><button type="button" class="button" @click="submit">提交</button></td>
-          <td v-if="lang === 'en'"><button type="button" class="button" @click="submit">Submit</button></td>
+          <td><button type="button" class="button" @click="submit">{{lang === 'cn' ? '提交' : 'Submit'}}</button></td>
         </tr>
       </tbody>
     </table>

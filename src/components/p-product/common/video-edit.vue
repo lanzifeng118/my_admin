@@ -1,15 +1,12 @@
 <template>
 <div class="edit product-classify-edit">
   <!-- cn -->
-  <h2 class="edit-h2" v-if="lang === 'cn' && !typeAdd">编辑视频</h2>
-  <h2 class="edit-h2" v-if="lang === 'cn' && typeAdd">添加视频</h2>
+  <h2 class="edit-h2" v-if="!typeAdd">{{lang === 'cn' ? '编辑视频' : 'Edit Video'}}</h2>
+  <h2 class="edit-h2" v-else>{{lang === 'cn' ? '添加视频' : 'Add Video'}}</h2>
   <router-link v-if="lang === 'cn'" to="/admin/product/video" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
-  <!-- en -->
-  <h2 class="edit-h2" v-if="lang === 'en' && !typeAdd">Edit Video</h2>
-  <h2 class="edit-h2" v-if="lang === 'en' && typeAdd">Add Video</h2>
-  <router-link v-if="lang === 'en'" to="/admin/product/listen" class="edit-close-btn" >
+  <router-link v-else to="/admin/product/listen" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
 
@@ -18,26 +15,22 @@
       <tbody>
         <!-- name -->
         <tr>
-          <td v-if="lang === 'cn'" width="100"><span class="icon-nessisary"></span>视频名称</td>
-          <td v-if="lang === 'en'" width="100"><span class="icon-nessisary"></span>Name</td>
+          <td width="100"><span class="icon-nessisary"></span>{{lang === 'cn' ? '视频名称' : 'Name'}}</td>
           <td><input type="text" v-model.trim="item.name"></td>
         </tr>
         <!-- 品牌 -->
         <tr>
-          <td v-if="lang === 'cn'">品牌</td>
-          <td v-if="lang === 'en'">Brand</td>
+          <td>{{lang === 'cn' ? '品牌' : 'Brand'}}</td>
           <td>
             <select v-model="item.classify">
-              <option disabled>选择品牌</option>
-              <option disabled>Choose Brand</option>
+              <option disabled>{{lang === 'cn' ? '选择品牌' : 'Choose Brand'}}</option>
               <option v-for="classifyItem in classify">{{classifyItem.name}}</option>
             </select>
           </td>
         </tr>
         <!-- img -->
         <tr>
-          <td v-if="lang === 'cn'" class="vertical-top">预览图<span class="separate"></span></td>
-          <td v-if="lang === 'en'" class="vertical-top">Preview Pic<span class="separate"></span></td>
+          <td class="vertical-top">{{lang === 'cn' ? '预览图' : 'Preview Pic'}}<span class="separate"></span></td>
           <td>
             <edit-pic
               boxWidth="294"
@@ -53,11 +46,10 @@
         </tr>
         <!-- 视频 -->
         <tr>
-          <td v-if="lang === 'cn'">视频</td>
-          <td v-if="lang === 'en'">Video</td>
+          <td>{{lang === 'cn' ? '视频' : 'Video'}}</td>
           <td class="pdf">
             <label for="inputVideo" class="button button-second">
-              <span class=" icon icon-round_add"></span>选择视频
+              <span class=" icon icon-round_add"></span>{{lang === 'cn' ? '选择视频' : 'Choose Video'}}
             </label>
             <input type="file" id="inputVideo" accept="video/mp4" @change="chooseVideo">
             <div class="pdf-box" v-if="item.video" :title="item.name">
@@ -69,8 +61,7 @@
         </tr>
         <tr>
           <td></td>
-          <td v-if="lang === 'cn'"><button type="button" class="button" @click="submit">提交</button></td>
-          <td v-if="lang === 'en'"><button type="button" class="button" @click="submit">Submit</button></td>
+          <td><button type="button" class="button" @click="submit">{{lang === 'cn' ? '提交' : 'Submit'}}</button></td>
         </tr>
       </tbody>
     </table>

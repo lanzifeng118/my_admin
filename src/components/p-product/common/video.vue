@@ -4,10 +4,8 @@
     <!-- 品牌 -->
     <div class="f-left">
       <select v-model="classifySelect" @change="changeSelect">
-        <option v-if="lang === 'cn'" disabled>选择品牌</option>
-        <option v-if="lang === 'cn'" value="">所有品牌</option>
-        <option v-if="lang === 'en'" disabled>Choose Brand</option>
-        <option v-if="lang === 'en'" value="">All Brand</option>
+        <option disabled>{{lang === 'cn' ? '选择品牌' : 'Choose Brand'}}</option>
+        <option value="">{{lang === 'cn' ? '所有品牌' : 'All Brands'}}</option>
         <option
           v-for="classifyItem in classify"
           :value="classifyItem.name"
@@ -17,14 +15,14 @@
       </select>
     </div>
     <button class="f-right button" @click="deleteAll">
-      <span class="icon icon-delete"></span><span v-if="lang === 'cn'">一键删除</span><span v-if="lang === 'en'">Delete All</span>
+      <span class="icon icon-delete"></span>{{lang === 'cn' ? '一键删除' : 'Delete All'}}
     </button>
     <!-- cn -->
     <router-link v-if="lang === 'cn'" to="/admin/product/videoadd" class="f-right button list-btn-add">
-      <span class="icon icon-round_add"></span>添加视频
+      <span class="icon icon-round_add"></span>添加
     </router-link>
     <!-- en -->
-    <router-link v-if="lang === 'en'" to="/admin/product/videoadden" class="f-right button list-btn-add">
+    <router-link v-else to="/admin/product/videoadden" class="f-right button list-btn-add">
       <span class="icon icon-round_add"></span>Add
     </router-link>
   </div>
@@ -34,26 +32,15 @@
     <table v-if="items.length > 0">
       <thead>
         <!-- cn -->
-        <tr v-if="lang === 'cn'">
+        <tr>
           <th width="100" @click="toggleSelectAll">
             <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
           </th>
-          <th>名称</th>
-          <th width="280">预览图</th>
-          <th width="190">品牌</th>
-          <th width="200">修改时间</th>
-          <th width="200">操作</th>
-        </tr>
-        <!-- en -->
-        <tr v-if="lang === 'en'">
-          <th width="100" @click="toggleSelectAll">
-            <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
-          </th>
-          <th>Name</th>
-          <th width="280">Preview Pic</th>
-          <th width="190">Brand</th>
-          <th width="200">Edit Time</th>
-          <th width="200">Operate</th>
+          <th>{{lang === 'cn' ? '名称' : 'Name'}}</th>
+          <th width="280">{{lang === 'cn' ? '预览图' : 'Preview Pic'}}</th>
+          <th width="190">{{lang === 'cn' ? '品牌' : 'Brand'}}</th>
+          <th width="200">{{lang === 'cn' ? '修改时间' : 'Edit Time'}}</th>
+          <th width="200">{{lang === 'cn' ? '操作' : 'Operate'}}</th>
         </tr>
       </thead>
       <tbody>
@@ -76,15 +63,11 @@
             <p v-if="item.classify && item.classify.trim()"><span>{{item.classify}}</span></p>
           </td>
           <td>{{item.modifytime}}</td>
-          <td v-if="lang === 'cn'" class="link">
-            <router-link :to="'/admin/product/videoedit/' + item.id">编辑</router-link>
+          <td class="link">
+            <router-link v-if="lang === 'cn'" :to="'/admin/product/videoedit/' + item.id">编辑</router-link>
+            <router-link v-else :to="'/admin/product/videoediten/' + item.id">Edit</router-link>
             <span class="icon-cutting_line"></span>
-            <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
-          </td>
-          <td v-if="lang === 'en'" class="link">
-            <router-link :to="'/admin/product/videoediten/' + item.id">Edit</router-link>
-            <span class="icon-cutting_line"></span>
-            <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
+            <a href="javascipt: void 0" @click="deleteItem(index)">{{lang === 'cn' ? '删除' : 'Delete'}}</a>
           </td>
         </tr>
       </tbody>
@@ -259,6 +242,8 @@ export default {
             }
           })
           util.toast.fade(this.toast, '删除成功', 'check')
+        } else {
+          util.req.changeError(this.toast)
         }
       })
     }
