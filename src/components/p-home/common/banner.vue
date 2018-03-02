@@ -1,23 +1,18 @@
 <template>
   <div class="home-banner">
-    <!-- cn -->
-    <div v-if="lang === 'cn'" class="f-clearfix">
+    <div class="f-clearfix">
       <button class="f-right button" @click="deleteAll">
-        <span class="icon icon-delete"></span>一键删除
+        <span class="icon icon-delete"></span>{{lang === 'cn' ? '一键删除' : 'Delete All'}}
       </button>
-      <router-link to="/admin/home/banneradd" class="f-right button list-btn-add">
+
+      <router-link  v-if="lang === 'cn'"to="/admin/home/banneradd" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
       </router-link >
-    </div>
-    <!-- en -->
-    <div v-if="lang === 'en'" class="f-clearfix">
-      <button class="f-right button" @click="deleteAll">
-        <span class="icon icon-delete"></span>Delete All
-      </button>
-      <router-link to="/admin/home/banneradden" class="f-right button list-btn-add">
+      <router-link v-else to="/admin/home/banneradden" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>Add
       </router-link >
     </div>
+
     <div class="list-table-wrap">
       <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
@@ -31,12 +26,12 @@
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="90">{{text.order[lang]}}</th>
-            <th>{{text.picture[lang]}}</th>
-            <th width="260">{{text.link[lang]}}</th>
-            <th width="100">{{text.display[lang]}}</th>
-            <th width="180">{{text.editTime[lang]}}</th>
-            <th width="130">{{text.operate[lang]}}</th>
+            <th width="90">{{lang === 'cn' ? '排序' : 'Order'}}</th>
+            <th>{{lang === 'cn' ? '图片' : 'Picture'}}</th>
+            <th width="260">{{lang === 'cn' ? '链接' : 'Link'}}</th>
+            <th width="100">{{lang === 'cn' ? '显示' : 'Display'}}</th>
+            <th width="180">{{lang === 'cn' ? '修改时间' : 'Edit Time'}}</th>
+            <th width="130">{{lang === 'cn' ? '操作' : 'Operate'}}</th>
           </tr>
         </thead>
         <tbody>
@@ -65,15 +60,11 @@
               <span class="icon-check"></span>
             </td>
             <td>{{item.modifytime}}</td>
-            <td v-if="lang === 'cn'" class="link">
-              <router-link :to="'/admin/home/banneredit/' + item.id">编辑</router-link>
+            <td class="link">
+              <router-link v-if="lang === 'cn'" :to="'/admin/home/banneredit/' + item.id">编辑</router-link>
+              <router-link v-else :to="'/admin/home/bannerediten/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
-            </td>
-            <td v-if="lang === 'en'" class="link">
-              <router-link :to="'/admin/home/bannerediten/' + item.id">Edit</router-link>
-              <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
+              <a href="javascipt: void(0)" @click="deleteItem(index)">{{lang === 'cn' ? '删除' : 'Delete'}}</a>
             </td>
           </tr>
         </tbody>
@@ -128,33 +119,7 @@
           text: '',
           show: false
         },
-        thSelect: false,
-        text: {
-          order: {
-            cn: '排序',
-            en: 'Order'
-          },
-          picture: {
-            cn: '图片',
-            en: 'Picture'
-          },
-          link: {
-            cn: '链接',
-            en: 'Link'
-          },
-          display: {
-            cn: '显示',
-            en: 'Display'
-          },
-          editTime: {
-            cn: '修改时间',
-            en: 'Edit Time'
-          },
-          operate: {
-            cn: '操作',
-            en: 'Operate'
-          }
-        }
+        thSelect: false
       }
     },
     computed: {

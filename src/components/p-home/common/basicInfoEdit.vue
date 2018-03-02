@@ -1,13 +1,12 @@
 <template>
 <div class="basic-info-edit">
   <!-- cn -->
-  <h2 v-if="lang === 'cn'" class="edit-h2">编辑基础信息</h2>
+  <h2 v-if="lang === 'cn'" class="edit-h2">{{lang === 'cn' ? '编辑基础信息' : 'Edit Basic Information'}}</h2>
+
   <router-link v-if="lang === 'cn'" to="/admin/home" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
-  <!-- en -->
-  <h2 v-if="lang === 'en'" class="edit-h2">Edit Basic Information</h2>
-  <router-link v-if="lang === 'en'" to="/admin/home/en" class="edit-close-btn" >
+  <router-link v-else to="/admin/home/en" class="edit-close-btn" >
     <span class="icon-round_close_fill"></span>
   </router-link>
 
@@ -15,14 +14,12 @@
     <table>
       <tbody>
         <tr>
-          <td v-if="lang === 'cn'" width="100">公司名称</td>
-          <td v-if="lang === 'en'" width="100">CO. Name</td>
-          <td><input type="text" v-model.trim="basicInfo.name"></td>
+          <td width="100">{{lang === 'cn' ? '公司名称' : 'CO. Name'}}</td>
+          <td><input type="text" v-model.trim="item.name"></td>
         </tr>
         <tr>
-          <td v-if="lang === 'cn'">全称</td>
-          <td v-if="lang === 'en'">Full Name</td>
-          <td><input style="width: 400px;" type="text" v-model.trim="basicInfo.full_name"></td>
+          <td>{{lang === 'cn' ? '全称' : 'Full Name'}}</td>
+          <td><input style="width: 400px;" type="text" v-model.trim="item.full_name"></td>
         </tr>
         <!-- logo -->
         <tr>
@@ -32,9 +29,9 @@
               logo="true"
               boxWidth="402"
               boxHeight="122"
-              :img="basicInfo.logo"
+              :img="item.logo"
               id="inputLogo"
-              note="（400px × 120px，100kb以内）"
+              note="（400px × 120px以内）"
               @choosePic="chooseLogo"
               @deletePic="deleteLogo"
               >
@@ -42,36 +39,30 @@
           </td>
         </tr>
         <tr>
-          <td v-if="lang === 'cn'" class="vertical-middle">地址</td>
-          <td v-if="lang === 'en'" class="vertical-middle">Address</td>
-          <td><textarea type="text" rows="2" v-model.trim="basicInfo.address"></textarea></td>
+          <td class="vertical-middle">{{lang === 'cn' ? '地址' : 'Address'}}</td>
+          <td><textarea type="text" rows="2" v-model.trim="item.address"></textarea></td>
         </tr>
         <tr>
-          <td v-if="lang === 'cn'">邮箱</td>
-          <td v-if="lang === 'en'">Email</td>
-          <td><input type="text" v-model.trim="basicInfo.email"></td>
+          <td>{{lang === 'cn' ? '邮箱' : 'Email'}}</td>
+          <td><input type="text" v-model.trim="item.email"></td>
         </tr>
         <tr>
-          <td v-if="lang === 'cn'">电话</td>
-          <td v-if="lang === 'en'">Tel</td>
-          <td><input type="text" v-model.trim="basicInfo.telephone"></td>
+          <td>{{lang === 'cn' ? '电话' : 'Tel'}}</td>
+          <td><input type="text" v-model.trim.number="item.telephone"></td>
         </tr>
         <tr>
-          <td v-if="lang === 'cn'">联系人</td>
-          <td v-if="lang === 'en'">Linkman</td>
-          <td><input type="text" v-model.trim="basicInfo.linkman"></td>
+          <td>{{lang === 'cn' ? '联系人' : 'Linkman'}}</td>
+          <td><input type="text" v-model.trim="item.linkman"></td>
         </tr>
         <tr>
-          <td v-if="lang === 'cn'">工作时间</td>
-          <td v-if="lang === 'en'">Work Time</td>
-          <td><input type="text" v-model.trim="basicInfo.worktime"></td>
+          <td>{{lang === 'cn' ? '工作时间' : 'Work Time'}}</td>
+          <td><input type="text" v-model.trim="item.worktime"></td>
         </tr>
         <tr>
-          <td v-if="lang === 'cn'">简介</td>
-          <td v-if="lang === 'en'">Profile</td>
+          <td>{{lang === 'cn' ? '简介' : 'Breif'}}</td>
           <td>
             <quill-editor
-              v-model.trim="basicInfo.brief"
+              v-model.trim="item.brief"
               :options="editorOption"
               >
             </quill-editor>
@@ -79,8 +70,7 @@
         </tr>
         <tr>
           <td></td>
-          <td v-if="lang === 'cn'"><button type="button" class="button" @click="submit">提交</button></td>
-          <td v-if="lang === 'en'"><button type="button" class="button" @click="submit">提交</button></td>
+          <td><button type="button" class="button" @click="submit">{{lang === 'cn' ? '提交' : 'Submit'}}</button></td>
         </tr>
       </tbody>
     </table>
@@ -111,7 +101,7 @@ export default {
   },
   data() {
     return {
-      basicInfo: {},
+      item: {},
       // quill
       editorOption: {
         placeholder: '输入内容...',
@@ -139,7 +129,7 @@ export default {
     this.axios(this.api.basicInfo.query()).then((res) => {
       let data = res.data
       if (data.code === '200') {
-        this.basicInfo = data.data
+        this.item = data.data
       } else {
         util.req.queryError(this.toast)
       }
@@ -149,11 +139,11 @@ export default {
     chooseLogo(e) {
       this.file = e.target.files[0]
       util.myFileReader(this.file, (result) => {
-        this.basicInfo.logo = result
+        this.item.logo = result
       })
     },
     deleteLogo() {
-      this.basicInfo.logo = ''
+      this.item.logo = ''
       this.file = null
     },
     submit() {
@@ -164,16 +154,16 @@ export default {
     sendLogo() {
       if (this.file) {
         this.uploadFile(this.file, (url) => {
-          this.basicInfo.logo = url
-          this.sendBasicInfo()
+          this.item.logo = url
+          this.sendItem()
         })
       } else {
-        this.sendBasicInfo()
+        this.sendItem()
       }
     },
-    sendBasicInfo() {
-      this.axios(this.api.basicInfo.update(this.basicInfo)).then((response) => {
-        let data = response.data
+    sendItem() {
+      this.axios(this.api.basicInfo.update(this.item)).then(res => {
+        let data = res.data
         if (data.code === '200') {
           this.showSuccess()
         } else {

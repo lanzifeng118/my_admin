@@ -1,27 +1,21 @@
 
 <template>
   <div class="home-banner-edit">
-    <div v-if="lang === 'cn'">
-      <h2 class="edit-h2" v-if="!typeAdd">编辑广告图</h2>
-      <h2 class="edit-h2" v-if="typeAdd">添加广告图</h2>
-      <router-link to="/admin/home/banner" class="edit-close-btn" >
-        <span class="icon-round_close_fill"></span>
-      </router-link>
-    </div>
-    <div v-if="lang === 'en'">
-      <h2 class="edit-h2" v-if="!typeAdd">Edit Banner</h2>
-      <h2 class="edit-h2" v-if="typeAdd">Add Banner</h2>
-      <router-link to="/admin/home/banneren" class="edit-close-btn" >
-        <span class="icon-round_close_fill"></span>
-      </router-link>
-    </div>
+    <h2 class="edit-h2" v-if="!typeAdd">{{lang === 'cn' ? '编辑广告图' : 'Edit Banner'}}</h2>
+    <h2 class="edit-h2" v-else>{{lang === 'cn' ? '添加广告图' : 'Add Banner'}}</h2>
+
+    <router-link v-if="lang === 'cn'" to="/admin/home/banner" class="edit-close-btn" >
+      <span class="icon-round_close_fill"></span>
+    </router-link>
+    <router-link v-else to="/admin/home/banneren" class="edit-close-btn" >
+      <span class="icon-round_close_fill"></span>
+    </router-link>
     <div class="edit-table-wrap">
       <table>
         <tbody>
           <!-- logo -->
           <tr>
-            <td v-if="lang === 'cn'" class="vertical-top" width="100">图片</td>
-            <td v-if="lang === 'en'" class="vertical-top" width="100">Picture</td>
+            <td class="vertical-top" width="100">{{lang === 'cn' ? '图片' : 'Picture'}}</td>
             <td>
               <edit-pic
                 logo="true"
@@ -38,20 +32,17 @@
           </tr>
           <!-- 链接 -->
           <tr>
-            <td v-if="lang === 'cn'">链接</td>
-            <td v-if="lang === 'en'">Link</td>
+            <td>{{lang === 'cn' ? '链接' : 'Link'}}</td>
             <td><input class="long" type="text" v-model.trim="item.link"></td>
           </tr>
           <!-- 顺序 -->
           <tr>
-            <td v-if="lang === 'cn'">顺序</td>
-            <td v-if="lang === 'en'">Order</td>
-            <td><input type="text" v-model.trim="item.sort"></td>
+            <td>{{lang === 'cn' ? '排序' : 'Order'}}</td>
+            <td><input type="text" v-model.trim.number="item.sort"></td>
           </tr>
           <!-- 显示 -->
           <tr>
-            <td v-if="lang === 'cn'">显示</td>
-            <td v-if="lang === 'en'">Display</td>
+            <td>{{lang === 'cn' ? '显示' : 'Display'}}</td>
             <td class="show">
               <span
                 :class="[item.display === 'Y' ? 'icon-square_check_fill' : 'icon-square']"
@@ -62,8 +53,7 @@
           </tr>
           <tr>
             <td></td>
-            <td v-if="lang === 'cn'"><button class="button" @click="submit">提交</button></td>
-            <td v-if="lang === 'en'"><button class="button" @click="submit">Submit</button></td>
+            <td><button class="button" @click="submit">{{lang === 'cn' ? '提交' : 'Submit'}}</button></td>
           </tr>
         </tbody>
       </table>
@@ -202,10 +192,9 @@ export default {
       }
     },
     chooseImg(e) {
-      let _this = this
       this.file = e.target.files[0]
-      util.myFileReader(this.file, (result) => {
-        _this.item.img = result
+      util.myFileReader(this.file, result => {
+        this.item.img = result
       })
     },
     deleteImg() {
