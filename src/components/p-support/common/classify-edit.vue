@@ -26,14 +26,13 @@
         </tr>
         <!-- sort -->
         <tr>
-          <td v-if="lang === 'cn'">顺序</td>
-          <td v-if="lang === 'en'">Order</td>
+          <td>{{lang === 'cn' ? '顺序' : 'Order'}}</td>
+          
           <td><input type="text" v-model.trim="item.sort"></td>
         </tr>
         <tr>
           <td></td>
-          <td v-if="lang === 'cn'"><button type="button" class="button" @click="submit">提交</button></td>
-          <td v-if="lang === 'en'"><button type="button" class="button" @click="submit">Submit</button></td>
+          <td><button type="button" class="button" @click="submit">{{lang === 'cn' ? '提交' : 'Submit'}}</button></td>   
         </tr>
       </tbody>
     </table>

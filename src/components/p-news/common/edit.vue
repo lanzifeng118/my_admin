@@ -45,8 +45,7 @@
         </tr>
         <!-- 显示 -->
         <tr>
-          <td v-if="lang === 'cn'" class="vertical-middle">显示</td>
-          <td v-if="lang === 'en'" class="vertical-middle">Display</td>
+          <td class="vertical-middle">{{lang === 'cn' ? '显示' : 'Display'}}
           <td class="show">
             <span
               :class="[item.display === 'Y' ? 'icon-square_check_fill' : 'icon-square']"
@@ -57,8 +56,8 @@
         </tr>
         <!-- 顺序 -->
         <tr>
-          <td v-if="lang === 'cn'">顺序</td>
-          <td v-if="lang === 'en'">Order</td>
+          <td>{{lang === 'cn' ? '顺序' : 'Order'}}</td>
+          
           <td><input type="text" v-model.trim="item.sort"></td>
         </tr>
         <!-- 分类 -->
@@ -89,8 +88,7 @@
         </tr>
         <tr>
           <td></td>
-          <td v-if="lang === 'cn'"><button type="button" class="button" @click="submit">提交</button></td>
-          <td v-if="lang === 'en'"><button type="button" class="button" @click="submit">Submit</button></td>
+          <td><button type="button" class="button" @click="submit">{{lang === 'cn' ? '提交' : 'Submit'}}</button></td>
         </tr>
       </tbody>
     </table>

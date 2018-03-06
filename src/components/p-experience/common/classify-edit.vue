@@ -1,33 +1,25 @@
 <template>
 <div class="edit experience-classify-edit">
   <!-- cn -->
-  <div v-if="lang === 'cn'">
-    <h2 class="edit-h2" v-if="!typeAdd">编辑分类</h2>
-    <h2 class="edit-h2" v-if="typeAdd">添加分类</h2>
-    <router-link to="/admin/experience/classify" class="edit-close-btn" >
-      <span class="icon-round_close_fill"></span>
-    </router-link>
-  </div>
-  <div v-if="lang === 'en'">
-    <h2 class="edit-h2" v-if="!typeAdd">Edit Classify</h2>
-    <h2 class="edit-h2" v-if="typeAdd">Add Classify</h2>
-    <router-link to="/admin/experience/classifyen" class="edit-close-btn" >
-      <span class="icon-round_close_fill"></span>
-    </router-link>
-  </div>
+  <h2 class="edit-h2" v-if="typeAdd">{{lang === 'cn' ? '添加分类' : 'Add Classify'}}</h2>
+  <h2 class="edit-h2" v-else>{{lang === 'cn' ? '编辑分类' : 'Edit Classify'}}</h2>
+  <router-link v-if="lang === 'cn'" to="/admin/experience/classify" class="edit-close-btn" >
+    <span class="icon-round_close_fill"></span>
+  </router-link>
+  <router-link v-else to="/admin/experience/classifyen" class="edit-close-btn" >
+    <span class="icon-round_close_fill"></span>
+  </router-link>
   <div class="edit-table-wrap">
     <table>
       <tbody>
         <!-- name -->
         <tr>
-          <td v-if="lang === 'cn'" width="100"><span class="icon-nessisary"></span>分类名称</td>
-          <td v-if="lang === 'en'" width="100"><span class="icon-nessisary"></span>Name</td>
+          <td width="100"><span class="icon-nessisary"></span>{{lang === 'cn' ? '分类名称' : 'Name'}}</td>
           <td><input type="text" v-model.trim="item.name"></td>
         </tr>
         <tr>
           <td></td>
-          <td v-if="lang === 'cn'"><button type="button" class="button" @click="submit">提交</button></td>
-          <td v-if="lang === 'en'"><button type="button" class="button" @click="submit">Submit</button></td>
+          <td><button type="button" class="button" @click="submit">{{lang === 'cn' ? '提交' : 'Submit'}}</button></td>   
         </tr>
       </tbody>
     </table>

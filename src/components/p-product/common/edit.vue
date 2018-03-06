@@ -1,7 +1,7 @@
 <template>
 <div class="product-edit edit">
-    <h2 class="edit-h2" v-if="!typeAdd">{{lang === 'cn' ? '编辑产品' : 'Edit Product'}}</h2>
-    <h2 class="edit-h2" v-else>{{lang === 'cn' ? '添加产品' : 'Add Product'}}</h2>
+    <h2 class="edit-h2" v-if="typeAdd">{{lang === 'cn' ? '添加产品' : 'Add Product'}}</h2>
+    <h2 class="edit-h2" v-else>{{lang === 'cn' ? '编辑产品' : 'Edit Product'}}</h2>
     <router-link v-if="lang === 'cn'" to="/admin/product/list" class="edit-close-btn" >
       <span class="icon-round_close_fill"></span>
     </router-link>
