@@ -12,17 +12,11 @@
       <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
         <thead>
-          <tr v-if="lang === 'cn'">
-            <th width="150">排序</th>
-            <th>品牌名称</th>
-            <th width="400">修改时间</th>
-            <th width="180">操作</th>
-          </tr>
-          <tr v-if="lang === 'en'">
-            <th width="150">Order</th>
-            <th>Name</th>
-            <th width="400">Edit Time</th>
-            <th width="180">Operate</th>
+          <tr>
+            <th width="150">{{lang === 'cn' ? '顺序' : 'Order'}}</th>
+            <th>{{lang === 'cn' ? '品牌名称' : 'Brand Name'}}</th>
+            <th width="400">{{lang === 'cn' ? '修改时间' : 'Edit Time'}}</th>
+            <th width="180">{{lang === 'cn' ? '操作' : 'Operate'}}</th>
           </tr>
         </thead>
         <tbody>
@@ -38,15 +32,11 @@
             <td>
               {{item.modifytime}}
             </td>
-            <td v-if="lang === 'cn'" class="link">
-              <router-link :to="'/admin/experience/brandedit/' + item.id">编辑</router-link>
+            <td class="link">
+              <router-link v-if="lang === 'cn'" :to="'/admin/experience/brandedit/' + item.id">编辑</router-link>
+              <router-link v-else :to="'/admin/experience/brandediten/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
-            </td>
-            <td v-if="lang === 'en'" class="link">
-              <router-link :to="'/admin/experience/brandediten/' + item.id">Edit</router-link>
-              <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
+              <a href="javascipt: void 0" @click="deleteItem(index)">{{lang === 'cn' ? '删除' : 'Delete'}}</a>
             </td>
           </tr>
         </tbody>

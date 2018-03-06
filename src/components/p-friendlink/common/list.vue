@@ -2,7 +2,7 @@
   <div class="friend-link-list">
     <div class="f-clearfix">
       <button class="f-right button" @click="deleteAll">
-        <span class="icon icon-delete"></span><span v-if="lang === 'cn'">一键删除</span><span v-if="lang === 'en'">Delete All</span>
+        <span class="icon icon-delete"></span>{{lang === 'cn' ? '一键删除' : 'Delete All'}}
       </button>
       <router-link v-if="lang === 'cn'" to="/admin/friendlink/add" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
@@ -15,7 +15,7 @@
       <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
         <thead>
-          <tr v-if="lang === 'cn'">
+          <tr>
             <!-- selectAll -->
             <th
               width="120"
@@ -24,26 +24,11 @@
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="120">排序</th>
-            <th>名称</th>
-            <th width="350">链接</th>
-            <th width="200">修改时间</th>
-            <th width="180">操作</th>
-          </tr>
-          <tr v-if="lang === 'en'">
-            <!-- selectAll -->
-            <th
-              width="120"
-              @click="toggleSelectAll"
-              class="pointer"
-            >
-              <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
-            </th>
-            <th width="120">Order</th>
-            <th>Name</th>
-            <th width="350">Link</th>
-            <th width="200">Edit Time</th>
-            <th width="180">Operate</th>
+            <th width="120">{{lang === 'cn' ? '顺序' : 'Order'}}</th>
+            <th>{{lang === 'cn' ? '名称' : 'Name'}}</th>
+            <th width="350">{{lang === 'cn' ? '链接' : 'Link'}}</th>
+            <th width="200">{{lang === 'cn' ? '修改时间' : 'Edit Time'}}</th>
+            <th width="180">{{lang === 'cn' ? '操作' : 'Operate'}}</th>
           </tr>
         </thead>
         <tbody>
@@ -65,15 +50,11 @@
               {{item.link}}
             </td>
             <td>{{item.modifytime}}</td>
-            <td v-if="lang === 'cn'" class="link">
-              <router-link :to="'/admin/friendlink/edit/' + item.id">编辑</router-link>
+            <td class="link">
+              <router-link v-if="lang === 'cn'" :to="'/admin/friendlink/edit/' + item.id">编辑</router-link>
+              <router-link v-else :to="'/admin/friendlink/editen/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
-            </td>
-            <td v-if="lang === 'en'" class="link">
-              <router-link :to="'/admin/friendlink/editen/' + item.id">Edit</router-link>
-              <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
+              <a href="javascipt: void 0" @click="deleteItem(index)">{{lang === 'cn' ? '删除' : 'Delete'}}</a>
             </td>
           </tr>
         </tbody>

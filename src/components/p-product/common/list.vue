@@ -65,7 +65,7 @@
             </td>
             <!-- classify -->
             <td class="classify">
-              <p v-if="item.classify.trim()">
+              <p v-if="item.classify && item.classify.trim()">
                 <span>{{item.classify}}</span>
               </p>
             </td>

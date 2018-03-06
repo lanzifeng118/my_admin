@@ -4,10 +4,8 @@
       <!-- 品牌 -->
       <div class="f-left">
         <select v-model="brandSelect" @change="changeSelect">
-          <option v-if="lang === 'cn'" disabled>选择品牌</option>
-          <option v-if="lang === 'cn'" value="">所有品牌</option>
-          <option v-if="lang === 'en'" disabled>Choose Brand</option>
-          <option v-if="lang === 'en'" value="">All Brand</option>
+          <option disabled>{{lang === 'cn' ? '选择品牌' : 'Choose Brand'}}</option>
+          <option value="">{{lang === 'cn' ? '所有品牌' : 'All Brands'}}</option>
           <option
             v-for="brandItem in brand"
             :value="brandItem.name"
@@ -17,7 +15,7 @@
         </select>
       </div>
       <button class="f-right button" @click="deleteAll">
-        <span class="icon icon-delete"></span><span v-if="lang === 'cn'">一键删除</span><span v-if="lang === 'en'">Delete All</span>
+        <span class="icon icon-delete"></span>{{lang === 'cn' ? '一键删除' : 'Delete All'}}
       </button>
       <router-link v-if="lang === 'cn'" to="/admin/experience/add" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
@@ -30,7 +28,7 @@
       <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
         <thead>
-          <tr v-if="lang === 'cn'">
+          <tr>
             <!-- selectAll -->
             <th
               width="80"
@@ -39,30 +37,13 @@
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="70">排序</th>
-            <th>Logo图</th>
-            <th width="230">描述</th>
-            <th width="180">品牌</th>
-            <th width="160">分类</th>
-            <th width="160">修改时间</th>
-            <th width="115">操作</th>
-          </tr>
-          <tr v-if="lang === 'en'">
-            <!-- selectAll -->
-            <th
-              width="80"
-              @click="toggleSelectAll"
-              class="pointer"
-            >
-              <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
-            </th>
-            <th width="70">Order</th>
+            <th width="70">{{lang === 'cn' ? '顺序' : 'Order'}}</th>
             <th>Logo</th>
-            <th width="230">Brief</th>
-            <th width="180">Brand</th>
-            <th width="160">Classify</th>
-            <th width="160">Edit Time</th>
-            <th width="115">Operate</th>
+            <th width="230">{{lang === 'cn' ? '描述' : 'Brief'}}</th>
+            <th width="180">{{lang === 'cn' ? '品牌' : 'Brand'}}</th>
+            <th width="160">{{lang === 'cn' ? '分类' : 'Classify'}}</th>
+            <th width="160">{{lang === 'cn' ? '修改时间' : 'Edit Time'}}
+            <th width="115">{{lang === 'cn' ? '操作' : 'Operate'}}</th>
           </tr>
         </thead>
         <tbody>
@@ -84,15 +65,11 @@
             <td>{{item.brand}}</td>
             <td>{{item.classify}}</td>
             <td>{{item.modifytime}}</td>
-            <td v-if="lang === 'cn'" class="link">
-              <router-link :to="'/admin/experience/edit/' + item.id">编辑</router-link>
+            <td class="link">
+              <router-link v-if="lang === 'cn'" :to="'/admin/experience/edit/' + item.id">编辑</router-link>
+              <router-link v-else :to="'/admin/experience/editen/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
-            </td>
-            <td v-if="lang === 'en'" class="link">
-              <router-link :to="'/admin/experience/editen/' + item.id">Edit</router-link>
-              <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
+              <a href="javascipt: void 0" @click="deleteItem(index)">{{lang === 'cn' ? '删除' : 'Delete'}}</a>
             </td>
           </tr>
         </tbody>

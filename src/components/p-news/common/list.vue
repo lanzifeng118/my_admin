@@ -4,10 +4,8 @@
       <!-- 分类 -->
       <div class="f-left">
         <select v-model="classifySelect" @change="changeSelect">
-          <option v-if="lang === 'cn'" disabled>选择分类</option>
-          <option v-if="lang === 'cn'" value="">所有分类</option>
-          <option v-if="lang === 'en'" disabled>Choose Classify</option>
-          <option v-if="lang === 'en'" value="">All Classify</option>
+          <option disabled>{{lang === 'cn' ? '选择分类' : 'Choose Classify'}}选择分类</option>
+          <option value="">{{lang === 'cn' ? '所有分类' : 'All Classify'}}</option>
           <option
             v-for="classifyItem in classify"
             :value="classifyItem.name"
@@ -18,7 +16,7 @@
       </div>
       <!-- 删除 -->
       <button class="f-right button" @click="deleteAll">
-        <span class="icon icon-delete"></span><span v-if="lang === 'cn'">一键删除</span><span v-if="lang === 'en'">Delete All</span>
+        <span class="icon icon-delete"></span>{{lang === 'cn' ? '一键删除' : 'Delete All'}}
       </button>
       <router-link v-if="lang === 'cn'" to="/admin/news/add" class="f-right button list-btn-add">
         <span class="icon icon-round_add"></span>添加
@@ -28,12 +26,11 @@
       </router-link >
     </div>
     <div class="list-table-wrap">
-      <div v-if="items.length <= 0" class="list-table-wrap-none">
-        还没有相关信息，请添加
-      </div>
+      <!-- msg -->
+      <div class="list-table-wrap-none">{{msg}}</div>
       <table v-if="items.length > 0">
         <thead>
-          <tr v-if="lang === 'cn'">
+          <tr>
             <!-- selectAll -->
             <th
               width="80"
@@ -42,30 +39,13 @@
             >
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th width="60">排序</th>
-            <th>标题</th>
-            <th width="220">预览图</th>
-            <th width="110">显示</th>
-            <th width="190">分类</th>
-            <th width="170">修改时间</th>
-            <th width="140">操作</th>
-          </tr>
-          <tr v-if="lang === 'en'">
-            <!-- selectAll -->
-            <th
-              width="80"
-              @click="toggleSelectAll"
-              class="pointer"
-            >
-              <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
-            </th>
-            <th width="60">Order</th>
-            <th>Title</th>
-            <th width="220">Preview Pic</th>
-            <th width="110">Display</th>
-            <th width="190">Classify</th>
-            <th width="170">Edit Time</th>
-            <th width="140">Operate</th>
+            <th width="60">{{lang === 'cn' ? '顺序' : 'Order'}}</th>
+            <th>{{lang === 'cn' ? '标题' : 'Title'}}</th>
+            <th width="220">{{lang === 'cn' ? '预览图' : 'Preview Pic'}}</th>
+            <th width="110">{{lang === 'cn' ? '显示' : 'Display'}}</th>
+            <th width="190">{{lang === 'cn' ? '分类' : 'Classify'}}</th>
+            <th width="170">{{lang === 'cn' ? '修改时间' : 'Edit Time'}}</th>
+            <th width="140">{{lang === 'cn' ? '操作' : 'Operate'}}</th>
           </tr>
         </thead>
         <tbody>
@@ -98,15 +78,11 @@
               <p v-if="item.classify && item.classify.trim()"><span>{{item.classify}}</span></p>
             </td>
             <td>{{item.modifytime}}</td>
-            <td v-if="lang === 'cn'" class="link">
-              <router-link :to="'/admin/news/edit/' + item.id">编辑</router-link>
+            <td class="link">
+              <router-link v-if="lang === 'cn'" :to="'/admin/news/edit/' + item.id">编辑</router-link>
+              <router-link v-else :to="'/admin/news/editen/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
-            </td>
-            <td v-if="lang === 'en'" class="link">
-              <router-link :to="'/admin/news/editen/' + item.id">Edit</router-link>
-              <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">Delete</a>
+              <a href="javascipt: void 0" @click="deleteItem(index)">{{lang === 'cn' ? '删除' : 'Delete'}}</a>
             </td>
           </tr>
         </tbody>
