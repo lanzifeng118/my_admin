@@ -127,28 +127,26 @@ export default {
   },
   methods: {
     getItem() {
-      let _this = this
       this.axios(this.apiCal.query()).then((res) => {
         let data = res.data
         if (data.code === '200') {
-          _this.item = data.data
+          this.item = data.data
         } else {
           util.req.queryError(this.toast)
-          _this.goback()
+          this.goback()
         }
       }).catch((err) => {
         if (err) {
           console.log(err)
           util.req.queryError(this.toast)
-          _this.goback()
+          this.goback()
         }
       })
     },
     chooseImg(e) {
-      let _this = this
       this.file = e.target.files[0]
       util.myFileReader(this.file, (result) => {
-        _this.item.img = result
+        this.item.img = result
       })
     },
     deleteImg() {
@@ -161,31 +159,29 @@ export default {
       this.sendImg()
     },
     sendImg() {
-      let _this = this
       if (this.file) {
         util.uploadFile(this, this.file, (url) => {
-          _this.item.img = url
-          _this.sendData()
+          this.item.img = url
+          this.sendData()
         }, () => {
-          _this.showError()
+          this.showError()
         })
       } else {
-        _this.sendData()
+        this.sendData()
       }
     },
     sendData() {
-      let _this = this
       this.axios(this.apiCal.update(this.item)).then((res) => {
         let data = res.data
         if (data.code === '200') {
-          _this.showSuccess()
+          this.showSuccess()
         } else {
-          _this.showError()
+          this.showError()
         }
       }).catch((err) => {
         if (err) {
           console.log(err)
-          _this.showError()
+          this.showError()
         }
       })
     },
@@ -197,9 +193,8 @@ export default {
       this.goback()
     },
     goback() {
-      let _this = this
       setTimeout(() => {
-        _this.$router.push(_this.listUrl)
+        this.$router.push(this.listUrl)
       }, 700)
     }
   },

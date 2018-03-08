@@ -34,8 +34,5 @@
 </script>
 
 <style>
-  .product .editor .quill-editor {
-    color: #7d6666;
-  }
 
 </style>

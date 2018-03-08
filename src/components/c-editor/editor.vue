@@ -20,11 +20,11 @@
         <span class="ql-formats">
           <select class="ql-header">
             <option value="1">标题1</option>
-            <option value="2">标题2</option>
-            <option value="3">标题3</option>
-            <option value="4">标题4</option>
-            <option value="5">标题5</option>
-            <option value="6">标题6</option>
+            <option value="2">蓝标题</option>
+            <option value="3">黄标题</option>
+            <option value="4">红标题</option>
+            <option value="5">灰标题</option>
+            <option value="6">段落不缩进</option>
             <option selected="selected">段落</option>
           </select>
           <select class="ql-size">
@@ -34,6 +34,10 @@
             <option value="huge">1.5倍</option>
           </select>
         </span>
+        <!-- <span class="ql-formats">
+          <button type="button" class="ql-indent" value="+1"></button>
+          <button type="button" class="ql-indent" value="-1"></button>
+        </span>  -->
         <span class="ql-formats">
           <select class="ql-color">
            <option selected="selected"></option>
@@ -203,15 +207,12 @@ export default {
 .editor .quill-editor {
   line-height: 1.5em;
 }
-.editor .ql-container {
-  font-size: 14px;
-}
+/* 标题 */
 .editor .quill-editor  h1 {
   font-size: 16px;
   line-height: 1.5em;
   color: #0d93b8;
   font-weight: bold;
-  margin: 15px 0;
 }
 .editor .quill-editor h2, 
 .editor .quill-editor h3,
@@ -220,7 +221,6 @@ export default {
   line-height: 1.5em;    
   padding-left: 10px;
   border-left: 2px solid #0d93b8;
-  margin: 15px 0;
 }
 .editor .quill-editor h3 {
   border-color: #ffc107;
@@ -233,29 +233,33 @@ export default {
   line-height: 1.5em;
   color: #999;
   border-left: 2px solid #ebebeb;
-  background-color: #f9f9f9;
-  margin: 10px 0;
+  background-color: #f5f5f5;
   font-size: 12px;
 }
-.editor .quill-editor h6 {
+/* 段落 */
+.editor .quill-editor h6,
+.editor .quill-editor p {
   font-size: 14px;
   line-height: 1.5em;
 }
 .editor .quill-editor p {
-  line-height: 1.5em;
-  margin-bottom: 10px;
+  text-indent: 2rem;
 }
+/* img */
+.editor img {
+  max-width: 100%;
+}
+/* ul,ol */
 .editor .quill-editor ul,
 .editor .quill-editor ol {
   padding-left: 0;
-  margin: 10px 0 10px 15px;
 }
 .editor .quill-editor li {
+  font-size: 14px;
   line-height: 1.5em;
   position: relative;
   display: block;
-  padding: 0 0 0 15px;
-  margin-bottom: 5px;
+  padding: 0 0 0 12px !important;
 }
 .editor .quill-editor li::before {
   content: '';
@@ -271,13 +275,16 @@ export default {
 .editor .quill-editor ol > li::before {
   border-radius: 3px;
 }
+/* size */
 .editor .ql-editor .ql-size-large {
   font-size: 1.2em;
 }
 .editor .ql-editor .ql-size-huge {
   font-size: 1.5em;
 }
+/* a */
 .editor .ql-editor a {
   color: #333;
+  text-decoration: underline;
 }
 </style>
