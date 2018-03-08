@@ -24,7 +24,7 @@
             <option value="3">黄标题</option>
             <option value="4">红标题</option>
             <option value="5">灰标题</option>
-            <option value="6">段落不缩进</option>
+            <option value="6">段落缩进</option>
             <option selected="selected">段落</option>
           </select>
           <select class="ql-size">
@@ -34,10 +34,10 @@
             <option value="huge">1.5倍</option>
           </select>
         </span>
-        <!-- <span class="ql-formats">
+        <span class="ql-formats">
           <button type="button" class="ql-indent" value="+1"></button>
           <button type="button" class="ql-indent" value="-1"></button>
-        </span>  -->
+        </span> 
         <span class="ql-formats">
           <select class="ql-color">
            <option selected="selected"></option>
@@ -242,7 +242,7 @@ export default {
   font-size: 14px;
   line-height: 1.5em;
 }
-.editor .quill-editor p {
+.editor .quill-editor h6 {
   text-indent: 2rem;
 }
 /* img */
@@ -266,14 +266,14 @@ export default {
   margin-left: 0;
   margin-right: 0;
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
   background: #86b513;
-  top: 7px;
+  top: 8px;
   left: 0px;
 }
 .editor .quill-editor ol > li::before {
-  border-radius: 3px;
+  border-radius: 2px;
 }
 /* size */
 .editor .ql-editor .ql-size-large {
@@ -286,5 +286,30 @@ export default {
 .editor .ql-editor a {
   color: #333;
   text-decoration: underline;
+}
+/* ql-indent */
+.editor .ql-editor .ql-indent-1 {
+  padding-left: 1rem;
+}
+.editor .ql-editor .ql-indent-2 {
+  padding-left: 2rem;
+}
+.editor .ql-editor .ql-indent-3 {
+  padding-left: 3rem;
+}
+.editor .ql-editor .ql-indent-4 {
+  padding-left: 4rem;
+}
+.editor .ql-editor .ql-indent-5 {
+  padding-left: 5rem;
+}
+.editor .ql-editor .ql-indent-6 {
+  padding-left: 6rem;
+}
+.editor .ql-editor .ql-indent-7 {
+  padding-left: 7rem;
+}
+.editor .ql-editor .ql-indent-8 {
+  padding-left: 8rem;
 }
 </style>

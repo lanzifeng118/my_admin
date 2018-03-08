@@ -313,4 +313,7 @@ export default {
 </script>
 
 <style>
+.news-edit .quill-editor {
+  width: 993px;
+}
 </style>

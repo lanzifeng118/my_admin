@@ -338,4 +338,7 @@ export default {
 </script>
 
 <style>
+.product-edit .quill-editor {
+  width: 680px;
+}
 </style>

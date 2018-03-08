@@ -1,5 +1,5 @@
 <template>
-  <div class="info-edit">
+  <div class="aboutus-edit">
     <!-- cn -->
     <div v-if="lang === 'cn'">
       <h2 class="edit-h2" v-if="!typeAdd">编辑关于我们</h2>
@@ -218,7 +218,10 @@ export default {
 </script>
 
 <style>
-  .info-edit {
-    position: relative;
-  }
+.aboutus-edit {
+  position: relative;
+}
+.aboutus-edit .quill-editor {
+  width: 993px;
+}
 </style>
