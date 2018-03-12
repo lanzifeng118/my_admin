@@ -115,7 +115,7 @@ export default {
     },
     wordsLength() {
       let len = 0
-      let total = this.lang === 'cn' ? 68 : 153
+      let total = this.lang === 'cn' ? 102 : 235
       let str = this.item.brief
       for (let i = 0; i < str.length; i++) {
         if (str.charCodeAt(i) > 127 || str.charCodeAt(i) === 94) {
