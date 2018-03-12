@@ -38,12 +38,12 @@
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
             <th width="70">{{lang === 'cn' ? '顺序' : 'Order'}}</th>
+            <th width="210">{{lang === 'cn' ? '名称' : 'Name'}}</th>
             <th>Logo</th>
-            <th width="230">{{lang === 'cn' ? '描述' : 'Brief'}}</th>
             <th width="180">{{lang === 'cn' ? '品牌' : 'Brand'}}</th>
             <th width="160">{{lang === 'cn' ? '分类' : 'Classify'}}</th>
             <th width="160">{{lang === 'cn' ? '修改时间' : 'Edit Time'}}
-            <th width="115">{{lang === 'cn' ? '操作' : 'Operate'}}</th>
+            <th width="130">{{lang === 'cn' ? '操作' : 'Operate'}}</th>
           </tr>
         </thead>
         <tbody>
@@ -59,9 +59,9 @@
             <td class="order">
               {{item.sort}}
             </td>
+            <td>{{item.name}}</td>
             <!-- logo -->
             <td class="img"><img style="max-width: 130px; max-height: 45px;" :src="item.img"></td>
-            <td>{{item.brief}}</td>
             <td>{{item.brand}}</td>
             <td>{{item.classify}}</td>
             <td>{{item.modifytime}}</td>

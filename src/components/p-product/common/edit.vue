@@ -165,11 +165,11 @@ export default {
     }
   },
   created() {
-    this.getItem()
+    this.getClassiy()
   },
   watch: {
     '$route' (to, from) {
-      this.getItem()
+      this.getClassiy()
     }
   },
   methods: {
@@ -177,7 +177,6 @@ export default {
       this.item.detail = content
     },
     getItem() {
-      this.getClassiy()
       let addLink = this.lang === 'cn' ? '/admin/product/add' : '/admin/product/adden'
       if (this.$route.path === addLink) {
         return
@@ -207,6 +206,7 @@ export default {
         let data = res.data
         if (data.code === '200') {
           this.classify = data.data.list
+          this.getItem()
         } else {
           this.queryErrorGoBack()
         }
