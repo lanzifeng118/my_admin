@@ -60,7 +60,7 @@
             <td class="link">
               <a :href="item.file_url" :download="item.file_name">下载</a>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
+              <a href="javascript: void(0)" @click="deleteItem(index)">删除</a>
             </td>
           </tr>
         </tbody>

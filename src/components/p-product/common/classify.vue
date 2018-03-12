@@ -56,7 +56,7 @@
               <router-link v-if="lang === 'cn'" :to="'/admin/product/classifyedit/' + item.id">编辑</router-link>
               <router-link v-else :to="'/admin/product/classifyediten/' + item.id">Edit</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void 0" @click="deleteItem(index)">{{lang === 'cn' ? '删除' : 'Delete'}}</a>
+              <a href="javascript: void 0" @click="deleteItem(index)">{{lang === 'cn' ? '删除' : 'Delete'}}</a>
             </td>
           </tr>
         </tbody>

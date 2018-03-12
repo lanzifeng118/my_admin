@@ -62,7 +62,7 @@
             <td class="link">
               <router-link :to="'/admin/support/detail/' + item.id">查看</router-link>
               <span class="icon-cutting_line"></span>
-              <a href="javascipt: void(0)" @click="deleteItem(index)">删除</a>
+              <a href="javascript: void(0)" @click="deleteItem(index)">删除</a>
             </td>
           </tr>
         </tbody>
