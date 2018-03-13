@@ -54,7 +54,7 @@
             <td class="vertical-top">{{lang === 'cn' ? '描述' : 'Breif'}}</td>
             <td>
               <textarea rows="3" type="text" v-model.trim="item.brief"></textarea>
-              <p class="experience-edit-words" :class="{warn: wordsLength < 0}">还可以输入{{wordsLength}}个{{lang === 'cn' ? '汉字' : '字母'}}</p>
+              <p class="edit-words" :class="{warn: wordsLength < 0}">还可以输入{{wordsLength}}个{{lang === 'cn' ? '汉字' : '字母'}}</p>
             </td>
           </tr>
           <tr>
@@ -296,12 +296,4 @@ export default {
 </script>
 
 <style>
-.experience-edit-words {
-  margin-top: 10px;
-  font-size: 12px;
-  color: #666;
-}
-.experience-edit-words.warn {
-  color: #e29800;
-}
 </style>

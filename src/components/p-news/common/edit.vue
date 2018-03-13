@@ -76,7 +76,10 @@
         <tr>
           <td v-if="lang === 'cn'" class="vertical-top">简要描述</td>
           <td v-if="lang === 'en'" class="vertical-top">Breif</td>
-          <td><textarea rows="3" type="text" v-model.trim="item.brief"></textarea></td>
+          <td>
+            <textarea rows="3" type="text" v-model.trim="item.brief"></textarea>
+            <p class="edit-words" :class="{warn: wordsLength < 0}">还可以输入{{wordsLength}}个{{lang === 'cn' ? '汉字' : '字母'}}</p>
+          </td>
         </tr>
         <!-- 详细介绍 -->
         <tr>
@@ -153,6 +156,19 @@ export default {
   computed: {
     api() {
       return this.lang === 'cn' ? api : apiEn
+    },
+    wordsLength() {
+      let len = 0
+      let total = this.lang === 'cn' ? 300 : 600
+      let str = this.item.brief
+      for (let i = 0; i < str.length; i++) {
+        if (str.charCodeAt(i) > 127 || str.charCodeAt(i) === 94) {
+          this.lang === 'cn' ? len++ : (len += 2)
+        } else {
+          this.lang === 'cn' ? (len += 0.5) : len++
+        }
+      }
+      return total - len
     }
   },
   created() {
