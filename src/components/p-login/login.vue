@@ -90,7 +90,7 @@ export default {
           if (data.code === '200') {
             this.login.text = '登录成功！'
             setTimeout(() => {
-              let redirect = this.getRedirect()
+              let redirect = this.$route.query.redirect
               if (redirect) {
                 this.$router.push(redirect)
               } else {
@@ -107,22 +107,6 @@ export default {
             this.$router.push('/error')
           }
         })
-    },
-    getRedirect() {
-      let search = window.location.href.split('?')[1]
-      let obj = {}
-      if (search) {
-        let searchArr = search.split('&')
-        searchArr.forEach((v, i) => {
-          let arr = v.split('=')
-          obj[arr[0]] = arr[1]
-        })
-      }
-      let redirect = obj.redirect
-      if (redirect) {
-        redirect = decodeURIComponent(redirect)
-      }
-      return redirect
     }
   }
 }
