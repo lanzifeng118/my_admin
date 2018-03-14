@@ -24,8 +24,8 @@
             <th width="80" @click="toggleSelectAll" class="pointer">
               <span :class="[thSelect ? 'icon-square_check_fill' : 'icon-square']"></span>
             </th>
-            <th>文件名</th>
-            <th width="300">文件预览</th>
+            <th width="310">文件名</th>
+            <th>文件预览</th>
             <th width="100">文件类型</th>
             <th width="100">文件大小</th>
             <th width="170">上传时间</th>
@@ -38,7 +38,7 @@
             <td class="pointer" @click="toggleSelect(index)">
               <span :class="[item.select ? 'icon-square_check_fill' : 'icon-square']"></span>
             </td>
-            <td>{{item.file_name}}</td>
+            <td class="file-name">{{item.file_name}}</td>
 
             <td class="img">
               <img v-if="item.file_type == 1" :src="item.file_url" style="max-width: 200px; max-height: 40px;">
@@ -238,5 +238,7 @@ export default {
 </script>
 
 <style>
-
+.file-list td.file-name {
+  word-break: break-all;
+}
 </style>
