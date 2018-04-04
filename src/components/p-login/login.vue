@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     checkUsername() {
-      this.user.username = this.user.username.trim()
       if (this.user.username !== '') {
         this.usernameWarn = false
         return true
