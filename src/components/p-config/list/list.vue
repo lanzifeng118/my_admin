@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import toast from 'components/toast/toast'
-
 export default {
   data() {
     return {
@@ -48,7 +46,6 @@ export default {
     }
   },
   components: {
-    toast
   }
 }
 </script>

@@ -77,8 +77,6 @@
 
 <script>
 import paging from 'components/c-paging/paging'
-import pop from 'components/pop/pop'
-import toast from 'components/toast/toast'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 
@@ -230,8 +228,6 @@ export default {
     }
   },
   components: {
-    pop,
-    toast,
     paging
   }
 }

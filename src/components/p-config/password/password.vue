@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import toast from 'components/toast/toast'
+
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 export default {
@@ -125,7 +125,6 @@ export default {
     }
   },
   components: {
-    toast
   }
 }
 </script>

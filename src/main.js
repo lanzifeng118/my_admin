@@ -7,6 +7,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex'
 import {getCookie} from 'components/tools/util'
+import pop from 'components/pop/pop'
+import toast from 'components/toast/toast'
 
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
@@ -65,6 +67,9 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
+
+Vue.component('pop', pop)
+Vue.component('toast', toast)
 
 /* eslint-disable no-new */
 new Vue({

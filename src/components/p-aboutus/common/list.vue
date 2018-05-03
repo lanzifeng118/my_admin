@@ -82,8 +82,6 @@
 </template>
 
 <script>
-  import pop from 'components/pop/pop'
-  import toast from 'components/toast/toast'
   import util from 'components/tools/util'
   import api from 'components/tools/api'
   import apiEn from 'components/tools/api-en'
@@ -220,8 +218,6 @@
       }
     },
     components: {
-      pop,
-      toast
     }
   }
 </script>

@@ -91,8 +91,6 @@
 </template>
 
 <script>
-import toast from 'components/toast/toast'
-import pop from 'components/pop/pop'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 import apiEn from 'components/tools/api-en'
@@ -249,8 +247,6 @@ export default {
     }
   },
   components: {
-    toast,
-    pop
   }
 }
 </script>

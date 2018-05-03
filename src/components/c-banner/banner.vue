@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import toast from 'components/toast/toast'
+  
   import api from 'components/tools/api'
   import apiEn from 'components/tools/api-en'
   import util from 'components/tools/util'
@@ -117,7 +117,6 @@
       }
     },
     components: {
-      toast
     }
   }
 </script>

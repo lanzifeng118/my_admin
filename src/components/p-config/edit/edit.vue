@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import toast from 'components/toast/toast'
+
 import editPic from 'components/c-edit-pic/edit-pic'
 import util from 'components/tools/util'
 import api from 'components/tools/api'
@@ -133,7 +133,6 @@ export default {
     }
   },
   components: {
-    toast,
     editPic
   }
 }

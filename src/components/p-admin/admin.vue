@@ -15,7 +15,7 @@
 <script>
 import vHeader from 'components/c-header/header'
 import vNav from 'components/c-nav/nav'
-import toast from 'components/toast/toast'
+
 import util from 'components/tools/util'
 import api from 'components/tools/api'
 
@@ -53,8 +53,7 @@ export default {
   },
   components: {
     vHeader,
-    vNav,
-    toast
+    vNav
   }
 }
 </script>
